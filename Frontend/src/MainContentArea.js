@@ -4,20 +4,50 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import PictureFrame from './PictureFrame';
 
+
+const apiData = []
+
 const fetchImages = async () => {
   const response = await axios.get('/api/image');
-  const imageSources = [];
+  const imageDataList = [];
 
-  response.data.forEach(imageData => {
-    const source = imageData.source;
-    imageSources.push(source);
+  response.data.forEach(responseData => {
+    const imageId = responseData.id;
+    const imageSource = responseData.source;
+    const imageData = {id: imageId, source: imageSource, tags: []};
+    imageDataList.push(imageData);
   });
 
-  return imageSources;
+  return imageDataList;
 };
 
-let pictures
+const fetchTags = async () => {
+  const response = await axios.get('api/tag');
+  const tagData = response.data;
+
+  return tagData;
+}
+
+const fetchImageTags = async (imageDataList) => {
+  const response = await axios.get('api/image-tag');
+  
+  response.data.forEach(imageTagData => {
+    const imageId = imageTagData['image_id'];
+    const tagId   = imageTagData['tag_id'];
+    imageDataList.find(imageData => imageData.id === imageId).tags.push(tagId);
+  })
+
+  return imageDataList;
+}
+
+let pictures;
+let tagsArray;
 pictures = await fetchImages();
+console.log(pictures);
+tagsArray = await fetchTags();
+console.log(tagsArray);
+pictures = await fetchImageTags(pictures);
+console.log(pictures);
 
 
 function MainContent() {
@@ -25,9 +55,12 @@ function MainContent() {
     <div className='flex-container'>
       <ImageList variant='masonry' cols={4} gap={4}>
         {pictures.map((pic) => {
+          var imageFirstTag = pic.tags[0];
+          console.log(tagsArray);
+          var imageTagName = imageFirstTag ? tagsArray.find(tagData => tagData.id === imageFirstTag)['name'] : 'Add Tag';
           return (
             <ImageListItem key={pictures.indexOf(pic)}>
-              <PictureFrame src={pic} maxWidth={400} toolbarMaxHeight={352} key={pictures.indexOf(pic)} tag={'tag'} index={pictures.indexOf(pic)}/>
+              <PictureFrame src={pic.source} maxWidth={400} toolbarMaxHeight={352} key={pictures.indexOf(pic)} tag={imageTagName} index={pictures.indexOf(pic)}/>
             </ImageListItem>  
           );
         })}
