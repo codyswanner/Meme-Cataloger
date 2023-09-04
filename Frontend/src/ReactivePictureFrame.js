@@ -19,11 +19,21 @@ function AddTag(props) {
 }
 
 function Tag(props) {
-  return (
-    <div style={{ fontSize: "0.7rem", color: "white" }}>
-      <p>{props.tag}</p>
-    </div>
-  );
+  if (props.tag === 0) {
+    return(
+      <div style={{ fontSize: "0.7rem", color: "white" }}>
+        <p>{'Add tag'}</p>
+      </div>
+    );
+  } else {
+    const tagId = props.tag;
+    const tagName = tagId ? props.tagNames.find(tagData => tagData.id === tagId)['name'] : 'Add Tag';
+    return (
+      <div style={{ fontSize: "0.7rem", color: "white" }}>
+        <p>{tagName}</p>
+      </div>
+    );
+  };
 }
 
 function ReactivePictureFrame(props) {
@@ -39,6 +49,16 @@ function ReactivePictureFrame(props) {
 
   const handleButtonClick = (buttonType, props) => {
     console.log(`Clicked ${buttonType} on image ${props.index}`);
+  }
+
+  const generateTags = (tags, tagNames) => {
+    return tags.length === 0 ? (
+      <Tag tag={0} key={0} tagNames={tagNames} />
+    ) : (
+      tags.map((tag) => (
+        <Tag tag={tag} key={tag} tagNames={tagNames} />
+      ))
+    );
   }
 
   var toolbarVisible = imageHovered;
@@ -84,7 +104,7 @@ function ReactivePictureFrame(props) {
         </div>
         <div>
           <Toolbar sx={[toolbarStyles, { bottom: 6.5 }]}>
-            <Tag tag={props.tag} />
+            {generateTags(props.tags, props.tagNames)}
             <AddTag index={props.index} style={{ marginLeft: "auto" }}/>
           </Toolbar>
         </div>

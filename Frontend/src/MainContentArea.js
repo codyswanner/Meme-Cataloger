@@ -3,6 +3,7 @@ import axios from 'axios';
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import PictureFrame from './PictureFrame';
+import ReactivePictureFrame from './ReactivePictureFrame';
 
 
 const apiData = []
@@ -43,11 +44,8 @@ const fetchImageTags = async (imageDataList) => {
 let pictures;
 let tagsArray;
 pictures = await fetchImages();
-console.log(pictures);
 tagsArray = await fetchTags();
-console.log(tagsArray);
 pictures = await fetchImageTags(pictures);
-console.log(pictures);
 
 
 function MainContent() {
@@ -56,12 +54,18 @@ function MainContent() {
       <ImageList variant='masonry' cols={4} gap={4}>
         {pictures.map((pic) => {
           var imageFirstTag = pic.tags[0];
-          console.log(tagsArray);
           var imageTagName = imageFirstTag ? tagsArray.find(tagData => tagData.id === imageFirstTag)['name'] : 'Add Tag';
           return (
             <ImageListItem key={pictures.indexOf(pic)}>
-              <PictureFrame src={pic.source} maxWidth={400} toolbarMaxHeight={352} key={pictures.indexOf(pic)} tag={imageTagName} index={pictures.indexOf(pic)}/>
-            </ImageListItem>  
+              <ReactivePictureFrame
+                src={pic.source}
+                maxWidth={400}
+                toolbarMaxHeight={352}
+                key={pictures.indexOf(pic)}
+                tags={pic.tags}
+                tagNames={tagsArray}
+                index={pictures.indexOf(pic)}/>
+            </ImageListItem>
           );
         })}
       </ImageList>
