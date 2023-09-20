@@ -1,40 +1,12 @@
 import React from 'react';
-import { Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
-//import Picture from "./picture";
+import { Box, IconButton, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
+import Tag from './Tag';
+import AddTagButton from './AddTagButton';
 import ShareIcon from "@mui/icons-material/Share";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function AddTag(props) {
-  const handleButtonClick = (buttonType, props) => {
-    console.log(`Clicked ${buttonType} on image ${props.index}`);
-  }
-
-  return (
-    <IconButton style={{ color: "white" }} onClick={() => handleButtonClick("Add Tag", props)}>
-      <p>+</p>
-    </IconButton>
-  );
-}
-
-function Tag(props) {
-  if (props.tag === 0) {
-    return(
-      <div style={{ fontSize: "0.7rem", color: "white" }}>
-        <p>{'Add tag'}</p>
-      </div>
-    );
-  } else {
-    const tagId = props.tag;
-    const tagName = tagId ? props.tagNames.find(tagData => tagData.id === tagId)['name'] : 'Add Tag';
-    return (
-      <div style={{ fontSize: "0.7rem", color: "white" }}>
-        <p>{tagName}</p>
-      </div>
-    );
-  };
-}
 
 function ReactivePictureFrame(props) {
   const [imageHovered, setImageHovered] = useState(false);
@@ -76,11 +48,13 @@ function ReactivePictureFrame(props) {
 
   return (
     <Box>
+      {/* Outer div detects mouseEnter/mouseLeave */}
       <div
         style={{ position: "relative" }}
         onMouseEnter={handleImageMouseEnter}
         onMouseLeave={handleImageMouseLeave}
       >
+        {/* Picture top toolbar, includes description and share/archive/trash buttons */}
         <Toolbar sx={toolbarStyles}>
           <Typography sx={{ fontSize: "0.9rem", color: "white" }}>
             Text Description
@@ -99,15 +73,15 @@ function ReactivePictureFrame(props) {
             </Toolbar>
           </div>
         </Toolbar>
+        {/* Actual image to be displayed */}
         <div>
           <img src={props.src} style={{ maxWidth: 500 }}/>
         </div>
-        <div>
-          <Toolbar sx={[toolbarStyles, { bottom: 6.5 }]}>
-            {generateTags(props.tags, props.tagNames)}
-            <AddTag index={props.index} style={{ marginLeft: "auto" }}/>
-          </Toolbar>
-        </div>
+        {/* Picture lower toolbar, includes Tag(s) and AddTagButton */}
+        <Toolbar sx={[toolbarStyles, { bottom: 6.5 }]}>
+          {generateTags(props.tags, props.tagNames)}
+          <AddTagButton index={props.index} style={{ marginLeft: "auto" }}/>
+        </Toolbar>
       </div>
     </Box>
   );
