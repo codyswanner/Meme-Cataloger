@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
-import PictureFrame from './PictureFrame';
 import ReactivePictureFrame from './ReactivePictureFrame';
 
 
@@ -41,14 +40,17 @@ const fetchImageTags = async (imageDataList) => {
   return imageDataList;
 }
 
-let pictures;
-let tagsArray;
-pictures = await fetchImages();
-tagsArray = await fetchTags();
-pictures = await fetchImageTags(pictures);
+// fetchImages function grabs the URLs for the pictures themselves
+let raw_pictures = await fetchImages();
+
+// fetchTags function grabs the list of all created tags
+let tagsArray = await fetchTags();
+
+// fetchImageTags function assigns appropriate tags to pictures; the result is used in the MainContentArea component
+let pictures = await fetchImageTags(raw_pictures);
 
 
-function MainContent() {
+function MainContentArea() {
   return (
     <div className='flex-container'>
       <ImageList variant='masonry' cols={4} gap={4}>
@@ -71,4 +73,4 @@ function MainContent() {
   );
 }
 
-export default MainContent;
+export default MainContentArea;
