@@ -53,8 +53,6 @@ function MainContent() {
     <div className='flex-container'>
       <ImageList variant='masonry' cols={4} gap={4}>
         {pictures.map((pic) => {
-          var imageFirstTag = pic.tags[0];
-          var imageTagName = imageFirstTag ? tagsArray.find(tagData => tagData.id === imageFirstTag)['name'] : 'Add Tag';
           return (
             <ImageListItem key={pictures.indexOf(pic)}>
               <ReactivePictureFrame
