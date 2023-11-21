@@ -1,0 +1,43 @@
+import json
+from asgiref.sync import async_to_sync
+from channels.generic.websocket import WebsocketConsumer
+
+
+class FilterConsumer(WebsocketConsumer):
+    def connect(self):
+        # what to do on connection opened.
+        # see documentation and tutorial code.
+
+        # Some ideas:
+        # Authenticate user, match client with backend,
+        # create some kind of session/token to keep things in order
+        self.accept()
+
+    def disconnect(self, code):
+        # what to do on connection close.
+        # see documentation and tutorial code,
+        # make sure to clean up any messes you left.
+
+        # Expire any sessions/tokens?
+        # Close any database connections?
+        pass
+
+    def receive(self, text_data=None, bytes_data=None):
+        # what to do when the user clicks a filter checkbox.
+        # see documentation and tutorial code,
+        # and just be smart and figure it out.
+
+        # Query database for images matching filters?
+        # Will that be somewhere else?
+        # Does that get handed to the API somehow?
+
+        # Is this where a message is sent to Django/React
+        # to update the list of pictures?
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
+        print(message)
+
+        self.send(text_data=json.dumps({"message": message}))
+
+
+

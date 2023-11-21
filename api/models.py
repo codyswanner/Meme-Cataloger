@@ -7,7 +7,7 @@ class AppUser(models.Model):
 
 
 class Image(models.Model):
-    source = models.ImageField()
+    source = models.ImageField(max_length=1000)
     owner = models.ForeignKey(AppUser, on_delete=models.CASCADE)
 
 

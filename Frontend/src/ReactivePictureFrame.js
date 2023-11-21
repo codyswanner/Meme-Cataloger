@@ -75,7 +75,7 @@ function ReactivePictureFrame(props) {
         </Toolbar>
         {/* Actual image to be displayed */}
         <div>
-          <img src={props.src} style={{ maxWidth: 500 }}/>
+          <img src={props.src} style={{ maxWidth: props.maxWidth }}/>
         </div>
         {/* Picture lower toolbar, includes Tag(s) and AddTagButton */}
         <Toolbar sx={[toolbarStyles, { bottom: 6.5 }]}>

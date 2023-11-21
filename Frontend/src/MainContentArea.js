@@ -51,6 +51,16 @@ let pictures = await fetchImageTags(raw_pictures);
 
 
 function MainContentArea() {
+
+  const [viewportwidth, setViewportWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className='flex-container'>
       <ImageList variant='masonry' cols={4} gap={4}>
@@ -59,7 +69,7 @@ function MainContentArea() {
             <ImageListItem key={pictures.indexOf(pic)}>
               <ReactivePictureFrame
                 src={pic.source}
-                maxWidth={400}
+                maxWidth={viewportwidth * 0.2}
                 toolbarMaxHeight={352}
                 key={pictures.indexOf(pic)}
                 tags={pic.tags}
