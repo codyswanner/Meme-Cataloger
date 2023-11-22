@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
 
-const handleChange = (e) => {
-
+const handleChange = (checkboxLabel) => {
+    console.log("Selected " + checkboxLabel)
 }
 
 function FilterCheckbox(props) {
@@ -10,7 +10,7 @@ function FilterCheckbox(props) {
         <FormControlLabel control={<Checkbox/>}
         label={props.text}
         sx={{ width: 1}}
-        onChange={handleChange}/>
+        onChange={() => handleChange(props.text)}/>
     );
     
 }

@@ -4,6 +4,11 @@ from channels.generic.websocket import WebsocketConsumer
 
 
 class FilterConsumer(WebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.user_id = None
+        self.layer_name = None
+
     def connect(self):
         # what to do on connection opened.
         # see documentation and tutorial code.
@@ -11,6 +16,14 @@ class FilterConsumer(WebsocketConsumer):
         # Some ideas:
         # Authenticate user, match client with backend,
         # create some kind of session/token to keep things in order
+        self.user_id = 1
+        self.layer_name = f"{self.user_id}_gallery"
+
+        # Join channel layer
+        async_to_sync(self.channel_layer.group_add)(
+            self.layer_name, self.channel_name
+        )
+
         self.accept()
 
     def disconnect(self, code):
@@ -33,11 +46,4 @@ class FilterConsumer(WebsocketConsumer):
 
         # Is this where a message is sent to Django/React
         # to update the list of pictures?
-        text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
-        print(message)
-
-        self.send(text_data=json.dumps({"message": message}))
-
-
-
+        pass

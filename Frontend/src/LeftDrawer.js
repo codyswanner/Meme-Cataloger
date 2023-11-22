@@ -20,12 +20,12 @@ function LeftDrawer() {
             <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
             <Box sx={{ overflow: 'auto' }}>
                 <List>
-                    {['Nature', 'Vacation', 'Important', 'Screenshots', 'Posters', 'Documents', 'Other'].map((text, index) => (
+                    {['Nature', 'Vacation', 'Important', 'Screenshots', 'Posters', 'Documents', 'Star Wars Memes', 'Other'].map((text, index) => (
                         // <ListItemButton key={index} onClick={() => handleButtonClick(text)}>
                         //     <ListItemText primary={text} />
                         // </ListItemButton>
 
-                        <FilterCheckbox text={text} socket={filterSocket}/>
+                        <FilterCheckbox text={text} socket={filterSocket} key={index}/>
                     ))}
                 </List>
                 <Divider />
