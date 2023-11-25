@@ -46,4 +46,10 @@ class FilterConsumer(WebsocketConsumer):
 
         # Is this where a message is sent to Django/React
         # to update the list of pictures?
-        pass
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
+
+        filter_name = text_data_json["filterName"]
+        
+
+        print(message)

@@ -4,6 +4,10 @@ const filterSocket = new WebSocket(
     'ws://' + window.location.host + '/ws/connection/path/here/'
 );
 
+filterSocket.onopen = () => {
+    filterSocket.send(JSON.stringify({'message': 'FilterSocket connected!'}));
+};
+
 // Also probably in this module: send message about filters, receive info to apply filters
 
 filterSocket.onclose = function(e) {
