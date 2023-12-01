@@ -47,9 +47,15 @@ class FilterConsumer(WebsocketConsumer):
         # Is this where a message is sent to Django/React
         # to update the list of pictures?
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        message_type = text_data_json.get('type', None);
 
-        filter_name = text_data_json["filterName"]
-        
+        if message_type == 'message':
+            websocket_message = text_data_json['message']
+            print(f'Websocket Message: {websocket_message}')
+        elif message_type == 'filterChange':
+            filter_name = text_data_json['filterName']
+            print(f'Filter selected: {filter_name}')
+        else:
+            print("Unexpected websocket message type!")
 
-        print(message)
+

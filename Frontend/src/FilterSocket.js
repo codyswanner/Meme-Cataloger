@@ -5,7 +5,8 @@ const filterSocket = new WebSocket(
 );
 
 filterSocket.onopen = () => {
-    filterSocket.send(JSON.stringify({'message': 'FilterSocket connected!'}));
+    console.log('FilterSocket connected!');
+    filterSocket.send(JSON.stringify({'type': 'message', 'message': 'FilterSocket Connected!'}));
 };
 
 // Also probably in this module: send message about filters, receive info to apply filters
