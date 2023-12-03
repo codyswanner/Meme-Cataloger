@@ -5,7 +5,9 @@ import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText, Form
 
 const drawerWidth = 240;
 
-function LeftDrawer() {
+function LeftDrawer(props) {
+    let tagsList = props.data[1];
+    
     return (
         <Drawer
             variant='permanent'
@@ -20,13 +22,12 @@ function LeftDrawer() {
             <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
             <Box sx={{ overflow: 'auto' }}>
                 <List>
-                    {['Nature', 'Vacation', 'Important', 'Screenshots', 'Posters', 'Documents', 'Star Wars Memes', 'Other'].map((text, index) => (
-                        // <ListItemButton key={index} onClick={() => handleButtonClick(text)}>
-                        //     <ListItemText primary={text} />
-                        // </ListItemButton>
+                    {tagsList.map((tag) => {
+                        const tagId = tag.id;
+                        const tagName = tag.name;
 
-                        <FilterCheckbox text={text} socket={filterSocket} key={index}/>
-                    ))}
+                        return(<FilterCheckbox text={tagName} socket={filterSocket} key={tagId} tagId={tagId}/>)
+                    })}
                 </List>
                 <Divider />
                 <List>

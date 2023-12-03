@@ -54,7 +54,8 @@ class FilterConsumer(WebsocketConsumer):
             print(f'Websocket Message: {websocket_message}')
         elif message_type == 'filterChange':
             filter_name = text_data_json['filterName']
-            print(f'Filter selected: {filter_name}')
+            filter_id = text_data_json['filterId']
+            print(f'Filter selected: {filter_name} with id {filter_id}')
         else:
             print("Unexpected websocket message type!")
 

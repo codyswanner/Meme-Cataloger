@@ -3,7 +3,7 @@ import { Box, Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, L
 import MainContentArea from './MainContentArea';
 import LeftDrawer from './LeftDrawer';
 
-function ContentFrame() {
+function ContentFrame(props) {
 
     const handleButtonClick = (buttonType) => {
         console.log(`Clicked ${buttonType} button`);
@@ -23,12 +23,12 @@ function ContentFrame() {
             </AppBar>
 
             {/* Drawer on left side, holds tag filter options */}
-            <LeftDrawer />
+            <LeftDrawer data={props.data}/>
 
             {/* Main content area */}
             <Box component="main" sx={{ flexGrow: 1 }}>
                 <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
-                <MainContentArea/>
+                <MainContentArea data={props.data}/>
             </Box>
         </Box>
     );
