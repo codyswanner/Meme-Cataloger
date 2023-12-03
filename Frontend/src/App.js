@@ -1,52 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentFrame from './ContentFrame'
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import axios from 'axios';
+import filterSocket from './FilterSocket';
 
-const fetchImages = async () => {
-  const response = await axios.get('/api/image');
-  const imageDataList = [];
-
-  response.data.forEach(responseData => {
-    const imageId = responseData.id;
-    const imageSource = responseData.source;
-    const imageData = {id: imageId, source: imageSource, tags: []};
-    imageDataList.push(imageData);
-  });
-
-  return imageDataList;
-};
-
-const fetchTags = async () => {
-  const response = await axios.get('api/tag');
-  const tagData = response.data;
-
-  return tagData;
-}
-
-const fetchImageTags = async (imageDataList) => {
-  const response = await axios.get('api/image-tag');
-  
-  response.data.forEach(imageTagData => {
-    const imageId = imageTagData['image_id'];
-    const tagId   = imageTagData['tag_id'];
-    imageDataList.find(imageData => imageData.id === imageId).tags.push(tagId);
-  })
-
-  return imageDataList;
-}
-
-// fetchImages function grabs the URLs for the pictures themselves
-let raw_pictures = await fetchImages();
-
-// fetchTags function grabs the list of all created tags
-let tagsArray = await fetchTags();
-
-// fetchImageTags function assigns appropriate tags to pictures; the result is used in the MainContentArea component
-let pictures = await fetchImageTags(raw_pictures);
-
-let apiData = [pictures, tagsArray];
 
 // createTheme sets background color
 const theme = createTheme({
@@ -57,11 +14,51 @@ const theme = createTheme({
   },
 });
 
-function App() {
+function App(props) {
+
+  const [appData, setAppData] = useState(props.apiData);
+  const [activeFilters, setActiveFilters] = useState([]);
+
+  // update pictures when data is received from WebSocket
+  useEffect(() => {
+    const socket = filterSocket;
+
+    const receiveMessage = (e) => {
+      const response = JSON.parse(e.data);
+
+      if (response.type == "filterChange") {
+        if (response.filterState == "on") {
+          setActiveFilters(
+            filters => {
+              filters.push(response.filterId)
+              return filters
+            });
+        } else if (response.filterState == "off") {
+          setActiveFilters(
+            filters => {
+              const i = filters.indexOf(response.filterId);
+              filters.splice(i, 1);
+              return filters;
+            });
+        }
+        
+        console.log(activeFilters);
+        // Send filters to Django to make query and return picture ids to display
+      }
+
+      
+    }
+
+    socket.addEventListener('message', receiveMessage);
+
+    return () => {
+      socket.removeEventListener('message', receiveMessage);
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <ContentFrame data={apiData}/>
+      <ContentFrame data={appData}/>
     </ThemeProvider>
   );
 }

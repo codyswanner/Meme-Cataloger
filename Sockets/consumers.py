@@ -35,6 +35,18 @@ class FilterConsumer(WebsocketConsumer):
         # Close any database connections?
         pass
 
+    def filter_change(self, text_data_json):
+        filter_name = text_data_json['filterName']
+        filter_id = text_data_json['filterId']
+        filter_state = text_data_json['filterState']
+
+        if filter_state == "on":
+            print(f'Filter selected: {filter_name} with id {filter_id}')
+        else:
+            print(f'Filter deselected: {filter_name} with id {filter_id}')
+
+        self.send(text_data=json.dumps(text_data_json))
+
     def receive(self, text_data=None, bytes_data=None):
         # what to do when the user clicks a filter checkbox.
         # see documentation and tutorial code,
@@ -47,16 +59,12 @@ class FilterConsumer(WebsocketConsumer):
         # Is this where a message is sent to Django/React
         # to update the list of pictures?
         text_data_json = json.loads(text_data)
-        message_type = text_data_json.get('type', None);
+        message_type = text_data_json.get('type', None)
 
         if message_type == 'message':
             websocket_message = text_data_json['message']
             print(f'Websocket Message: {websocket_message}')
         elif message_type == 'filterChange':
-            filter_name = text_data_json['filterName']
-            filter_id = text_data_json['filterId']
-            print(f'Filter selected: {filter_name} with id {filter_id}')
+            self.filter_change(text_data_json)
         else:
             print("Unexpected websocket message type!")
-
-

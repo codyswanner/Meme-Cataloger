@@ -1,12 +1,17 @@
 import * as React from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
 
-const handleChange = (props) => {
+const handleChange = (props, event) => {
     const checkboxLabel = props.text;
     const socket = props.socket;
-    const selectionMessage = "FilterCheckbox: selected " + props.tagId;
+    const selectionMessage = "FilterCheckbox: " + (event.target.checked ? "" : "un") + "checked " + props.tagId;
     console.log(selectionMessage);
-    socket.send(JSON.stringify({'type':'filterChange', 'filterName': checkboxLabel, "filterId": props.tagId}));
+    socket.send(JSON.stringify({
+        'type':'filterChange', 
+        'filterName': checkboxLabel, 
+        'filterId': props.tagId, 
+        'filterState': (event.target.checked ? "on" : "off")
+    }));
 };
 
 function FilterCheckbox(props) {
@@ -14,10 +19,11 @@ function FilterCheckbox(props) {
         <FormControlLabel control={<Checkbox/>}
         label={props.text}
         sx={{ width: 1}}
-        onChange={() => handleChange(props)}/>
+        onChange={(event) => handleChange(props, event)}/>
     );
     
 }
 
 
 export default FilterCheckbox;
+ 
