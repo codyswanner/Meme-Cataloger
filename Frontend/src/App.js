@@ -41,9 +41,12 @@ function App(props) {
               return filters;
             });
         }
+      
         
         console.log(activeFilters);
         // Send filters to Django to make query and return picture ids to display
+        // Add user id to this
+        socket.send(JSON.stringify({'type': 'activeFilters', 'activeFilters': activeFilters}));
       }
 
       

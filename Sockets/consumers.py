@@ -1,6 +1,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from api.models import *
 
 
 class FilterConsumer(WebsocketConsumer):
@@ -47,6 +48,18 @@ class FilterConsumer(WebsocketConsumer):
 
         self.send(text_data=json.dumps(text_data_json))
 
+    def apply_filters(self, text_data_json):
+        print("\n\nNew Filter Array!")
+        print(text_data_json)
+        active_filters = text_data_json['activeFilters']
+        image_results = Image.objects.all()
+        for f in active_filters:
+            image_results = image_results.filter(imagetag__tag_id=f)
+        for result in image_results:
+            print(result.id)
+
+        self.send(text_data=json.dumps("Finish apply_filters function!"))
+
     def receive(self, text_data=None, bytes_data=None):
         # what to do when the user clicks a filter checkbox.
         # see documentation and tutorial code,
@@ -66,5 +79,8 @@ class FilterConsumer(WebsocketConsumer):
             print(f'Websocket Message: {websocket_message}')
         elif message_type == 'filterChange':
             self.filter_change(text_data_json)
+            print(text_data_json)
+        elif message_type == 'activeFilters':
+            self.apply_filters(text_data_json)
         else:
             print("Unexpected websocket message type!")
