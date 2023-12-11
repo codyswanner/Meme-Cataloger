@@ -52,13 +52,15 @@ class FilterConsumer(WebsocketConsumer):
         print("\n\nNew Filter Array!")
         print(text_data_json)
         active_filters = text_data_json['activeFilters']
-        image_results = Image.objects.all()
+        image_queryset = Image.objects.all()
+        image_results = []
         for f in active_filters:
-            image_results = image_results.filter(imagetag__tag_id=f)
-        for result in image_results:
-            print(result.id)
+            image_queryset = image_queryset.filter(imagetag__tag_id=f)
+        for result in image_queryset:
+            image_results.append(result.id)
+        print(image_results)
 
-        self.send(text_data=json.dumps("Finish apply_filters function!"))
+        self.send(text_data=json.dumps({'type': 'applyFilters', 'results': image_results}))
 
     def receive(self, text_data=None, bytes_data=None):
         # what to do when the user clicks a filter checkbox.

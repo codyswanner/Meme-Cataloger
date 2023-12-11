@@ -56,6 +56,8 @@ async function ApiCall() {
 
   let apiData = [picturesArray, tagsArray, imageTagsArray];
 
+  console.log(apiData)
+
   return apiData;
 
 }
