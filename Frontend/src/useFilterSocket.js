@@ -37,14 +37,16 @@ function useFilterSocket(props) {
         const results = response.results;
                 let imagesToRender = [];
                 if (results.length == 0) {
-                setAppData(props.apiData);
-                } else {props.apiData[0].forEach(image => {
-                if (results.includes(image.id)) {
-                    imagesToRender.push(image)
-                };
-                });
-                const newData = [imagesToRender, props.apiData[1], props.apiData[2]];
-                setAppData(newData);
+                    console.log("No matching photos!")
+                    setAppData([[], props.apiData[1], props.apiData[2]]);
+                } else {
+                    props.apiData[0].forEach(image => {
+                        if (results.includes(image.id)) {
+                            imagesToRender.push(image)
+                        };
+                    });
+                    const newData = [imagesToRender, props.apiData[1], props.apiData[2]];
+                    setAppData(newData);
                 }
     }
 
