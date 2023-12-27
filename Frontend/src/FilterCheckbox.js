@@ -18,7 +18,7 @@ function FilterCheckbox(props) {
     return(
         <FormControlLabel control={<Checkbox/>}
         label={props.text}
-        sx={{ width: 1}}
+        sx={{ width: 1}} // TODO: Change with screen width
         onChange={(event) => handleChange(props, event)}/>
     );
     
