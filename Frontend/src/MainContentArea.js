@@ -24,15 +24,15 @@ function MainContentArea(props) {
       <ImageList variant='masonry' cols={4} gap={4}> {/* Change cols based on screen width */}
         {pictures.map((pic) => {
           return (
-            <ImageListItem key={pictures.indexOf(pic)}>
+            <ImageListItem key={pic.id}>
               <ReactivePictureFrame
                 src={pic.source}
                 maxWidth={viewportwidth * 0.2} // Change based on screen size
                 toolbarMaxHeight={352} // Change based on screen size?
-                key={pictures.indexOf(pic)}
                 tags={pic.tags}
                 tagNames={tagsArray}
-                index={pictures.indexOf(pic)}/>
+                id={pic.id}
+                /*index={pictures.indexOf(pic)}*//>
             </ImageListItem>
           );
         })}

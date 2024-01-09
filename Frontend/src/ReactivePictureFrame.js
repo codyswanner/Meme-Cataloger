@@ -17,6 +17,20 @@ function ReactivePictureFrame(props) {
     setImageHovered(false);
   };
 
+  const handleButtonClick = (buttonType, props) => {
+    console.log(`Clicked ${buttonType} on image ${props.id}`);
+  }
+
+  const generateTags = (tags, tagNames) => {
+    return tags.length === 0 ? (
+      <Tag tag={0} key={0} tagNames={tagNames} />
+    ) : (
+      tags.map((tag) => (
+        <Tag tag={tag} key={tag} tagNames={tagNames} />
+      ))
+    );
+  }
+
   var toolbarVisible = imageHovered;
 
   const toolbarStyles = {

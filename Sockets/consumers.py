@@ -62,6 +62,19 @@ class FilterConsumer(WebsocketConsumer):
 
         self.send(text_data=json.dumps({'type': 'applyFilters', 'results': image_results}))
 
+    def add_tag(self, text_data_json):
+        image_id = text_data_json['imageId']
+        tag_id = text_data_json['tagId']
+
+        image_object = Image.objects.get(id=image_id)
+        tag_object = Tag.objects.get(id=tag_id)
+        t = ImageTag(image_id=image_object, tag_id=tag_object)
+        t.save()
+
+        # send an update to client
+        return_message = {'type': 'tagAdded', 'id': t.id, 'imageId': image_id, 'tagId': tag_id}
+        self.send(text_data=json.dumps(return_message))
+
     def receive(self, text_data=None, bytes_data=None):
         # what to do when the user clicks a filter checkbox.
         # see documentation and tutorial code,
@@ -84,5 +97,7 @@ class FilterConsumer(WebsocketConsumer):
             print(text_data_json)
         elif message_type == 'activeFilters':
             self.apply_filters(text_data_json)
+        elif message_type == 'addTag':
+            self.add_tag(text_data_json)
         else:
             print("Unexpected websocket message type!")
