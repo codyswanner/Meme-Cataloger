@@ -1,11 +1,9 @@
 import React from 'react';
-import { Box, IconButton, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
-import Tag from './Tag';
-import AddTagButton from './AddTagButton';
-import ShareIcon from "@mui/icons-material/Share";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Box } from "@mui/material";
+
+import ImageTopToolbar from './ImageTopToolbar';
+import ImageBottomToolbar from './ImageBottomToolbar';
 
 
 function ReactivePictureFrame(props) {
@@ -55,33 +53,15 @@ function ReactivePictureFrame(props) {
         onMouseLeave={handleImageMouseLeave}
       >
         {/* Picture top toolbar, includes description and share/archive/trash buttons */}
-        <Toolbar sx={toolbarStyles}>
-          <Typography sx={{ fontSize: "0.9rem", color: "white" }}>
-            Text Description
-          </Typography>
-          <div style={{ marginLeft: "auto" }}>
-            <Toolbar disableGutters>
-              <IconButton onClick={() => handleButtonClick("Share", props)}>
-                <ShareIcon sx={{ color: "white" }} />
-              </IconButton>
-              <IconButton onClick={() => handleButtonClick("Archive", props)}>
-                <ArchiveIcon sx={{ color: "white" }} />
-              </IconButton>
-              <IconButton onClick={() => handleButtonClick("Delete", props)}>
-                <DeleteIcon sx={{ color: "white" }} />
-              </IconButton>
-            </Toolbar>
-          </div>
-        </Toolbar>
+        <ImageTopToolbar toolbarStyles = {toolbarStyles} {...props}/>
+
         {/* Actual image to be displayed */}
         <div>
           <img src={props.src} style={{ maxWidth: props.maxWidth }}/>
         </div>
+
         {/* Picture lower toolbar, includes Tag(s) and AddTagButton */}
-        <Toolbar sx={[toolbarStyles, { bottom: 6.5 }]}>
-          {generateTags(props.tags, props.tagNames)}
-          <AddTagButton imageId={props.id} style={{ marginLeft: "auto" }}/>
-        </Toolbar>
+        <ImageBottomToolbar toolbarStyles={toolbarStyles} {...props}/>
       </div>
     </Box>
   );

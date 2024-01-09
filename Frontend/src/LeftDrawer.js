@@ -1,12 +1,16 @@
 import * as React from 'react';
 import FilterCheckbox from './FilterCheckbox'
 import filterSocket from './FilterSocket';
-import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText, FormControlLabel, Checkbox } from '@mui/material';
+import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText } from '@mui/material';
 
-const drawerWidth = 240;
+function handleButtonClick() {
+    // handle click for Archive and Trash buttons
+    null;
+}
 
 function LeftDrawer(props) {
     let tagsList = props.data[1];
+    const drawerWidth = 240; // Variable based on screen size?
     
     return (
         <Drawer
@@ -32,6 +36,7 @@ function LeftDrawer(props) {
                 <Divider />
                 <List>
                     {['Archive', 'Trash'].map((text, index) => (
+                        // handleButtonClick not implemented for Archive and Trash features yet
                         <ListItemButton key={index} onClick={() => handleButtonClick(text)}>
                             <ListItemText primary={text} />
                         </ListItemButton>

@@ -1,14 +1,9 @@
 import * as React from 'react';
-import { Box, Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Box, AppBar, CssBaseline, Toolbar, Typography} from '@mui/material';
 import MainContentArea from './MainContentArea';
 import LeftDrawer from './LeftDrawer';
 
 function ContentFrame(props) {
-
-    const handleButtonClick = (buttonType) => {
-        console.log(`Clicked ${buttonType} button`);
-    }
-
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
