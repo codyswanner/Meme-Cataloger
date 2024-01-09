@@ -19,7 +19,7 @@ function ImageBottomToolbar(props) {
     return(
       <Toolbar sx={[props.toolbarStyles, { bottom: 6.5 }]}>
         {generateTags(props.tags, props.tagNames)}
-        <AddTagButton index={props.index} style={{ marginLeft: "auto" }}/>
+        <AddTagButton imageId={props.id} style={{ marginLeft: "auto" }}/>
       </Toolbar>
     );
   }

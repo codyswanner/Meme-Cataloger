@@ -7,8 +7,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 
 function ImageTopToolbar(props) {
-    const handleButtonClick = (buttonType, index) => {
-      console.log(`Clicked ${buttonType} on image ${index}`);
+    const handleButtonClick = (buttonType, id) => {
+      console.log(`Clicked ${buttonType} on image ${id}`);
     }
   
     return(
@@ -18,13 +18,13 @@ function ImageTopToolbar(props) {
         </Typography>
         <div style={{ marginLeft: "auto" }}>
           <Toolbar disableGutters>
-            <IconButton onClick={() => handleButtonClick("Share", props.index)}>
+            <IconButton onClick={() => handleButtonClick("Share", props.id)}>
               <ShareIcon sx={{ color: "white" }} />
             </IconButton>
-            <IconButton onClick={() => handleButtonClick("Archive", props.index)}>
+            <IconButton onClick={() => handleButtonClick("Archive", props.id)}>
               <ArchiveIcon sx={{ color: "white" }} />
             </IconButton>
-            <IconButton onClick={() => handleButtonClick("Delete", props.index)}>
+            <IconButton onClick={() => handleButtonClick("Delete", props.id)}>
               <DeleteIcon sx={{ color: "white" }} />
             </IconButton>
           </Toolbar>
