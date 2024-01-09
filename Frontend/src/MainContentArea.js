@@ -69,15 +69,15 @@ function MainContentArea(props) {
       <ImageList variant='masonry' cols={4} gap={4}>
         {pictures.map((pic) => {
           return (
-            <ImageListItem key={pictures.indexOf(pic)}>
+            <ImageListItem key={pic.id}>
               <ReactivePictureFrame
                 src={pic.source}
                 maxWidth={viewportwidth * 0.2}
                 toolbarMaxHeight={352}
-                key={pictures.indexOf(pic)}
                 tags={pic.tags}
                 tagNames={tagsArray}
-                index={pictures.indexOf(pic)}/>
+                id={pic.id}
+                /*index={pictures.indexOf(pic)}*//>
             </ImageListItem>
           );
         })}

@@ -20,7 +20,7 @@ function ReactivePictureFrame(props) {
   };
 
   const handleButtonClick = (buttonType, props) => {
-    console.log(`Clicked ${buttonType} on image ${props.index}`);
+    console.log(`Clicked ${buttonType} on image ${props.id}`);
   }
 
   const generateTags = (tags, tagNames) => {
@@ -80,7 +80,7 @@ function ReactivePictureFrame(props) {
         {/* Picture lower toolbar, includes Tag(s) and AddTagButton */}
         <Toolbar sx={[toolbarStyles, { bottom: 6.5 }]}>
           {generateTags(props.tags, props.tagNames)}
-          <AddTagButton index={props.index} style={{ marginLeft: "auto" }}/>
+          <AddTagButton imageId={props.id} style={{ marginLeft: "auto" }}/>
         </Toolbar>
       </div>
     </Box>
