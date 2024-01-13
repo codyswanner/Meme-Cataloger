@@ -1,7 +1,8 @@
-import * as React from 'react';
-import FilterCheckbox from './FilterCheckbox'
-import filterSocket from './FilterSocket';
+import React from 'react';
 import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText } from '@mui/material';
+
+import filterSocket from './FilterSocket';
+import FilterCheckbox from './FilterCheckbox'
 
 function handleButtonClick() {
     // handle click for Archive and Trash buttons
@@ -33,7 +34,7 @@ function LeftDrawer(props) {
                         return(<FilterCheckbox text={tagName} socket={filterSocket} key={tagId} tagId={tagId}/>)
                     })}
                 </List>
-                <Divider />
+                <Divider/>
                 <List>
                     {['Archive', 'Trash'].map((text, index) => (
                         // handleButtonClick not implemented for Archive and Trash features yet

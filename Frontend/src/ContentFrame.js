@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { Box, AppBar, CssBaseline, Toolbar, Typography} from '@mui/material';
+
 import MainContentArea from './MainContentArea';
 import LeftDrawer from './LeftDrawer';
 

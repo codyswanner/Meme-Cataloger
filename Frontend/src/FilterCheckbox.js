@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
 
 const handleChange = (props, event) => {
@@ -18,7 +18,7 @@ function FilterCheckbox(props) {
     return(
         <FormControlLabel control={<Checkbox/>}
         label={props.text}
-        sx={{ width: 1}} // TODO: Change with screen width
+        sx={{ width: 1 }} // TODO: Change with screen width
         onChange={(event) => handleChange(props, event)}/>
     );
     

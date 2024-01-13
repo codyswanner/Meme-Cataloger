@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useState } from 'react';
 import { Box } from "@mui/material";
 
 import ImageTopToolbar from './ImageTopToolbar';
@@ -17,19 +16,9 @@ function ReactivePictureFrame(props) {
     setImageHovered(false);
   };
 
-  const handleButtonClick = (buttonType, props) => {
-    console.log(`Clicked ${buttonType} on image ${props.id}`);
-  }
-
-  const generateTags = (tags, tagNames) => {
-    return tags.length === 0 ? (
-      <Tag tag={0} key={0} tagNames={tagNames} />
-    ) : (
-      tags.map((tag) => (
-        <Tag tag={tag} key={tag} tagNames={tagNames} />
-      ))
-    );
-  }
+  // const handleButtonClick = (buttonType, props) => {
+  //   console.log(`Clicked ${buttonType} on image ${props.id}`);
+  // }
 
   var toolbarVisible = imageHovered;
 
