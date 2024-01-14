@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import ImageList from '@mui/material/ImageList'
-import ImageListItem from '@mui/material/ImageListItem'
+import React, { useState, useEffect, useContext } from 'react';
+import { ImageList, ImageListItem } from '@mui/material'
+
 import ReactivePictureFrame from './ReactivePictureFrame';
+import AppDataContext from './AppDataContext';
 
 
-function MainContentArea(props) {
+function MainContentArea() {
 
-  let pictures = props.data[0];
-  let tagsArray = props.data[1];
+  const appData = useContext(AppDataContext);
+
+  let pictures = appData[0];
+  let tagsArray = appData[1];
   
   // Move to App or ContentFrame?
   const [viewportwidth, setViewportWidth] = useState(window.innerWidth);
@@ -30,7 +33,7 @@ function MainContentArea(props) {
                 maxWidth={viewportwidth * 0.2} // Change based on screen size
                 toolbarMaxHeight={352} // Change based on screen size?
                 tags={pic.tags}
-                tagNames={tagsArray}
+                
                 id={pic.id}
                 /*index={pictures.indexOf(pic)}*//>
             </ImageListItem>

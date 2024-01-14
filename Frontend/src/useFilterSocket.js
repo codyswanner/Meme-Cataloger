@@ -51,40 +51,23 @@ function useFilterSocket(props) {
     }
 
     function handleTagAdded (response) {
-        console.log("tagAdded message received!")
-        console.log(response);
-
         const objectId = response.id;
         const imageId = response.imageId;
         const tagId = response.tagId;
 
         const modifiedAppData = {...appData};
-        console.log("appData copy completed: ")
-        console.log(modifiedAppData);
         // Use response to locate relevant object in appData[0]
         const findInAppData = (id) => modifiedAppData[0].find(element => element.id == id); 
         const imageObject = findInAppData(imageId);
         // Modify object in appData[0] to match updates
         imageObject.tags.push(tagId);
-        console.log("modifiedAppData[0] updated");
-        console.log(modifiedAppData);
         
         
         // Add object to appData[2] to reflect updates
         const newImageTag = {'id': objectId, 'image_id': imageId, 'tag_id': tagId};
-        console.log("newImageTag created");
-        console.log(newImageTag);
-        console.log("modifiedAppData[2] before:")
-        console.log(modifiedAppData[2]);
         modifiedAppData[2].push(newImageTag);
-        console.log("modifiedAppData[2] updated")
-        console.log(modifiedAppData[2]);
-        console.log("setting appData!")
 
         setAppData(modifiedAppData);
-
-        console.log("appData set!")
-
     }
 
     useEffect(() => {

@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText } from '@mui/material';
 
 import filterSocket from './FilterSocket';
-import FilterCheckbox from './FilterCheckbox'
+import FilterCheckbox from './FilterCheckbox';
+import AppDataContext from './AppDataContext';
 
 function handleButtonClick() {
     // handle click for Archive and Trash buttons
     null;
 }
 
-function LeftDrawer(props) {
-    let tagsList = props.data[1];
+function LeftDrawer() {
+    const appData = useContext(AppDataContext);
+    let tagsList = appData[1];
     const drawerWidth = 240; // Variable based on screen size?
     
     return (

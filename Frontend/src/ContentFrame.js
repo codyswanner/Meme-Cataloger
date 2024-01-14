@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, AppBar, CssBaseline, Toolbar, Typography} from '@mui/material';
 
 import MainContentArea from './MainContentArea';
 import LeftDrawer from './LeftDrawer';
+import AppDataContext from './AppDataContext';
 
-function ContentFrame(props) {
+function ContentFrame() {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -19,12 +20,12 @@ function ContentFrame(props) {
             </AppBar>
 
             {/* Drawer on left side, holds tag filter options */}
-            <LeftDrawer data={props.data}/>
+            <LeftDrawer />
 
             {/* Main content area */}
             <Box component="main" sx={{ flexGrow: 1 }}>
                 <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
-                <MainContentArea data={props.data}/>
+                <MainContentArea />
             </Box>
         </Box>
     );

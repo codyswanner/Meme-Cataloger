@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
 import ContentFrame from './ContentFrame';
 import useFilterSocket from './useFilterSocket';
-
+import AppDataContext from './AppDataContext';
 
 // createTheme sets background color
 const theme = createTheme({
@@ -22,7 +22,9 @@ function App(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <ContentFrame data={appData}/>
+    <AppDataContext.Provider value={appData}>
+      <ContentFrame />
+    </AppDataContext.Provider>
     </ThemeProvider>
   );
 }
