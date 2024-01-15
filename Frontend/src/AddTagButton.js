@@ -6,59 +6,30 @@ import AddTagPopper from './AddTagPopper';
 
 
 
-// function AddTagPopper(props) {
-//   const id = open ? 'simple-popper' : undefined;
-
-//   return(
-//     <Popper id={id} open={props.open} anchorEl={props.anchorEl}>
-//       <Box sx={{ border: 1, p: 1, bgcolor: '#aaaaaa' }}>
-//         <p>Testing the popper</p>
-//       </Box>
-//     </Popper>
-//   )
-// }
-
-
-
-
-
-
 function AddTagButton(props) {
 
   const socket = filterSocket;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [buttonHovered, setButtonHovered] = useState(false);
-  
-  const handleButtonClick = (props) => {
+    
+  const handleClick = (e, props) => {
     
 
-    const tagId = 999 // Hardcoded!  Make dynamic later!  Hardcoded!  Make dynamic later!
-    socket.send(JSON.stringify({'type': 'addTag', 'imageId': props.imageId, 'tagId': tagId}));
+    // const tagId = 999 // Hardcoded!  Make dynamic later!  Hardcoded!  Make dynamic later!
+    // socket.send(JSON.stringify({'type': 'addTag', 'imageId': props.imageId, 'tagId': tagId}));
+    setAnchorEl(anchorEl ? null : e.currentTarget);
   }
 
-  const handleMouseEnter = (e) => {
-    setAnchorEl(e.currentTarget);
-    setButtonHovered(true);
-  }
-
-  const handleMouseLeave = () => {
-    setAnchorEl(null);
-    setButtonHovered(false);
-  }
-
-  const open = buttonHovered == true;
+  const open = Boolean(anchorEl);
   
-
   return (
     <>
       <IconButton
         style={{ color: "white" }}
-        onClick={() => handleButtonClick(props)}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
+        onClick={(e) => handleClick(e, props)}>
         <p>+</p>
       </IconButton>
-      <AddTagPopper open={open} anchorEl={anchorEl} />
+
+      <AddTagPopper open={open} anchorEl={anchorEl} imageId={props.imageId}/>
     </>
   );
 };
