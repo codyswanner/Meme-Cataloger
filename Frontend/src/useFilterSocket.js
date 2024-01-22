@@ -26,7 +26,6 @@ function useFilterSocket(props) {
         }
         
         
-        console.log(activeFilters);
         // Send filters to Django to make query and return picture ids to display
         // Add user id to this
         socket.send(JSON.stringify({'type': 'activeFilters', 'activeFilters': activeFilters}));
@@ -70,6 +69,43 @@ function useFilterSocket(props) {
         setAppData(modifiedAppData);
     }
 
+    function handleTagRemoved (response) {
+        const objectId = response.id;
+        const imageId = response.imageId;
+        const tagId = response.tagId;
+
+        const modifiedAppData = {...appData};
+        // Use response to locate relevant objects in appData
+        const findImage = (id) => modifiedAppData[0].find(element => element.id == id); 
+        const imageObject = findImage(imageId);
+
+        const findImageTag = (id) => modifiedAppData[2].find(element => element.id == id);
+
+        // Modiify objects in appData to match updates
+        // var tagArray = imageObject['tags']
+        var tagArray = imageObject['tags'];
+
+        console.log(tagArray);
+        
+        tagArray = tagArray.filter(function(item) {
+            return item !== tagId
+        })
+
+        console.log(tagArray);
+
+        imageObject['tags'] = tagArray;
+
+        console.log(modifiedAppData);
+        
+
+        setAppData(modifiedAppData);
+
+
+
+        
+        
+    }
+
     useEffect(() => {
         const socket = filterSocket;
     
@@ -81,6 +117,8 @@ function useFilterSocket(props) {
                 handleApplyFilters(response);
             } else if (response.type == "tagAdded") {
                 handleTagAdded(response);
+            } else if (response.type == "tagRemoved") {
+                handleTagRemoved(response);
             } else {
                 console.log("WebSocket message of undetermined type received")
             }

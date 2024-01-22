@@ -11,7 +11,7 @@ function ImageBottomToolbar(props) {
         <Tag tag={0} key={0} tagNames={tagNames} />
       ) : (
         tags.map((tag) => (
-          <Tag tag={tag} key={tag} tagNames={tagNames} />
+          <Tag tag={tag} imageId={props.id} key={tag} tagNames={tagNames} />
         ))
       );
     }
