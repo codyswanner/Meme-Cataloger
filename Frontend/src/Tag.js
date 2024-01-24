@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 
 import AppDataContext from './AppDataContext';
 import filterSocket from './FilterSocket';
-import './button-link.css';
 
 function Tag(props) {
   const appData = useContext(AppDataContext);

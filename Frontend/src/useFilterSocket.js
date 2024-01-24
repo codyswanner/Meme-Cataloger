@@ -70,41 +70,42 @@ function useFilterSocket(props) {
     }
 
     function handleTagRemoved (response) {
-        const objectId = response.id;
-        const imageId = response.imageId;
-        const tagId = response.tagId;
+        const objectId = response.id; // This is the id of the imageTag object to be removed
+        const imageId = response.imageId; // id of the target image
+        const tagId = response.tagId; // id of the target tag
 
+        // Make a copy of appData; modifying it directly would cause unnecessary re-renders
         const modifiedAppData = {...appData};
+
         // Use response to locate relevant objects in appData
-        const findImage = (id) => modifiedAppData[0].find(element => element.id == id); 
+        const findImage = (id) => modifiedAppData[0].find(element => element.id == id);
         const imageObject = findImage(imageId);
 
         const findImageTag = (id) => modifiedAppData[2].find(element => element.id == id);
+        const imageTagObject = findImageTag(objectId);
 
         // Modiify objects in appData to match updates
-        // var tagArray = imageObject['tags']
-        var tagArray = imageObject['tags'];
-
-        console.log(tagArray);
         
-        tagArray = tagArray.filter(function(item) {
-            return item !== tagId
-        })
+            // in tags array, remove target tag by id
+            var tagArray = imageObject['tags'];
+            tagArray = tagArray.filter(function(item) {
+                return item !== tagId
+            });
+            imageObject['tags'] = tagArray;
 
-        console.log(tagArray);
 
-        imageObject['tags'] = tagArray;
+            // in imageTag object, delete relevant object.
+            const imageTagData = modifiedAppData[2]
 
-        console.log(modifiedAppData);
-        
+            for (const [key, value] of Object.entries(imageTagData)) {
+                if (value.id === objectId) {
+                    delete imageTagData[key];
+                }
+            }
 
         setAppData(modifiedAppData);
-
-
-
-        
-        
     }
+
 
     useEffect(() => {
         const socket = filterSocket;
