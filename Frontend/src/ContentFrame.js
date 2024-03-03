@@ -3,21 +3,14 @@ import { Box, Button, AppBar, CssBaseline, Toolbar, Typography} from '@mui/mater
 import UploadIcon from '@mui/icons-material/Upload'
 import { styled } from '@mui/material/styles';
 
+import TopAppBar from './TopAppBar';
 import MainContentArea from './MainContentArea';
 import LeftDrawer from './LeftDrawer';
 import AppDataContext from './AppDataContext';
 
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-  });
+
+
+
 
 function ContentFrame() {
     return (
@@ -25,17 +18,7 @@ function ContentFrame() {
             <CssBaseline />
 
             {/* Navigation banner/AppBar at top of the page */}
-            <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                <Toolbar>
-                    <Typography variant='h5' noWrap component='div'>
-                        Meme-opolis
-                    </Typography>
-                    <Button component="label" variant="contained" sx={{marginLeft: "auto"}} startIcon={<UploadIcon/>}>
-                        Upload
-                        <VisuallyHiddenInput type='file'/>
-                    </Button>
-                </Toolbar>
-            </AppBar>
+            <TopAppBar/>
 
             {/* Drawer on left side, holds tag filter options */}
             <LeftDrawer />
