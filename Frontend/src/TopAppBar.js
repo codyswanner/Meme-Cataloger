@@ -23,6 +23,32 @@ function UploadDialog(props) {
         props.onClose();
     }
 
+    const handleDrop = (e) => {
+        e.preventDefault();
+        console.log("file dropped!")
+        const dt = e.dataTransfer;
+        console.log(dt);
+
+        const isFile = dt.types.includes('application/x-moz-file') | dt.types.includes('Files');
+        if (isFile) {
+            console.log("Drop includes file!");
+            if (dt.files) {
+                const data = dt.files[0]
+                console.log(data);
+            } else {
+                console.log("No files associated with drop");
+            }
+
+        } else {
+            console.log("Incorrect drop type: " + dt.types);
+        }
+    }
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        console.log("file dragged over!")
+    }
+
     return(
         <Dialog open={props.open} onClose={handleClose}>
             <DialogTitle>
@@ -37,6 +63,7 @@ function UploadDialog(props) {
             </Typography>
             <Box 
             sx={{
+                id: 'upload-box',
                 flexGrow: 1, 
                 borderStyle: 'dashed', 
                 display: 'flex',
@@ -44,7 +71,9 @@ function UploadDialog(props) {
                 justifyContent: 'center',
                 verticalAlign: 'center',
                 margin: '5% 0 5% 0'
-                }}>
+                }}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}>
                 <Button
                      component="label"
                      variant="contained"
@@ -96,9 +125,3 @@ function TopAppBar() {
 };
 
 export default TopAppBar;
-
-
-
-
-
-
