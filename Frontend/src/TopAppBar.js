@@ -39,6 +39,15 @@ async function handleUpload(e, files) {
 function UploadBox(props) {
 
     const [files, setFiles] = useState([]);
+
+    const handleInput = () => {
+        console.log("File Input!")
+        const dt = document.querySelector('#fileInput').files;
+        console.log(dt);
+        const data = dt[0]
+        console.log(data);  
+        setFiles([...files, data]);
+    }
     
     const handleDrop = (e) => {
         e.preventDefault();
@@ -125,7 +134,7 @@ function UploadBox(props) {
             sx={{ height: 50, verticalAlign: 'center', position: 'relative', margin: 'auto' }}
             startIcon={<UploadIcon/>}>
                 Upload Here!
-                <VisuallyHiddenInput type='file' />
+                <VisuallyHiddenInput type='file' id='fileInput' onInput={handleInput}/>
             </Button>
         </Box>
     );}
