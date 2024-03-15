@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Button, AppBar, Toolbar, Typography, Dialog, DialogTitle} from '@mui/material';
+import { Box, Button, AppBar, Toolbar, ListItemText, ListItemButton, Typography, Dialog, DialogTitle, List, ListItem} from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload'
 import { styled } from '@mui/material/styles';
+import axios from 'axios';
 
+import CSRFToken from './CSRFToken';
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -17,12 +19,13 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-function UploadDialog(props) {
 
-    const handleClose = () => {
-        props.onClose();
-    }
 
+
+function UploadBox(props) {
+
+    const [files, setFiles] = useState([]);
+    
     const handleDrop = (e) => {
         e.preventDefault();
         console.log("file dropped!")
@@ -35,6 +38,9 @@ function UploadDialog(props) {
             if (dt.files) {
                 const data = dt.files[0]
                 console.log(data);
+                
+                setFiles([...files, data]);
+                // const axios_response = axios.post('/api/')
             } else {
                 console.log("No files associated with drop");
             }
@@ -48,6 +54,77 @@ function UploadDialog(props) {
         e.preventDefault();
         console.log("file dragged over!")
     }
+    
+    if (files.length) {
+        return(
+            <form method='POST' action={''}>
+            <Box 
+            sx={{
+            id: 'upload-box',
+            display: 'flex',
+            flexGrow: 1, 
+            flexWrap: 'wrap',
+            flexDirection: 'column',
+            borderStyle: 'dashed', 
+            height: 'auto',
+            minHeight: 200,
+            justifyContent: 'space-between',
+            verticalAlign: 'center',
+            margin: '5% 0 5% 0',
+            padding: '2%'
+            }}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <List>
+                    {files.map((file, index) => (
+                        <Typography key={index}>
+                            {file.name}
+                        </Typography>
+                    ))}
+                </List>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button type='submit'>Click me!</Button>
+                </Box>
+            </Box>
+            </form>
+        )
+    } else {
+    return(
+        <Box 
+        sx={{
+            id: 'upload-box',
+            flexGrow: 1, 
+            borderStyle: 'dashed', 
+            display: 'flex',
+            height: 200,
+            justifyContent: 'center',
+            verticalAlign: 'center',
+            margin: '5% 0 5% 0'
+            }}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}>
+            <Button
+            component="label"
+            variant="contained"
+            sx={{ height: 50, verticalAlign: 'center', position: 'relative', margin: 'auto' }}
+            startIcon={<UploadIcon/>}>
+                Upload Here!
+                <VisuallyHiddenInput type='file' />
+            </Button>
+        </Box>
+    );}
+};
+
+
+
+
+function UploadDialog(props) {
+
+    const handleClose = () => {
+        props.onClose();
+    }
 
     return(
         <Dialog open={props.open} onClose={handleClose}>
@@ -58,31 +135,10 @@ function UploadDialog(props) {
             sx={{
                 margin: '0 5% 0 5%'
             }}>
-            <Typography>
-                Drag and drop into the box, or click the button to browse
-            </Typography>
-            <Box 
-            sx={{
-                id: 'upload-box',
-                flexGrow: 1, 
-                borderStyle: 'dashed', 
-                display: 'flex',
-                height: 200,
-                justifyContent: 'center',
-                verticalAlign: 'center',
-                margin: '5% 0 5% 0'
-                }}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}>
-                <Button
-                     component="label"
-                     variant="contained"
-                     sx={{ height: 50, verticalAlign: 'center', position: 'relative', margin: 'auto' }}
-                     startIcon={<UploadIcon/>}>
-                    Upload Here!
-                    <VisuallyHiddenInput type='file' />
-                </Button>
-            </Box>
+                <Typography>
+                    Drag and drop into the box, or click the button to browse
+                </Typography>
+                <UploadBox/>
             </Box>
         </Dialog>
     )
