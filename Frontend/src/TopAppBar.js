@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import axios from 'axios';
 
 import CSRFToken from './CSRFToken';
+import { sendCSRFRequest } from './CSRFToken';
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -19,6 +20,19 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
+
+async function handleUpload(e, files) {
+    e.preventDefault()
+    'use server'
+    const formData = new FormData();
+    await console.log(files);
+    await files.forEach(file => {
+        formData.append('file', file);    
+    });
+    console.log(formData);
+
+    await sendCSRFRequest(formData, 'api/upload/');
+}
 
 
 
@@ -40,7 +54,6 @@ function UploadBox(props) {
                 console.log(data);
                 
                 setFiles([...files, data]);
-                // const axios_response = axios.post('/api/')
             } else {
                 console.log("No files associated with drop");
             }
@@ -85,8 +98,9 @@ function UploadBox(props) {
                 </List>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button type='submit'>Click me!</Button>
+                    <Button type='submit' onClick={(e) => handleUpload(e, files)}>Click me!</Button>
                 </Box>
+                <CSRFToken/>
             </Box>
             </form>
         )

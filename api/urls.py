@@ -7,5 +7,6 @@ urlpatterns = [
     path('image/', ImageView.as_view()),
     path('tag/', TagView.as_view()),
     path('image-tag/', ImageTagView.as_view()),
+    path('upload/', upload, name="upload")
 ]
 

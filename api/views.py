@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
@@ -34,3 +35,14 @@ class ImageTagView(generics.ListAPIView):
     queryset = ImageTag.objects.all()
     serializer_class = ImageTagSerializer
     renderer_classes = [JSONRenderer]
+
+
+def upload(request):
+    form_data = list(request.FILES.values())
+    print("Received form data!")
+    print(form_data)
+    file_data = form_data[0]
+    print(file_data)
+
+    ...
+    return HttpResponse(status=200)
