@@ -21,7 +21,7 @@ const VisuallyHiddenInput = styled('input')({
   });
 
 
-async function handleUpload(e, files) {
+async function handleUpload(e, files, setFiles) {
     e.preventDefault()
     'use server'
     const formData = new FormData();
@@ -32,6 +32,7 @@ async function handleUpload(e, files) {
     console.log(formData);
 
     await sendCSRFRequest(formData, 'api/upload/');
+    await setFiles([]);
 }
 
 
@@ -107,7 +108,7 @@ function UploadBox(props) {
                 </List>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button type='submit' onClick={(e) => handleUpload(e, files)}>Click me!</Button>
+                    <Button type='submit' onClick={(e) => handleUpload(e, files, setFiles)}>Click me!</Button>
                 </Box>
                 <CSRFToken/>
             </Box>

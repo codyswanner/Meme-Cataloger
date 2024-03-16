@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from .serializers import *
 from .models import *
+from .uploads import *
 
 
 # Create your views here.
@@ -43,6 +44,10 @@ def upload(request):
     print(form_data)
     file_data = form_data[0]
     print(file_data)
+    print("Handing to upload handler...")
+    handle_uploaded_file(file_data)
+    print("Updating database records...")
+    update_database(file_data)
+    print("Done uploading file!")
 
-    ...
     return HttpResponse(status=200)
