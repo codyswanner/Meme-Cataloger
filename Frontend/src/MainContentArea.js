@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ImageList, ImageListItem } from '@mui/material'
 
-import ReactivePictureFrame from './ReactivePictureFrame';
-import AppDataContext from './AppDataContext';
+import ReactivePictureFrame from './ImageFrame/ReactivePictureFrame';
+import AppDataContext from './SupportingModules/AppDataContext';
 
 
 function MainContentArea() {

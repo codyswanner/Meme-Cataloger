@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText } from '@mui/material';
 
-import filterSocket from './FilterSocket';
+import AppDataContext from '../SupportingModules/AppDataContext';
+import filterSocket from '../SupportingModules/FilterSocket';
 import FilterCheckbox from './FilterCheckbox';
-import AppDataContext from './AppDataContext';
+
 
 function handleButtonClick() {
     // handle click for Archive and Trash buttons

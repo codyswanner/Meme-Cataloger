@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Popper, Box, List, ListItemButton } from '@mui/material';
 
-import AppDataContext from './AppDataContext';
-import filterSocket from './FilterSocket';
+import AppDataContext from '../SupportingModules/AppDataContext';
+import filterSocket from '../SupportingModules/FilterSocket';
 
 
 function TagPopperContent(props) {

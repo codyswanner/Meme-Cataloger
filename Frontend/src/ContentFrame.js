@@ -1,15 +1,9 @@
-import React, { useContext } from 'react';
-import { Box, Button, AppBar, CssBaseline, Toolbar, Typography} from '@mui/material';
-import UploadIcon from '@mui/icons-material/Upload'
-import { styled } from '@mui/material/styles';
+import React from 'react';
+import { Box, CssBaseline, Toolbar } from '@mui/material';
 
-import TopAppBar from './TopAppBar';
+import TopAppBar from './TopAppBar/TopAppBar';
 import MainContentArea from './MainContentArea';
-import LeftDrawer from './LeftDrawer';
-import AppDataContext from './AppDataContext';
-
-
-
+import LeftDrawer from './LeftDrawer/LeftDrawer';
 
 
 function ContentFrame() {

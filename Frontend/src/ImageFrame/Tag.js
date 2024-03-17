@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 
-import AppDataContext from './AppDataContext';
-import filterSocket from './FilterSocket';
+import AppDataContext from '../SupportingModules/AppDataContext';
+import filterSocket from '../SupportingModules/FilterSocket';
 
 function Tag(props) {
   const appData = useContext(AppDataContext);

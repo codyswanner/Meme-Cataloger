@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconButton } from "@mui/material";
 
-import filterSocket from './FilterSocket';
+import filterSocket from '../SupportingModules/FilterSocket';
 import AddTagPopper from './AddTagPopper';
 
 

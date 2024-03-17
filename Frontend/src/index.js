@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import './index.css';
 
+import ApiCall from './SupportingModules/ApiCall';
 import App from './App';
-import ApiCall from './ApiCall';
 
 let apiData = await ApiCall();
 
