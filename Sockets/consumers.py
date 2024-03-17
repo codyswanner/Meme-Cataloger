@@ -83,7 +83,6 @@ class FilterConsumer(WebsocketConsumer):
         tag_object = Tag.objects.get(id=tag_id)
         image_tag_object = ImageTag.objects.get(image_id=image_object, tag_id=tag_object)
         image_tag_object_id = image_tag_object.id
-        print(image_tag_object_id)
         image_tag_object.delete()
 
         # send an update to the client
@@ -100,32 +99,23 @@ class FilterConsumer(WebsocketConsumer):
         ...
 
     def receive(self, text_data=None, bytes_data=None):
-        # what to do when the user clicks a filter checkbox.
-        # see documentation and tutorial code,
-        # and just be smart and figure it out.
-
-        # Query database for images matching filters?
-        # Will that be somewhere else?
-        # Does that get handed to the API somehow?
-
-        # Is this where a message is sent to Django/React
-        # to update the list of pictures?
         text_data_json = json.loads(text_data)
         message_type = text_data_json.get('type', None)
 
-        if message_type == 'message':
-            websocket_message = text_data_json['message']
-            print(f'Websocket Message: {websocket_message}')
-        elif message_type == 'filterChange':
-            self.filter_change(text_data_json)
-            print(text_data_json)
-        elif message_type == 'activeFilters':
-            self.apply_filters(text_data_json)
-        elif message_type == 'addTag':
-            self.add_tag(text_data_json)
-        elif message_type == 'removeTag':
-            self.remove_tag(text_data_json)
-        elif message_type == 'deleteImage':
-            self.delete_image(text_data_json)
-        else:
-            print("Unexpected websocket message type!")
+        match message_type:
+            case 'message':
+                websocket_message = text_data_json['message']
+                print(f'Websocket Message: {websocket_message}')
+            case 'filterChange':
+                self.filter_change(text_data_json)
+                print(text_data_json)
+            case 'activeFilters':
+                self.apply_filters(text_data_json)
+            case 'addTag':
+                self.add_tag(text_data_json)
+            case 'removeTag':
+                self.remove_tag(text_data_json)
+            case 'deleteImage':
+                self.delete_image(text_data_json)
+            case _:
+                print("Unexpected websocket message type!")
