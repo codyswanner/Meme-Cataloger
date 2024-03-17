@@ -90,6 +90,15 @@ class FilterConsumer(WebsocketConsumer):
         return_message = {'type': 'tagRemoved', 'id': image_tag_object_id, 'imageId': image_id, 'tagId': tag_id}
         self.send(text_data=json.dumps(return_message))
 
+    def delete_image(self, text_data_json):
+        image_id = text_data_json['imageId']
+        print(f"Delete request received for image %s" % image_id)
+
+        image_object = Image.objects.get(id=image_id)
+        source_filename = image_object.source
+        print(f"Image filename is %s" % source_filename)
+        ...
+
     def receive(self, text_data=None, bytes_data=None):
         # what to do when the user clicks a filter checkbox.
         # see documentation and tutorial code,
@@ -116,5 +125,7 @@ class FilterConsumer(WebsocketConsumer):
             self.add_tag(text_data_json)
         elif message_type == 'removeTag':
             self.remove_tag(text_data_json)
+        elif message_type == 'deleteImage':
+            self.delete_image(text_data_json)
         else:
             print("Unexpected websocket message type!")
