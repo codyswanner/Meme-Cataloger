@@ -1,6 +1,9 @@
+import os
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+
+import api.models
 from api.models import *
 
 
@@ -96,7 +99,21 @@ class FilterConsumer(WebsocketConsumer):
         image_object = Image.objects.get(id=image_id)
         source_filename = image_object.source
         print(f"Image filename is %s" % source_filename)
-        ...
+        full_file_path = \
+            f'C:\\Users\\codys\\Dev\\PycharmProjects\\Django' \
+            f'\\MemeCataloger2\\media\\%s' % source_filename
+        print(full_file_path)
+
+        try:
+            os.remove(full_file_path)
+            print("File deleted from disk")
+            image_object.delete()
+            print("Image object deleted from database")
+            print("Delete image completed!")
+            return_message = {'type': 'imageDeleted', 'id': image_id}
+            self.send(text_data=json.dumps(return_message))
+        except FileNotFoundError:
+            print("File not found!")
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)

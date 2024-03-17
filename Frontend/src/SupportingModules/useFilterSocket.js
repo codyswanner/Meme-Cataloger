@@ -106,6 +106,34 @@ function useFilterSocket(props) {
         setAppData(modifiedAppData);
     }
 
+    function handleImageDeleted (response) {
+        const imageId = response.id;
+        console.log("imageDeleted message received for image " + imageId)
+
+        const modifiedAppData = {...appData};
+
+        // Delete image from the image array
+        var imageArray = modifiedAppData[0];
+
+        imageArray = imageArray.filter(function(item) {
+            return item.id !== imageId
+        });
+
+        modifiedAppData[0] = imageArray;
+
+        // Delete any tag association records for image
+        const imageTagData = modifiedAppData[2];
+
+        for (const [key, value] of Object.entries(imageTagData)) {
+            if (value.image_id === imageId) {
+                delete imageTagData[key];
+            }
+        };
+
+        setAppData(modifiedAppData);
+        console.log("Image " + imageId + " deleted!");
+    }
+
 
     useEffect(() => {
         const socket = filterSocket;
@@ -120,6 +148,8 @@ function useFilterSocket(props) {
                 handleTagAdded(response);
             } else if (response.type == "tagRemoved") {
                 handleTagRemoved(response);
+            } else if (response.type == "imageDeleted") {
+                handleImageDeleted(response);
             } else {
                 console.log("WebSocket message of undetermined type received")
             }
