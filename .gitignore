@@ -21,3 +21,5 @@ yarn-debug.log*
 yarn-error.log*
 /.idea/vcs.xml
 /media/images/
+/python312/
+/venv/
