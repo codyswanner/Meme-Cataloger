@@ -35,7 +35,6 @@ class FilterConsumer(WebsocketConsumer):
         # make sure to clean up any messes you left.
 
         # Expire any sessions/tokens?
-        # Close any database connections?
         pass
 
     def filter_change(self, text_data_json):
