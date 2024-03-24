@@ -1,6 +1,4 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
@@ -12,7 +10,7 @@
                 "isDefault": true
             },
             "runOptions": {
-                "runOn": "folderOpen",
+                "runOn": "folderOpen"
             }
         },
         {
@@ -24,10 +22,10 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
-                "panel": "shared",
+                "panel": "shared"
             },
             "group": {
-                "kind": "build",
+                "kind": "build"
             },
             "options": {
                 "cwd": "${workspaceFolder}\\Frontend\\src\\.."
@@ -43,10 +41,10 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
-                "panel": "shared",
+                "panel": "shared"
             },
             "group": {
-                "kind": "build",
+                "kind": "build"
             },
             "isBackground": true
         },
@@ -95,10 +93,10 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
-                "panel": "shared",
+                "panel": "shared"
             },
             "group": {
-                "kind": "build",
+                "kind": "build"
             },
             "isBackground": true
         }
