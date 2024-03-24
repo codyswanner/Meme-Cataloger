@@ -9,6 +9,16 @@
 # production
 /build
 
+# system-specific project files
+/api/__pycache__/
+/api/management/
+/api/migrations/
+/Frontend/__pycache__/
+/Frontend/migrations/
+/MemeCataloger2/__pycache__/
+/Sockets/__pycache__/
+/Sockets/migrations/
+
 # misc
 .DS_Store
 .env.local
