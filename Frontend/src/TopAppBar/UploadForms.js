@@ -9,21 +9,14 @@ import { sendCSRFRequest } from '../SupportingModules/CSRFToken';
 
 async function handleUpload(e, files, setFiles) {
     e.preventDefault()
-    'use server'
+    'use server' // Tells React to use a server action
     const formData = new FormData();
-    console.log(files);
-    await files.forEach(file => {
-        formData.append('file', file);    
-    });
-    console.log(formData);
-
+    await files.forEach(file => {formData.append('file', file)});
     sendCSRFRequest(formData, 'api/upload/');
     await setFiles([]);
 };
 
-
 function FileUploadForm(props) {
-
     return (
         <form method='POST' action={''}>
             <Box 
@@ -53,7 +46,7 @@ function FileUploadForm(props) {
                 </List>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button type='submit' onClick={(e) => handleUpload(e, props.files, props.setFiles)}>Click me!</Button>
+                    <Button type='submit' onClick={(e) => handleUpload(e, props.files, props.setFiles)}>Upload</Button>
                 </Box>
                 <CSRFToken/>
             </Box>

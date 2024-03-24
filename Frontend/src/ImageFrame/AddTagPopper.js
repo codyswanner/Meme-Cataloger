@@ -34,7 +34,7 @@ function TagPopperContent(props) {
             })}
         </List>
     )
-}
+};
 
 function AddTagPopper(props) {
     const id = open ? 'simple-popper' : undefined;
@@ -46,6 +46,6 @@ function AddTagPopper(props) {
         </Box>
         </Popper>
     )
-}
+};
 
 export default AddTagPopper;

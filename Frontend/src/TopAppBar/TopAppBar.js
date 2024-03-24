@@ -14,7 +14,7 @@ function TopAppBar() {
 
     const handleCloseUpload = () => {
         setOpen(false);
-    }
+    };
 
     return(
         <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -33,10 +33,7 @@ function TopAppBar() {
                 <UploadDialog open={open} onClose={handleCloseUpload}/>
             </Toolbar>
         </AppBar>
-    )
-
-    
-
+    );
 };
 
 export default TopAppBar;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
 
+
 const handleChange = (props, event) => {
     const checkboxLabel = props.text;
     const socket = props.socket;
@@ -21,9 +22,7 @@ function FilterCheckbox(props) {
         sx={{ width: 1 }} // TODO: Change with screen width
         onChange={(event) => handleChange(props, event)}/>
     );
-    
-}
-
+};
 
 export default FilterCheckbox;
  

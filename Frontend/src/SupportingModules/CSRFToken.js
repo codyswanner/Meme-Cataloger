@@ -1,6 +1,7 @@
 import React from 'react';
 import jQuery from 'jquery';
 
+
 export function sendCSRFRequest(formData, targetURL) {
     const data = formData;
     const request = new XMLHttpRequest();
@@ -18,19 +19,14 @@ function getCookie(name) {
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
-            }
-        }
-    }
+            };
+        };
+    };
     return cookieValue;
 };
 
-
-var csrftoken = getCookie('csrftoken');
-
 const CSRFToken = () => {
-    return (
-        <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
-    );
+    return (<input type="hidden" name="csrfmiddlewaretoken" value={getCookie('csrftoken')} />);
 };
 
 export default CSRFToken;

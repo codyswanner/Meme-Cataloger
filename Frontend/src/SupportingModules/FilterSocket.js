@@ -1,5 +1,3 @@
-// Will need a way to match client with corresponding backend consumer.
-
 const filterSocket = new WebSocket(
     'ws://' + window.location.host + '/ws/filter-socket/'
 );

@@ -24,6 +24,6 @@ function ContentFrame() {
             </Box>
         </Box>
     );
-}
+};
 
 export default ContentFrame;

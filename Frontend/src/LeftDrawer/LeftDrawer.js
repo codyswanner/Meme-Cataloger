@@ -9,7 +9,7 @@ import FilterCheckbox from './FilterCheckbox';
 function handleButtonClick() {
     // handle click for Archive and Trash buttons
     null;
-}
+};
 
 function LeftDrawer() {
     const appData = useContext(AppDataContext);
@@ -25,15 +25,13 @@ function LeftDrawer() {
                 flexShrink: 0,
                 ['& .MuiDrawer-paper']: { width: drawerWidth, backgroundColor: '#aaaaaa' },
                 marginRight: '0.5%',
-            }}
-        >
+            }}>
             <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
             <Box sx={{ overflow: 'auto' }}>
                 <List>
                     {tagsList.map((tag) => {
                         const tagId = tag.id;
                         const tagName = tag.name;
-
                         return(<FilterCheckbox text={tagName} socket={filterSocket} key={tagId} tagId={tagId}/>)
                     })}
                 </List>
@@ -49,6 +47,6 @@ function LeftDrawer() {
             </Box>
         </Drawer>
     );
-}
+};
 
 export default LeftDrawer;

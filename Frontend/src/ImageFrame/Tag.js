@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import AppDataContext from '../SupportingModules/AppDataContext';
 import filterSocket from '../SupportingModules/FilterSocket';
 
+
 function Tag(props) {
   const appData = useContext(AppDataContext);
   const tagNames = appData[1];
@@ -17,15 +18,15 @@ function Tag(props) {
     color: '#ffffff',
     cursor: 'pointer',
     textDecoration: isHovered ? 'underline' : 'none',
-  }
+  };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-  }
+  };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-  }
+  };
 
   const handleTagClick = (imageId, tagId) => {
     socket.send(JSON.stringify({
@@ -33,7 +34,7 @@ function Tag(props) {
       'imageId': imageId, 
       'tagId': tagId
   }));
-  }
+  };
 
   if (props.tag === 0) {
       // The zero tag is assigned to pictures with no other tags.
@@ -58,6 +59,6 @@ function Tag(props) {
       </div>
     );
   };
-}
+};
 
 export default Tag;

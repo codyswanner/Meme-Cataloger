@@ -16,10 +16,6 @@ function ReactivePictureFrame(props) {
     setImageHovered(false);
   };
 
-  // const handleButtonClick = (buttonType, props) => {
-  //   console.log(`Clicked ${buttonType} on image ${props.id}`);
-  // }
-
   var toolbarVisible = imageHovered;
 
   const toolbarStyles = {
@@ -54,6 +50,6 @@ function ReactivePictureFrame(props) {
       </div>
     </Box>
   );
-}
+};
 
 export default ReactivePictureFrame;

@@ -1,23 +1,15 @@
 import React, { useState } from 'react';
 import { IconButton } from "@mui/material";
 
-import filterSocket from '../SupportingModules/FilterSocket';
 import AddTagPopper from './AddTagPopper';
 
 
-
 function AddTagButton(props) {
-
-  const socket = filterSocket;
   const [anchorEl, setAnchorEl] = useState(null);
-    
-  const handleClick = (e, props) => {
-    
-
-    // const tagId = 999 // Hardcoded!  Make dynamic later!  Hardcoded!  Make dynamic later!
-    // socket.send(JSON.stringify({'type': 'addTag', 'imageId': props.imageId, 'tagId': tagId}));
+  
+  const handleClick = (e) => {
     setAnchorEl(anchorEl ? null : e.currentTarget);
-  }
+  };
 
   const open = Boolean(anchorEl);
   
@@ -25,10 +17,9 @@ function AddTagButton(props) {
     <>
       <IconButton
         style={{ color: "white" }}
-        onClick={(e) => handleClick(e, props)}>
+        onClick={(e) => handleClick(e)}>
         <p>+</p>
       </IconButton>
-
       <AddTagPopper open={open} anchorEl={anchorEl} imageId={props.imageId}/>
     </>
   );

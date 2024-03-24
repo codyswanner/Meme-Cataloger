@@ -34,7 +34,7 @@ class FilterConsumer(WebsocketConsumer):
         # see documentation and tutorial code,
         # make sure to clean up any messes you left.
 
-        # Expire any sessions/tokens?
+        # Leave channel layer?
         pass
 
     def filter_change(self, text_data_json):
@@ -115,7 +115,7 @@ class FilterConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        message_type = text_data_json.get('type', None)
+        message_type = text_data_json.get('type')
 
         match message_type:
             case 'message':
@@ -123,7 +123,6 @@ class FilterConsumer(WebsocketConsumer):
                 print(f'Websocket Message: {websocket_message}')
             case 'filterChange':
                 self.filter_change(text_data_json)
-                print(text_data_json)
             case 'activeFilters':
                 self.apply_filters(text_data_json)
             case 'addTag':

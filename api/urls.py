@@ -9,4 +9,3 @@ urlpatterns = [
     path('image-tag/', ImageTagView.as_view()),
     path('upload/', upload, name="upload")
 ]
-
