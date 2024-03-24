@@ -1,0 +1,106 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build All",
+            "dependsOrder": "parallel",
+            "dependsOn": ["Webpack", "Docker-Redis", "Firefox", "Django"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "runOptions": {
+                "runOn": "folderOpen",
+            }
+        },
+        {
+            "label": "Webpack",
+            "type": "shell",
+            "command": "npm",
+            "args": ["run", "dev"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+            },
+            "group": {
+                "kind": "build",
+            },
+            "options": {
+                "cwd": "${workspaceFolder}\\Frontend\\src\\.."
+            },
+            "isBackground": true
+        },
+        {
+            "label": "Docker-Redis",
+            "type": "shell",
+            "command": "docker",
+            "args": ["run", "--rm", "-p", "6379:6379", "redis:7"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+            },
+            "group": {
+                "kind": "build",
+            },
+            "isBackground": true
+        },
+        {
+            "label": "Firefox",
+            "dependsOrder": "sequence",
+            "dependsOn": "Wait for Django",
+            "type": "shell",
+            "command": "start",
+            "args": ["firefox", "127.0.0.1:8000", "127.0.0.1:8000/api/image"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "close": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Wait for Django",
+            "type": "shell",
+            "command": "timeout",
+            "args": ["/t", "4", "/nobreak"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "close": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Django",
+            "type": "shell",
+            "command": "python",
+            "args": ["${workspaceFolder}\\manage.py", "runserver"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+            },
+            "group": {
+                "kind": "build",
+            },
+            "isBackground": true
+        }
+    ]
+}
