@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Popper, Box, List, ListItemButton } from '@mui/material';
+import { Popper, Box, List, ListItemButton, Autocomplete, TextField } from '@mui/material';
 
 import AppDataContext from '../SupportingModules/AppDataContext';
 import filterSocket from '../SupportingModules/FilterSocket';
@@ -17,22 +17,43 @@ function TagPopperContent(props) {
         }));
     }
 
-    return(
-        <List>
-            {appData[1].map((tag) => {
-                const tagId = tag.id;
-                const tagName = tag.name;
+    const tagOptions = appData[1].map((tag) => {
+        const tagId = tag.id;
+        const tagName = tag.name;
+        return (tagId, tagName)
+    })
 
-                return(
-                    <ListItemButton
-                    key={tagId}
-                    tagid={tagId}
-                    onClick={() => handleTagClick(props, tagId)}>
-                        {tagName}
-                    </ListItemButton>
-                )
-            })}
-        </List>
+    return(
+        // <List>
+        //     {appData[1].map((tag) => {
+        //         const tagId = tag.id;
+        //         const tagName = tag.name;
+
+        //         return(
+        //             <ListItemButton
+        //             key={tagId}
+        //             tagid={tagId}
+        //             onClick={() => handleTagClick(props, tagId)}>
+        //                 {tagName}
+        //             </ListItemButton>
+        //         )
+        //     })}
+        // </List>
+
+
+        <Autocomplete
+            options={tagOptions}
+            style={{ width: 300 }}
+            openOnFocus
+            disablePortal
+            multiple
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    variant='outlined'
+                />
+            )}
+        />
     )
 };
 
