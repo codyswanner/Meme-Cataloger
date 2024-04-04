@@ -13,6 +13,7 @@ function ImageTopToolbar(props) {
 
   return(
     <Toolbar sx={props.toolbarStyles}>
+      {/* TODO: Change this to an input that accepts text descriptions */}
       <Typography sx={{ fontSize: "0.9rem", color: "white" }}>
         Text Description
       </Typography>

@@ -9,6 +9,7 @@ class AppUser(models.Model):
 class Image(models.Model):
     source = models.ImageField(max_length=1000)
     owner = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    # TODO: add relation for text descriptions
 
 
 class Tag(models.Model):

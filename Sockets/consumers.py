@@ -131,5 +131,7 @@ class FilterConsumer(WebsocketConsumer):
                 self.remove_tag(text_data_json)
             case 'deleteImage':
                 self.delete_image(text_data_json)
+            case 'updateDescription':
+                pass  # TODO: implement handling for text description updates
             case _:
                 print("Unexpected websocket message type!")
