@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Toolbar, Typography } from "@mui/material";
+import { IconButton, TextField, Input, Toolbar, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
@@ -14,9 +14,7 @@ function ImageTopToolbar(props) {
   return(
     <Toolbar sx={props.toolbarStyles}>
       {/* TODO: Change this to an input that accepts text descriptions */}
-      <Typography sx={{ fontSize: "0.9rem", color: "white" }}>
-        Text Description
-      </Typography>
+      <TextField placeholder="Text Description" size="small" variant="outlined" sx={{background: 'rgba(0, 0, 0, 0)', input: { color: "white"}}}/>
       <div style={{ marginLeft: "auto" }}>
         <Toolbar disableGutters>
           <IconButton onClick={() => handleButtonClick("Share", props.id)}>
