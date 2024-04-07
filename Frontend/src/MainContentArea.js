@@ -24,6 +24,7 @@ function MainContentArea() {
             <ImageListItem key={pic.id}>
               <ReactivePictureFrame
                 src={pic.source}
+                description = {pic.description}
                 maxWidth={viewportwidth * 0.2} // Change based on screen size
                 toolbarMaxHeight={352} // Change based on screen size?
                 tags={pic.tags}

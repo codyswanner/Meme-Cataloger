@@ -10,7 +10,8 @@ async function ApiCall() {
     response.data.forEach(responseData => {
       const imageId = responseData.id;
       const imageSource = responseData.source;
-      const imageData = {id: imageId, source: imageSource, tags: []};
+      const imageDescription = responseData.description;
+      const imageData = {id: imageId, source: imageSource, description: imageDescription, tags: []};
       imageDataList.push(imageData);
     });
 
