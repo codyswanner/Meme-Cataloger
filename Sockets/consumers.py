@@ -113,6 +113,15 @@ class FilterConsumer(WebsocketConsumer):
         except FileNotFoundError:
             print("File not found!")
 
+    @staticmethod
+    def update_description(text_data_json):
+        image_id = text_data_json['imageId']
+        new_description = text_data_json['description']
+        image_object = Image.objects.get(id=image_id)
+        image_object.description = new_description
+        image_object.save()
+        print(f"Description for image %d update to %s" % (image_id, new_description))
+
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message_type = text_data_json.get('type')
@@ -132,6 +141,6 @@ class FilterConsumer(WebsocketConsumer):
             case 'deleteImage':
                 self.delete_image(text_data_json)
             case 'updateDescription':
-                pass  # TODO: implement handling for text description updates
+                self.update_description(text_data_json)
             case _:
                 print("Unexpected websocket message type!")
