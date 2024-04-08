@@ -54,7 +54,7 @@
             "dependsOn": "Wait for Django",
             "type": "shell",
             "command": "start",
-            "args": ["firefox", "127.0.0.1:8000"],
+            "args": ["firefox", "127.0.0.1:8000", "https://github.com/codyswanner/Meme-Cataloger2"],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
