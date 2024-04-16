@@ -80,38 +80,13 @@ class FilterConsumer(WebsocketConsumer):
 
     def remove_tag(self, text_data_json):
         image_id = text_data_json['imageId']
-        tag_id = text_data_json['tagId']
+        imagetag_id = text_data_json['imageTagId']
 
-        image_object = Image.objects.get(id=image_id)
-        tag_object = Tag.objects.get(id=tag_id)
+        imagetag_object = ImageTag.objects.get(id=imagetag_id)
+        imagetag_object.delete()
 
-        # image_tag_object = ImageTag.objects.get(image_id=image_object, tag_id=tag_object)
-
-        # New attempt for handling multiple results:
-        imagetag_query = ImageTag.objects.filter(image_id=image_object, tag_id=tag_object)
-        if len(imagetag_query) == 1:  # Typical case
-            print("Found a unique tag for this query")
-            imagetag_object = imagetag_query[0]
-            image_tag_object_id = imagetag_object.id
-            imagetag_object.delete()
-            # send an update to the client
-            return_message = {'type': 'tagRemoved', 'id': image_tag_object_id, 'imageId': image_id,
-                              'tagId': tag_id}
-            print(return_message)
-            self.send(text_data=json.dumps(return_message))
-
-        elif len(imagetag_query) > 1:  # Bug-causing case
-            print("Found more than one tag for this query")
-            # TODO: What to do with plural results?
-
-        elif len(imagetag_query) == 0:  # Unexpected (but maybe possible) case
-            print("There was no matching tag for this query")
-            # No action needed from consumer/server... but is this request even possible (outside of tests)?
-
-        else:  # Potentially impossible case? Covering bases for all other numbers.
-            print("Undefined result -- query result is neither 0, 1, or greater than one.  "
-                  "(Does that mean it is negative?)")
-            # DEFINITELY how would this result be possible, should be unreachable with current setup
+        return_message = {'type': 'tagRemoved', 'id': imagetag_id, 'imageId': image_id}
+        self.send(text_data=json.dumps(return_message))
 
     def delete_image(self, text_data_json):
         image_id = text_data_json['imageId']
