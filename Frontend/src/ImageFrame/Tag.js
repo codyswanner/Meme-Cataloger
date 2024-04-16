@@ -46,17 +46,24 @@ function Tag(props) {
       </div>
     );
   } else {
-      // Display the name of the tag that was passed in.
-    const imageTagId = props.imageTag;
-    const tagId = appData[2].find(imageTag => imageTag.id === imageTagId)['tag_id'];
-    console.log(appData[1]);
+    
+    // Display the name of the tag that was passed in.
+
+    function getTagId(appData2, imageTagId) {
+      const imageTag = appData2.find(element => element.id === imageTagId);
+      const tagId = imageTag['tag_id'];
+      return tagId;
+    }
+
+    const tagId = getTagId(appData[2], props.imageTag);
+    
     const tagName = tagId ? appData[1].find(tagData => tagData.id === tagId)['name'] : '!!!'; // If there is no match, show "warning" triple bang
     return (
       <div 
         style={{ fontSize: "0.7rem", color: "white" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}>
-        <button style={buttonStyle} onClick={() => handleTagClick(props.imageId, imageTagId)}>
+        <button style={buttonStyle} onClick={() => handleTagClick(props.imageId, props.imageTag, tagId)}>
           {tagName}
         </button>
       </div>

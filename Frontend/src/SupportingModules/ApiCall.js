@@ -36,10 +36,10 @@ async function ApiCall() {
     imageTagData.forEach(imageTagData => {
       const imageId = imageTagData['image_id'];
       const imageTagId = imageTagData['id']; // Find unique imageTag ids
-      const tagId   = imageTagData['tag_id'];
+      // const tagId   = imageTagData['tag_id'];
       // Append unique imageTag data to image
       imageDataList.find(imageData => imageData.id === imageId).imageTags.push(imageTagId);
-      imageDataList.find(imageData => imageData.id === imageId).tags.push(tagId);
+      // imageDataList.find(imageData => imageData.id === imageId).tags.push(tagId);
     });
 
     return imageDataList;

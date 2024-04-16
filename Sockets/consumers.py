@@ -88,15 +88,16 @@ class FilterConsumer(WebsocketConsumer):
         # image_tag_object = ImageTag.objects.get(image_id=image_object, tag_id=tag_object)
 
         # New attempt for handling multiple results:
-        imagetag_query = ImageTag.object.filter(image_id=image_object, tag_id=tag_object)
+        imagetag_query = ImageTag.objects.filter(image_id=image_object, tag_id=tag_object)
         if len(imagetag_query) == 1:  # Typical case
             print("Found a unique tag for this query")
-            imagetag_object = imagetag_query[1]
+            imagetag_object = imagetag_query[0]
             image_tag_object_id = imagetag_object.id
             imagetag_object.delete()
             # send an update to the client
             return_message = {'type': 'tagRemoved', 'id': image_tag_object_id, 'imageId': image_id,
                               'tagId': tag_id}
+            print(return_message)
             self.send(text_data=json.dumps(return_message))
 
         elif len(imagetag_query) > 1:  # Bug-causing case
