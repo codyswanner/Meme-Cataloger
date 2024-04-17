@@ -114,25 +114,46 @@ function useFilterSocket(props) {
     useEffect(() => {
         const socket = filterSocket;
     
+        //const receiveMessage = (e) => {
+        //    const response = JSON.parse(e.data);
+        //    if (response.type == "filterChange") {
+        //        handleFilterChange(response, socket);
+        //    } else if (response.type == "applyFilters") {
+        //        handleApplyFilters(response);
+        //    } else if (response.type == "tagAdded") {
+        //        handleTagAdded(response);
+        //    } else if (response.type == "tagRemoved") {
+        //        handleTagRemoved(response);
+        //    } else if (response.type == "imageDeleted") {
+        //        handleImageDeleted(response);
+        //    } else {
+        //        console.log("Unexpected websocket message type received!")
+        //    };
+        //};
+
         const receiveMessage = (e) => {
             const response = JSON.parse(e.data);
-            if (response.type == "filterChange") {
-                handleFilterChange(response, socket);
-            } else if (response.type == "applyFilters") {
-                handleApplyFilters(response);
-            } else if (response.type == "tagAdded") {
-                handleTagAdded(response);
-            } else if (response.type == "tagRemoved") {
-                handleTagRemoved(response);
-            } else if (response.type == "imageDeleted") {
-                handleImageDeleted(response);
-            } else if (response.type == "message") {
-                handleSocketMessage(response);
-            } else {
-                console.log("Unexpected websocket message type received!")
-            };
+            switch (response.type) {
+                case "filterChange":
+                    handleFilterChange(response, socket);
+                    break;
+                case "applyFilters":
+                    handleApplyFilters(response);
+                    break;
+                case "tagAdded":
+                    handleTagAdded(response);
+                    break;
+                case "tagRemoved":
+                    handleTagRemoved(response);
+                    break;
+                case "imageDeleted":
+                    handleImageDeleted(response);
+                    break;
+                default:
+                    console.log("Unexpected websocket message type received!");
+                };
         };
-    
+
         socket.addEventListener('message', receiveMessage);
     
         return () => {socket.removeEventListener('message', receiveMessage);}
