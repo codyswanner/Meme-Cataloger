@@ -65,18 +65,20 @@ class FilterConsumer(WebsocketConsumer):
 
     def add_tag(self, text_data_json):
         image_id = text_data_json['imageId']
-        tag_id = text_data_json['tagId']
-
-        # TODO: check if a tag with this description already exists
-        # if this association already exists, do not allow it to be saved again
         image_object = Image.objects.get(id=image_id)
+        tag_id = text_data_json['tagId']
         tag_object = Tag.objects.get(id=tag_id)
-        t = ImageTag(image_id=image_object, tag_id=tag_object)
-        t.save()
 
-        # send an update to client
-        return_message = {'type': 'tagAdded', 'id': t.id, 'imageId': image_id, 'tagId': tag_id}
-        self.send(text_data=json.dumps(return_message))
+        if ImageTag.objects.filter(image_id=image_object, tag_id=tag_object).exists():
+            # if tag association already exists, inform the client and do not re-create it
+            return_message = {'type': 'message', 'message': 'This tag association already exists!'}
+            self.send(text_data=json.dumps(return_message))
+        else:
+            # if tag association does not exist, create it and inform client
+            new_imagetag = ImageTag(image_id=image_object, tag_id=tag_object)
+            new_imagetag.save()
+            return_message = {'type': 'tagAdded', 'id': new_imagetag.id, 'imageId': image_id, 'tagId': tag_id}
+            self.send(text_data=json.dumps(return_message))
 
     def remove_tag(self, text_data_json):
         image_id = text_data_json['imageId']

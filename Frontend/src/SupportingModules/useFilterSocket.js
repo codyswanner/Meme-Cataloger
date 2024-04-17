@@ -54,7 +54,7 @@ function useFilterSocket(props) {
         const findInAppData = (id) => modifiedAppData[0].find(element => element.id == id); 
         const imageObject = findInAppData(imageId);
         // Modify object in image object array to match updates
-        imageObject.tags.push(tagId);
+        imageObject.imageTags.push(objectId);
         
         
         // Add imageTag object to appData[2] to reflect updates
@@ -107,6 +107,10 @@ function useFilterSocket(props) {
         setAppData(modifiedAppData);
     };
 
+    function handleSocketMessage (response) {
+        console.log(response.message);
+    }
+
     useEffect(() => {
         const socket = filterSocket;
     
@@ -122,6 +126,8 @@ function useFilterSocket(props) {
                 handleTagRemoved(response);
             } else if (response.type == "imageDeleted") {
                 handleImageDeleted(response);
+            } else if (response.type == "message") {
+                handleSocketMessage(response);
             } else {
                 console.log("Unexpected websocket message type received!")
             };
