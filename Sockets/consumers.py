@@ -65,29 +65,29 @@ class FilterConsumer(WebsocketConsumer):
 
     def add_tag(self, text_data_json):
         image_id = text_data_json['imageId']
-        tag_id = text_data_json['tagId']
-
         image_object = Image.objects.get(id=image_id)
+        tag_id = text_data_json['tagId']
         tag_object = Tag.objects.get(id=tag_id)
-        t = ImageTag(image_id=image_object, tag_id=tag_object)
-        t.save()
 
-        # send an update to client
-        return_message = {'type': 'tagAdded', 'id': t.id, 'imageId': image_id, 'tagId': tag_id}
-        self.send(text_data=json.dumps(return_message))
+        if ImageTag.objects.filter(image_id=image_object, tag_id=tag_object).exists():
+            # if tag association already exists, inform the client and do not re-create it
+            return_message = {'type': 'message', 'message': 'This tag association already exists!'}
+            self.send(text_data=json.dumps(return_message))
+        else:
+            # if tag association does not exist, create it and inform client
+            new_imagetag = ImageTag(image_id=image_object, tag_id=tag_object)
+            new_imagetag.save()
+            return_message = {'type': 'tagAdded', 'id': new_imagetag.id, 'imageId': image_id, 'tagId': tag_id}
+            self.send(text_data=json.dumps(return_message))
 
     def remove_tag(self, text_data_json):
         image_id = text_data_json['imageId']
-        tag_id = text_data_json['tagId']
+        imagetag_id = text_data_json['imageTagId']
 
-        image_object = Image.objects.get(id=image_id)
-        tag_object = Tag.objects.get(id=tag_id)
-        image_tag_object = ImageTag.objects.get(image_id=image_object, tag_id=tag_object)
-        image_tag_object_id = image_tag_object.id
-        image_tag_object.delete()
+        imagetag_object = ImageTag.objects.get(id=imagetag_id)
+        imagetag_object.delete()
 
-        # send an update to the client
-        return_message = {'type': 'tagRemoved', 'id': image_tag_object_id, 'imageId': image_id, 'tagId': tag_id}
+        return_message = {'type': 'tagRemoved', 'id': imagetag_id, 'imageId': image_id}
         self.send(text_data=json.dumps(return_message))
 
     def delete_image(self, text_data_json):
@@ -113,6 +113,15 @@ class FilterConsumer(WebsocketConsumer):
         except FileNotFoundError:
             print("File not found!")
 
+    @staticmethod
+    def update_description(text_data_json):
+        image_id = text_data_json['imageId']
+        new_description = text_data_json['description']
+        image_object = Image.objects.get(id=image_id)
+        image_object.description = new_description
+        image_object.save()
+        print(f"Description for image %d update to %s" % (image_id, new_description))
+
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message_type = text_data_json.get('type')
@@ -131,5 +140,7 @@ class FilterConsumer(WebsocketConsumer):
                 self.remove_tag(text_data_json)
             case 'deleteImage':
                 self.delete_image(text_data_json)
+            case 'updateDescription':
+                self.update_description(text_data_json)
             case _:
                 print("Unexpected websocket message type!")

@@ -54,7 +54,7 @@ function useFilterSocket(props) {
         const findInAppData = (id) => modifiedAppData[0].find(element => element.id == id); 
         const imageObject = findInAppData(imageId);
         // Modify object in image object array to match updates
-        imageObject.tags.push(tagId);
+        imageObject.imageTags.push(objectId);
         
         
         // Add imageTag object to appData[2] to reflect updates
@@ -65,30 +65,21 @@ function useFilterSocket(props) {
     };
 
     function handleTagRemoved (response) {
-        const objectId = response.id; // This is the id of the imageTag object to be removed
-        const imageId = response.imageId; // id of the target image
-        const tagId = response.tagId; // id of the target tag
+        const imageTagId = response.id;
+        const imageId = response.imageId;
 
-        const modifiedAppData = {...appData}; // Create a mutable copy
+        const modifiedAppData = {...appData};
 
-        // Use response to locate relevant objects in appData
+        // remove imageTag from image data
         const findImage = (id) => modifiedAppData[0].find(element => element.id == id);
         const imageObject = findImage(imageId);
+        imageObject['imageTags'] = imageObject['imageTags'].filter(function(item) {return item !== imageTagId})
         
-        // in tags array of target image, remove target tag by id
-        var tagArray = imageObject['tags']; // Create a mutable copy
-        tagArray = tagArray.filter(function(item) {return item !== tagId});
-        imageObject['tags'] = tagArray; // push updates to array
+        // remove imageTag from imageTag data
+        let index = modifiedAppData[2].findIndex(element => element.id === imageTagId);
+        modifiedAppData[2].splice(index, 1);
 
-        // in imageTag object, delete relevant object.
-        const imageTagData = modifiedAppData[2]
-        for (const [key, value] of Object.entries(imageTagData)) {
-            if (value.id === objectId) {
-                delete imageTagData[key];
-            };
-        };
-
-        setAppData(modifiedAppData); // push updates and re-render
+        setAppData(modifiedAppData);
     };
 
     function handleImageDeleted (response) {
@@ -105,6 +96,7 @@ function useFilterSocket(props) {
         modifiedAppData[0] = imageArray;
 
         // Delete any tag association records for image
+        // (Can this be changed to match the structure of handleTagRemoved?)
         const imageTagData = modifiedAppData[2];
         for (const [key, value] of Object.entries(imageTagData)) {
             if (value.image_id === imageId) {
@@ -115,26 +107,53 @@ function useFilterSocket(props) {
         setAppData(modifiedAppData);
     };
 
+    function handleSocketMessage (response) {
+        console.log(response.message);
+    }
+
     useEffect(() => {
         const socket = filterSocket;
     
+        //const receiveMessage = (e) => {
+        //    const response = JSON.parse(e.data);
+        //    if (response.type == "filterChange") {
+        //        handleFilterChange(response, socket);
+        //    } else if (response.type == "applyFilters") {
+        //        handleApplyFilters(response);
+        //    } else if (response.type == "tagAdded") {
+        //        handleTagAdded(response);
+        //    } else if (response.type == "tagRemoved") {
+        //        handleTagRemoved(response);
+        //    } else if (response.type == "imageDeleted") {
+        //        handleImageDeleted(response);
+        //    } else {
+        //        console.log("Unexpected websocket message type received!")
+        //    };
+        //};
+
         const receiveMessage = (e) => {
             const response = JSON.parse(e.data);
-            if (response.type == "filterChange") {
-                handleFilterChange(response, socket);
-            } else if (response.type == "applyFilters") {
-                handleApplyFilters(response);
-            } else if (response.type == "tagAdded") {
-                handleTagAdded(response);
-            } else if (response.type == "tagRemoved") {
-                handleTagRemoved(response);
-            } else if (response.type == "imageDeleted") {
-                handleImageDeleted(response);
-            } else {
-                console.log("Unexpected websocket message type received!")
-            };
+            switch (response.type) {
+                case "filterChange":
+                    handleFilterChange(response, socket);
+                    break;
+                case "applyFilters":
+                    handleApplyFilters(response);
+                    break;
+                case "tagAdded":
+                    handleTagAdded(response);
+                    break;
+                case "tagRemoved":
+                    handleTagRemoved(response);
+                    break;
+                case "imageDeleted":
+                    handleImageDeleted(response);
+                    break;
+                default:
+                    console.log("Unexpected websocket message type received!");
+                };
         };
-    
+
         socket.addEventListener('message', receiveMessage);
     
         return () => {socket.removeEventListener('message', receiveMessage);}
