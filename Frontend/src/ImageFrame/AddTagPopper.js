@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { Popper, Box, List, ListItemButton } from '@mui/material';
 
 import AppDataContext from '../SupportingModules/AppDataContext';
@@ -38,9 +38,38 @@ function TagPopperContent(props) {
 
 function AddTagPopper(props) {
     const id = open ? 'simple-popper' : undefined;
+    const popperRef = useRef(null);
+    
+    // Thank you StackOverflow user Ben Bud! https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+          /**
+           * Trigger if clicked outside both the popper and it's button
+           */
+          function handleClickOutside(event) {
+            if (ref.current &&
+                !ref.current.contains(event.target) &&
+                props.buttonRef.current &&
+                !props.buttonRef.current.contains(event.target)) {
+              props.setOpen(false);
+              props.setAnchorEl(null);
+            }
+          }
+          // Bind the event listener
+          document.addEventListener("mousedown", handleClickOutside);
+          return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+          };
+        }, [ref]);
+    }
+
+    useOutsideAlerter(popperRef);
+
+
 
     return(
-        <Popper id={id} open={props.open} anchorEl={props.anchorEl} sx={{ zIndex: 1200 }}>
+        <Popper id={id} ref={popperRef} open={props.open} anchorEl={props.anchorEl} sx={{ zIndex: 1200 }}>
         <Box sx={{ border: 1, p: 1, bgcolor: '#aaaaaa' }}>
             <TagPopperContent {...props}/>
         </Box>
