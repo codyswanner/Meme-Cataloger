@@ -146,7 +146,6 @@ class FilterConsumer(WebsocketConsumer):
         print(text_data_json)
         active_filters: list = text_data_json['activeFilters']
         image_queryset: QuerySet = Image.objects.all()
-        print(type(image_queryset))
         image_results: list = []
         for f in active_filters:
             image_queryset = image_queryset.filter(imagetag__tag_id=f)
