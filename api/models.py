@@ -38,8 +38,7 @@ from django.db import models
 
 # Create your models here.
 class AppUser(models.Model):
-    """AppUser
-    Identifies a user of the app.
+    """Identifies a user of the app.
     Extends Django's model.Model class.
 
     Attributes
