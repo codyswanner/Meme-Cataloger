@@ -334,4 +334,3 @@ class FilterConsumer(WebsocketConsumer):
                 self.update_description(text_data_json)
             case _:
                 print("Unexpected websocket message type!")
-
