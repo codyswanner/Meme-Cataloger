@@ -22,6 +22,7 @@ def handle_uploaded_file(file_data):
     file_data: InMemoryUploadedFile
         The file to be uploaded.
     """
+
     file_name: str = str(file_data.name)
     # TODO: Use BASE_DIR or MEDIA_DIR global variable!
     media_path: str = \
@@ -42,6 +43,7 @@ def update_database(file_data):
     file_data: InMemoryUploadedFile
         The file to be recorded to the database.
     """
+
     # Future: add user association for newly uploaded files
     file_path: str = f"images/%s" % file_data.name
     user: AppUser = AppUser.objects.get(id=1)

@@ -19,6 +19,7 @@ class AppUserSerializer(serializers.ModelSerializer):
     Extends Django's serializers.ModelSerializer.
     Used in api.views.
     """
+
     class Meta:
         model = AppUser
         fields = '__all__'
@@ -29,6 +30,7 @@ class ImageSerializer(serializers.ModelSerializer):
     Extends Django's serializers.ModelSerializer.
     Used in api.views.
     """
+
     class Meta:
         model = Image
         fields = '__all__'
@@ -39,6 +41,7 @@ class TagSerializer(serializers.ModelSerializer):
     Extends Django's serializers.ModelSerializer.
     Used in api.views.
     """
+
     class Meta:
         model = Tag
         fields = '__all__'
@@ -49,6 +52,7 @@ class ImageTagSerializer(serializers.ModelSerializer):
     Extends Django's serializers.ModelSerializer.
     Used in api.views.
     """
+
     class Meta:
         model = ImageTag
         fields = '__all__'

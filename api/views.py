@@ -37,6 +37,7 @@ class AppUserView(generics.ListCreateAPIView):
     Exposes API-delivered AppUser information.
     See api.models.AppUser for details.
     """
+
     queryset: QuerySet = AppUser.objects.all()
     serializer_class = AppUserSerializer
     renderer_classes = [JSONRenderer]
@@ -52,6 +53,7 @@ class ImageView(generics.ListAPIView):
     Exposes API-delivered Image information.
     See api.models.Image for details.
     """
+
     queryset: QuerySet = Image.objects.all()
     serializer_class = ImageSerializer
     renderer_classes = [JSONRenderer]
@@ -62,6 +64,7 @@ class TagView(generics.ListAPIView):
     Exposes API-delivered Tag information.
     See api.models.Tag for details.
     """
+
     queryset: QuerySet = Tag.objects.all()
     serializer_class = TagSerializer
     renderer_classes = [JSONRenderer]
@@ -72,6 +75,7 @@ class ImageTagView(generics.ListAPIView):
     Exposes API-delivered ImageTag information.
     See api.models.ImageTag for details.
     """
+
     queryset: QuerySet = ImageTag.objects.all()
     serializer_class = ImageTagSerializer
     renderer_classes = [JSONRenderer]
@@ -91,6 +95,7 @@ def upload(request: ASGIRequest) -> HttpResponse:
         Django server response to request.
         On success, returns status 200.
     """
+
     print(type(request))
     form_data: list = list(request.FILES.values())
     print("Received form data!")
