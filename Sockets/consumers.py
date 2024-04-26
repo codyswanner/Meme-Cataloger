@@ -3,6 +3,8 @@
 Includes FilterConsumer class, the methods of which handle WebSocket
 messages from the frontend, including any processing, database calls,
 and responses back to client.
+
+https://channels.readthedocs.io/
 """
 
 import os
