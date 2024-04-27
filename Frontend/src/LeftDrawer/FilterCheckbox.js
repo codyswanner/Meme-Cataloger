@@ -1,16 +1,18 @@
 import React from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
 
+import filterSocket from '../SupportingModules/FilterSocket';
+
 
 const handleChange = (props, event) => {
     const checkboxLabel = props.text;
-    const socket = props.socket;
+    const socket = filterSocket;
     const selectionMessage = "FilterCheckbox: " + (event.target.checked ? "" : "un") + "checked " + props.tagId;
     console.log(selectionMessage);
     socket.send(JSON.stringify({
-        'type':'filterChange', 
-        'filterName': checkboxLabel, 
-        'filterId': props.tagId, 
+        'type':'filterChange',
+        'filterName': checkboxLabel,
+        'filterId': props.tagId,
         'filterState': (event.target.checked ? "on" : "off")
     }));
 };

@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText } from '@mui/material';
 
 import AppDataContext from '../SupportingModules/AppDataContext';
-import filterSocket from '../SupportingModules/FilterSocket';
 import FilterCheckbox from './FilterCheckbox';
 
 
@@ -32,7 +31,7 @@ function LeftDrawer() {
                     {tagsList.map((tag) => {
                         const tagId = tag.id;
                         const tagName = tag.name;
-                        return(<FilterCheckbox text={tagName} socket={filterSocket} key={tagId} tagId={tagId}/>)
+                        return(<FilterCheckbox text={tagName} key={tagId} tagId={tagId}/>)
                     })}
                 </List>
                 <Divider/>
