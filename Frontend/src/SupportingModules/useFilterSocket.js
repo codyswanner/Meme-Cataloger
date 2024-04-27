@@ -134,6 +134,9 @@ function useFilterSocket(props) {
         const receiveMessage = (e) => {
             const response = JSON.parse(e.data);
             switch (response.type) {
+                case "message":
+                    handleSocketMessage(response);
+                    break;
                 case "filterChange":
                     handleFilterChange(response, socket);
                     break;
