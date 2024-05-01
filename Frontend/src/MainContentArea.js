@@ -27,7 +27,6 @@ function MainContentArea() {
                 description = {pic.description}
                 maxWidth={viewportwidth * 0.2} // Change based on screen size
                 toolbarMaxHeight={352} // Change based on screen size?
-                // tags={pic.tags}
                 imageTags={pic.imageTags}
                 id={pic.id}
               />
