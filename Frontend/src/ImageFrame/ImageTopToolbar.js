@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton, TextField, Input, Toolbar, Typography } from "@mui/material";
+import { IconButton, TextField, Toolbar, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
@@ -7,19 +7,28 @@ import DeleteImageButton from './DeleteImageButton';
 import filterSocket from '../SupportingModules/FilterSocket';
 
 
+/**
+ * Offers options for image including description, delete, archive, etc.
+ * This component renders at the top third of an image when the image is hovered.
+ * 
+ * @param {object} props Contains props passed to the component.
+ * @param {number} props.id Unique ID of the image.
+ * 
+ * @returns The ImageTopToolbar component to be rendered in the app.
+ */
 function ImageTopToolbar(props) {
-  const [description, setDescription] = useState(props.description ? props.description : '');
-
+  
+  // Placeholder function until Archive/Share functionalities are implemented
   const handleButtonClick = (buttonType, id) => {
     console.log(`Clicked ${buttonType} on image ${id}`);
   };
 
-  const handleDescriptionChange = (e, props) => {
+  const handleDescriptionChange = (e, imageId) => {
+    // Inform the backend of the change
     const socket = filterSocket;
-    setDescription(e.target.value);
     socket.send(JSON.stringify({
       'type': 'updateDescription', 
-      'imageId': props.id,
+      'imageId': imageId,
       'description': e.target.value
     }));
   }
@@ -27,6 +36,7 @@ function ImageTopToolbar(props) {
   
   return(
     <Toolbar sx={props.toolbarStyles}>
+      {/* TextField holds the image desc and allows editing by user (left side) */}
       <TextField 
         placeholder="Text Description"
         size="small"
@@ -34,17 +44,19 @@ function ImageTopToolbar(props) {
         sx={{background: 'rgba(0, 0, 0, 0)',
         input: { color: "white"}}}
         defaultValue={props.description ? props.description : ''}
-        onChange={(e) => {handleDescriptionChange(e, props)}}
+        onChange={(e) => {handleDescriptionChange(e, props.id)}}
       />
+
+      {/* Image options should be placed to the right side */}
       <div style={{ marginLeft: "auto" }}>
-        <Toolbar disableGutters>
+        <Toolbar disableGutters> {/* MUI Gutters cause spacing issues */}
           <IconButton onClick={() => handleButtonClick("Share", props.id)}>
             <ShareIcon sx={{ color: "white" }} />
           </IconButton>
           <IconButton onClick={() => handleButtonClick("Archive", props.id)}>
             <ArchiveIcon sx={{ color: "white" }} />
           </IconButton>
-          <DeleteImageButton id={props.id}/>
+          <DeleteImageButton id={props.id}/> {/* Custom component, see imports */}
         </Toolbar>
       </div>
     </Toolbar>
