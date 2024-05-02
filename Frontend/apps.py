@@ -1,3 +1,6 @@
+"""Registers the package as an app to be called by the Django app.
+"""
+
 from django.apps import AppConfig
 
 
