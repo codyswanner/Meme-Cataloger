@@ -1,15 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { IconButton } from "@mui/material";
 
 import AddTagPopper from './AddTagPopper';
 
 
+/**
+ * Activates a menu to select a tag to add to the image.
+ * 
+ * @param {object} props Contains props passed to the component.
+ * @param {number} props.imageId Used by child component; image to add a tag to.
+ * 
+ * @returns The AddTagButton component to be rendered in the app.
+ */
 function AddTagButton(props) {
+
+  // See https://mui.com/material-ui/react-popper/ for details on the purpose of anchorEl.
   const [anchorEl, setAnchorEl] = useState(null);
+  
+  // Sets AddTagPopper open or closed.
   const [open, setOpen] = useState(false);
+  
+  // Used by AddTagPopper for click-away handling.
   const buttonRef = useRef(null);
   
   const handleClick = (e) => {
+    // On click, toggle AddTagPopper open or closed.
     setAnchorEl(anchorEl ? null : e.currentTarget);
     setOpen((prev) => !prev);
   };

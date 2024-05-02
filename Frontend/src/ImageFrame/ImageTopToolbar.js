@@ -12,7 +12,7 @@ import filterSocket from '../SupportingModules/FilterSocket';
  * This component renders at the top third of an image when the image is hovered.
  * 
  * @param {object} props Contains props passed to the component.
- * @param {object} props.id Unique ID of the image.
+ * @param {number} props.id Unique ID of the image.
  * 
  * @returns The ImageTopToolbar component to be rendered in the app.
  */
