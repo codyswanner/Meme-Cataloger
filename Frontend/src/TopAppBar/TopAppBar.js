@@ -5,6 +5,12 @@ import UploadIcon from '@mui/icons-material/Upload'
 import UploadDialog from './UploadDialog';
 
 
+/**
+ * Title and upload button for app.
+ * Appears as a banner at the top of the page.
+ * 
+ * @returns The TopAppBar component to be rendered in the app.
+ */
 function TopAppBar() {
     const [open, setOpen] = useState(false);
     
