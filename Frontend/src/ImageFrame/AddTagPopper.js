@@ -34,23 +34,6 @@ function TagPopperContent(props) {
     })
 
     return(
-        // <List>
-        //     {appData[1].map((tag) => {
-        //         const tagId = tag.id;
-        //         const tagName = tag.name;
-
-        //         return(
-        //             <ListItemButton
-        //             key={tagId}
-        //             tagid={tagId}
-        //             onClick={() => handleTagClick(props, tagId)}>
-        //                 {tagName}
-        //             </ListItemButton>
-        //         )
-        //     })}
-        // </List>
-
-
         <Autocomplete
             options={tagOptions}
             style={{ width: 300 }}
