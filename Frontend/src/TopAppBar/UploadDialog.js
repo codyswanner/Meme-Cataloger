@@ -4,6 +4,14 @@ import { Box, Typography, Dialog, DialogTitle } from '@mui/material';
 import UploadBox from './UploadBox';
 
 
+/**
+ * An interface for uploading new images to the app.
+ * 
+ * @param {object} props Contains props passed to the component.
+ * @param {boolean} props.open Controls open/visible state of the componenet.
+ * 
+ * @returns The UploadDialog componenet to be rendered in the app.
+ */
 function UploadDialog(props) {
 
     const handleClose = () => {

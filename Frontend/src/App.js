@@ -15,17 +15,32 @@ const theme = createTheme({
   },
 });
 
+/**
+ * Root component that renders all other components.
+ * Activates useFilterSocket hook,
+ * which is the hub for WebSocket communications with backend.
+ * 
+ * @param {object} props Contains props passed into the component.
+ * @param {Array} props.apiData Data for initial page load.
+ * 
+ * @returns The root App component to render all other components.
+ */
 function App(props) {
 
-  // update pictures when data is received from WebSocket
-  const appData = useFilterSocket(props);
+  // useFilterSocket receives messages for updates to appData.
+  // appData contains Image, Tag and ImageTag data.
+  const appData = useFilterSocket(props.apiData);
 
   return (
+    <>
+    {/* https://mui.com/material-ui/customization/theming/#themeprovider */}
     <ThemeProvider theme={theme}>
-    <AppDataContext.Provider value={appData}>
-      <ContentFrame />
-    </AppDataContext.Provider>
+      {/* https://react.dev/reference/react/useContext */}
+      <AppDataContext.Provider value={appData}>
+        <ContentFrame />
+      </AppDataContext.Provider>
     </ThemeProvider>
+    </>
   );
 }
 

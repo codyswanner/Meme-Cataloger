@@ -5,10 +5,17 @@ import ReactivePictureFrame from './ImageFrame/ReactivePictureFrame';
 import AppDataContext from './SupportingModules/AppDataContext';
 
 
+/**
+ * Area for images to be displayed in the app.
+ * 
+ * @returns The MainContentArea component to be rendered in the app.
+ */
 function MainContentArea() {
+  // Image, Tag, and ImageTag data
   const appData = useContext(AppDataContext);
   
-  // Move to App or ContentFrame?
+  // We do want MainContentArea to resize, but not LeftDrawer,
+  // so the resizing logic lives here.
   const [viewportwidth, setViewportWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => setViewportWidth(window.innerWidth);
@@ -18,16 +25,15 @@ function MainContentArea() {
 
   return (
     <div className='flex-container'>
-      <ImageList variant='masonry' cols={4} gap={4}> {/* Change cols based on screen width */}
+      <ImageList variant='masonry' cols={4} gap={4}> {/* Future: change cols based on screen width */}
         {appData[0].map((pic) => { // appData[0] is the image array
           return (
             <ImageListItem key={pic.id}>
               <ReactivePictureFrame
                 src={pic.source}
                 description = {pic.description}
-                maxWidth={viewportwidth * 0.2} // Change based on screen size
-                toolbarMaxHeight={352} // Change based on screen size?
-                // tags={pic.tags}
+                maxWidth={viewportwidth * 0.2} // Future: change based on screen size
+                toolbarMaxHeight={352} // Future: change based on screen size?
                 imageTags={pic.imageTags}
                 id={pic.id}
               />

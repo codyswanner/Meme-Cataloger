@@ -1,3 +1,8 @@
+"""routing.py
+Routes requests for processing by consumers.FilterConsumer.
+https://channels.readthedocs.io/en/latest/topics/routing.html
+"""
+
 from django.urls import re_path
 from . import consumers
 
