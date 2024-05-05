@@ -13,11 +13,11 @@ import { sendCSRFRequest } from '../SupportingModules/CSRFToken';
  * @param {Array} files The selected files to be uploaded.
  * @param {function} setFiles Resets state to empty after request is complete.
  */
-async function handleUpload(files, setFiles) {
+async function handleUpload(e, files, setFiles) {
     e.preventDefault()
     'use server' // Tells React to use a server action
     const formData = new FormData();
-    await files.forEach(file => {formData.append('file', file)});
+    files.forEach(file => {formData.append('file', file)});
     sendCSRFRequest(formData, 'api/upload/');
     await setFiles([]);
 };
@@ -63,7 +63,7 @@ function FileUploadForm(props) {
                 </List>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button type='submit' onClick={() => handleUpload(props.files, props.setFiles)}>Upload</Button>
+                    <Button type='submit' onClick={(e) => handleUpload(e, props.files, props.setFiles)}>Upload</Button>
                 </Box>
                 <CSRFToken/>
             </Box>
@@ -93,6 +93,10 @@ function EmptyUploadForm(props) {
         whiteSpace: 'nowrap',
         width: 1,
     });
+
+    const acceptedImageFiletypes = "image/jpg,image/jpeg,image/png,image/webp,image/gif,image/bmp,image/svg"
+    const acceptedVideoFiletypes = "video/mp4,video/mov,video/avi,video/mkv,video/wmv,video/flv,video/webm"
+    const acceptedFileTypes = (acceptedImageFiletypes + "," + acceptedVideoFiletypes)
     
     return(
         <Box 
@@ -114,7 +118,11 @@ function EmptyUploadForm(props) {
             sx={{ height: 50, verticalAlign: 'center', position: 'relative', margin: 'auto' }}
             startIcon={<UploadIcon/>}>
                 Upload Here!
-                <VisuallyHiddenInput type='file' id='fileInput' onInput={props.handleInput}/>
+                <VisuallyHiddenInput
+                type='file'
+                id='fileInput'
+                onInput={props.handleInput}
+                accept={acceptedFileTypes}/>
             </Button>
         </Box>
     )

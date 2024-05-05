@@ -17,6 +17,7 @@ upload(request: ASGIRequest) -> HttpResponse
     Uploads a new file to persistent storage and the database.
 """
 
+import filetype
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.renderers import JSONRenderer
@@ -96,17 +97,18 @@ def upload(request: ASGIRequest) -> HttpResponse:
         On success, returns status 200.
     """
 
-    print(type(request))
     form_data: list = list(request.FILES.values())
-    print("Received form data!")
-    print(form_data)
+    # Future: accept all uploaded files,
+    # not just the first one
     file_data: InMemoryUploadedFile = form_data[0]
-    print(file_data)
-    # TODO: check each operation before commit
-    print("Handing to upload handler...")
-    handle_uploaded_file(file_data)
-    print("Updating database records...")
-    update_database(file_data)
-    print("Done uploading file!")
-
-    return HttpResponse(status=200)
+    image_match = filetype.image_match(file_data)
+    video_match = filetype.video_match(file_data)
+    if image_match or video_match:
+        handle_uploaded_file(file_data)
+        update_database(file_data)
+        print("Done uploading file!")
+        return HttpResponse(status=200)
+    else:
+        print("Incorrect file for upload")
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
+        return HttpResponse(status=415)
