@@ -15,7 +15,8 @@ import { sendCSRFRequest } from '../SupportingModules/CSRFToken';
  */
 async function handleUpload(e, files, setFiles) {
     e.preventDefault()
-    'use server' // Tells React to use a server action
+    // 'use server' // Tells React to use a server action
+    // Does above line need to be here?  Commenting out seems to have no effect
     const formData = new FormData();
     files.forEach(file => {formData.append('file', file)});
     sendCSRFRequest(formData, 'api/upload/');

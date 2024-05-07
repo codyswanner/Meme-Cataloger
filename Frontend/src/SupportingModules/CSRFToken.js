@@ -10,6 +10,21 @@ import React from 'react';
  */
 export function sendCSRFRequest(formData, targetURL) {
     const request = new XMLHttpRequest();
+    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/response
+    request.onreadystatechange = () => {
+        if (request.readyState === 4) {
+            if (request.status === 200) {
+                console.log("Huzzah!");
+            } else if (request.status === 415) {
+                // https://stackoverflow.com/questions/69057424/how-can-i-catch-a-server-error-with-async-await-in-javascript
+                // Is an Error overkill for my case?
+                throw new Error("Unsupported media type!");
+            } else {
+                console.log("Something unexpected happened!");
+            }
+        }
+    };
+
     request.open('POST', targetURL);
     request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     request.send(formData);
