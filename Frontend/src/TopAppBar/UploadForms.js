@@ -28,14 +28,21 @@ async function handleUpload(e, files, setFiles, setUploadFailed) {
 
 // TODO: document this function!
 function handleUploadFailed(uploadFailed) {
+    const uploadFailedStyles = {
+        height: 30,
+        margin: '5% auto 0 auto',
+        position: 'relative',
+        verticalAlign: 'center',
+    }
+
     if (uploadFailed) {
         console.log("received the prop, it's true!");
         return(
-            <>
+            <Box sx={uploadFailedStyles}>
             <Typography> {/* Very rudimentary error display, replace with more permanent solution later */}
                 Unsupported File Type!
             </Typography>
-            </>
+            </Box>
         )
     } else {
         console.log("Recievied the prop, it's false!");
@@ -181,6 +188,7 @@ function EmptyUploadForm(props) {
             borderStyle: 'dashed', 
             display: 'flex',
             height: 200,
+            flexDirection: 'column',
             justifyContent: 'center',
             verticalAlign: 'center',
             margin: '5% 0 5% 0'
