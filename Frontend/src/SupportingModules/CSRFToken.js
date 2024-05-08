@@ -8,27 +8,18 @@ import React from 'react';
  * @param {FormData} formData From the image upload request
  * @param {String} targetURL Usually 'upload/', see api.urls and api.views for details
  */
-export function sendCSRFRequest(formData, targetURL) {
-    const request = new XMLHttpRequest();
-    // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/response
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            if (request.status === 200) {
-                console.log("Huzzah!");
-            } else if (request.status === 415) {
-                // https://stackoverflow.com/questions/69057424/how-can-i-catch-a-server-error-with-async-await-in-javascript
-                // Is an Error overkill for my case?
-                throw new Error("Unsupported media type!");
-            } else {
-                console.log("Something unexpected happened!");
-            }
+export async function sendCSRFRequest(formData, targetURL) {
+        const response = await fetch(targetURL, {
+            method: "POST",
+            body: formData,
+            headers: {'X-CSRFToken': getCookie('csrftoken')}
+        });
+        if (response.ok) {
+            console.log("Success!");
+        } else {
+            throw new Error("Can't upload that!");
         }
-    };
-
-    request.open('POST', targetURL);
-    request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    request.send(formData);
-};
+}
 
 /**
  * Used to get a value of a session cookie.
