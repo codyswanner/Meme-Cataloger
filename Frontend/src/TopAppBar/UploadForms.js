@@ -6,12 +6,14 @@ import { styled } from '@mui/material/styles';
 import CSRFToken from '../SupportingModules/CSRFToken';
 import { sendCSRFRequest } from '../SupportingModules/CSRFToken';
 
-// TODO: update this documentation!
+
 /**
  * Sends upload request to backend (via HTTP).
  * 
+ * @param {Event} e For preventing default browser behavior.
  * @param {Array} files The selected files to be uploaded.
  * @param {function} setFiles Resets state to empty after request is complete.
+ * @param {function} setUploadFailed Says whether the upload failed or not.
  */
 async function handleUpload(e, files, setFiles, setUploadFailed) {
     e.preventDefault()
@@ -20,14 +22,20 @@ async function handleUpload(e, files, setFiles, setUploadFailed) {
     try {
         await sendCSRFRequest(formData, 'api/upload/');
         setUploadFailed(false);
-    } catch (e) {
+    } catch (err) {
         setUploadFailed(true);
     }
     
     await setFiles([]);
 };
 
-// TODO: document this function!
+/**
+ * Shows an error to the user when the upload fails.
+ * Currently, the only case handled by this function is "unsupported file type".
+ * 
+ * @param {boolean} uploadFailed When true, renders an error message for the user.
+ * @returns The (conditionally rendered) error message to be displayed in the UploadBox.
+ */
 function handleUploadFailed(uploadFailed) {
     const uploadFailedStyles = {
         height: 30,
@@ -50,7 +58,16 @@ function handleUploadFailed(uploadFailed) {
     }
 }
 
-// TODO: document this function!
+/**
+ * Displays a button for the file that will remove it from the form when clicked.
+ * Fits inside the FileUploadForm.
+ * 
+ * @param {object} props Contains props passed to the component.
+ * @param {file} props.file The specific file referenced by this button.
+ * @param {Array} props.files The array of files currently in the form.
+ * @param {function} props.setFiles Modifies the props.files array.
+ * @returns The name of the file as a button that can be pressed to remove the file.
+ */
 function FileButton(props) {
     const [isHovered, setIsHovered] = useState(false);
     
