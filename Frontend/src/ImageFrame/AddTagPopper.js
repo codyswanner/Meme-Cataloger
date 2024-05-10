@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Popper, Box, List, ListItemButton, Autocomplete, TextField } from '@mui/material';
 
 import AppDataContext from '../SupportingModules/AppDataContext';
@@ -17,27 +17,39 @@ import filterSocket from '../SupportingModules/FilterSocket';
 function TagPopperContent(props) {
     const appData = useContext(AppDataContext);
     const socket = filterSocket; // For communication with backend
-
-    const handleTagClick = (imageId, tagId) => {
-        // Inform backend of tag addition
-        socket.send(JSON.stringify({
-            'type': 'addTag', 
-            'imageId': imageId,
-            'tagId': tagId
-        }));
-    }
+    const [selectedValue, setSelectedValue] = useState([]);
 
     const tagOptions = appData[1].map((tag) => {
-        const tagId = tag.id;
-        const tagName = tag.name;
-        return (tagId, tagName)
+        const tagObject = {'id': tag.id, 'label': tag.name};
+        return (tagObject)
     })
+
+    const handleChange = (value, imageId) => {
+        setSelectedValue(value);
+        //console.log(event);
+        console.log("Setting value to: ", value);
+        console.log("On image ", imageId);
+
+        // This message format will not work,
+        // because the array will include ALL tags.
+        // Going to have to re-write this message,
+        // and the receiving side on the channels consumer.
+
+        //socket.send(JSON.stringify({
+        //    'type': 'addTag', 
+        //    'imageId': imageId,
+        //    'tagId': tagId
+        //}));
+
+    }
 
     return(
         <Autocomplete
             options={tagOptions}
             style={{ width: 300 }}
             openOnFocus
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(event, value) => handleChange(value, props.imageId)}
             disablePortal
             multiple
             renderInput={(params) => (
