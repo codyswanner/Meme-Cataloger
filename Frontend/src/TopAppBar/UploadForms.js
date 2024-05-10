@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, List } from '@mui/material';
+import { Alert, Box, Button, List } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload'
 import { styled } from '@mui/material/styles';
 
@@ -40,9 +40,9 @@ function handleUploadFailed(uploadFailed) {
         console.log("received the prop, it's true!");
         return(
             <Box sx={uploadFailedStyles}>
-            <Typography> {/* Very rudimentary error display, replace with more permanent solution later */}
+            <Alert severity='error'>
                 Unsupported File Type!
-            </Typography>
+            </Alert>
             </Box>
         )
     } else {
