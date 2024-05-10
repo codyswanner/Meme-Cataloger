@@ -19,6 +19,7 @@ async function handleUpload(e, files, setFiles, setUploadFailed) {
     files.forEach(file => {formData.append('file', file)});
     try {
         await sendCSRFRequest(formData, 'api/upload/');
+        setUploadFailed(false);
     } catch (e) {
         setUploadFailed(true);
     }
