@@ -8,12 +8,18 @@ import React from 'react';
  * @param {FormData} formData From the image upload request
  * @param {String} targetURL Usually 'upload/', see api.urls and api.views for details
  */
-export function sendCSRFRequest(formData, targetURL) {
-    const request = new XMLHttpRequest();
-    request.open('POST', targetURL);
-    request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    request.send(formData);
-};
+export async function sendCSRFRequest(formData, targetURL) {
+        const response = await fetch(targetURL, {
+            method: "POST",
+            body: formData,
+            headers: {'X-CSRFToken': getCookie('csrftoken')}
+        });
+        if (response.ok) {
+            console.log("Success!");
+        } else {
+            throw new Error("Can't upload that!");
+        }
+}
 
 /**
  * Used to get a value of a session cookie.
