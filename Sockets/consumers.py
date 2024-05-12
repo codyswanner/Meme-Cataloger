@@ -9,6 +9,7 @@ https://channels.readthedocs.io/
 
 import os
 import json
+from django.conf import settings
 from asgiref.sync import async_to_sync
 from django.db.models.query import QuerySet
 from channels.generic.websocket import WebsocketConsumer
@@ -257,9 +258,10 @@ class FilterConsumer(WebsocketConsumer):
         image_object: Image = Image.objects.get(id=image_id)
         source_filename: str = image_object.source
         print(f"Image filename is %s" % source_filename)
+        app_media_root: str = settings.MEDIA_ROOT
         full_file_path: str = \
-            f'C:\\Users\\codys\\Dev\\PycharmProjects\\Django' \
-            f'\\MemeCataloger2\\media\\%s' % source_filename
+            f'{app_media_root}/{source_filename}'
+        print(full_file_path)
 
         # TODO: check for existence of both file and DB entry before performing action
         try:
