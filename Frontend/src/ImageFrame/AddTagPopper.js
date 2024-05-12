@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useEffect, useState } from 'react';
-import { Popper, Box, List, ListItemButton, Autocomplete, TextField } from '@mui/material';
+import React, { useContext, useRef, useEffect } from 'react';
+import { Popper, Box, Autocomplete, TextField } from '@mui/material';
 
 import AppDataContext from '../SupportingModules/AppDataContext';
 import filterSocket from '../SupportingModules/FilterSocket';
@@ -17,29 +17,19 @@ import filterSocket from '../SupportingModules/FilterSocket';
 function TagPopperContent(props) {
     const appData = useContext(AppDataContext);
     const socket = filterSocket; // For communication with backend
-    const [selectedValue, setSelectedValue] = useState([]);
 
     const tagOptions = appData[1].map((tag) => {
         const tagObject = {'id': tag.id, 'label': tag.name};
         return (tagObject)
     })
 
-    const handleChange = (value, imageId) => {
-        setSelectedValue(value);
-        //console.log(event);
-        console.log("Setting value to: ", value);
-        console.log("On image ", imageId);
+    const handleChange = (tagArray, imageId) => {
 
-        // This message format will not work,
-        // because the array will include ALL tags.
-        // Going to have to re-write this message,
-        // and the receiving side on the channels consumer.
-
-        //socket.send(JSON.stringify({
-        //    'type': 'addTag', 
-        //    'imageId': imageId,
-        //    'tagId': tagId
-        //}));
+        socket.send(JSON.stringify({
+            'type': 'updateTags',
+            'imageId': imageId,
+            'tagArray': tagArray
+        }));
 
     }
 
@@ -49,6 +39,7 @@ function TagPopperContent(props) {
             style={{ width: 300 }}
             openOnFocus
             isOptionEqualToValue={(option, value) => option.id === value.id}
+            // onChange returns an 'event' object that we don't need
             onChange={(event, value) => handleChange(value, props.imageId)}
             disablePortal
             multiple
