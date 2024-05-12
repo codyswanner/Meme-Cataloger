@@ -29,6 +29,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/Frontend/static/Frontend/
 /media/images/
 /python312/
 /venv/
