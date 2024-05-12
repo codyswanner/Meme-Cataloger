@@ -261,7 +261,6 @@ class FilterConsumer(WebsocketConsumer):
         app_media_root: str = settings.MEDIA_ROOT
         full_file_path: str = \
             f'{app_media_root}/{source_filename}'
-        print(full_file_path)
 
         # TODO: check for existence of both file and DB entry before performing action
         try:

@@ -28,7 +28,6 @@ def handle_uploaded_file(file_data):
     app_media_root: str = settings.MEDIA_ROOT
     media_path: str = \
         f'{app_media_root}/images/{file_name}'
-    print(f"Writing file to %s" % media_path)
     with open(media_path, "wb+") as destination:
         for chunk in file_data.chunks():
             destination.write(chunk)
