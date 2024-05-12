@@ -11,6 +11,7 @@ update_database(file_data)
 """
 
 from .models import *
+from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
@@ -24,11 +25,9 @@ def handle_uploaded_file(file_data):
     """
 
     file_name: str = str(file_data.name)
-    # TODO: Use BASE_DIR or MEDIA_DIR global variable!
+    app_media_root: str = settings.MEDIA_ROOT
     media_path: str = \
-        f'C:\\Users\\codys\\Dev\\PycharmProjects\\Django' \
-        f'\\MemeCataloger2\\media\\images\\%s' % file_name
-    print(f"Writing file to %s" % media_path)
+        f'{app_media_root}/images/{file_name}'
     with open(media_path, "wb+") as destination:
         for chunk in file_data.chunks():
             destination.write(chunk)

@@ -12,6 +12,7 @@ import { FileUploadForm, EmptyUploadForm } from './UploadForms';
  */
 function UploadBox() {
     const [files, setFiles] = useState([]);
+    const [uploadFailed, setUploadFailed] = useState(false);
 
     // this is triggered when user clicks "Upload" button
     const handleInput = () => {
@@ -50,6 +51,7 @@ function UploadBox() {
                 handleDrop={handleDrop}
                 files={files}
                 setFiles={setFiles}
+                setUploadFailed={setUploadFailed}
             />
         );
     } else {
@@ -60,6 +62,8 @@ function UploadBox() {
                 files={files}
                 setFiles={setFiles}
                 handleInput={handleInput}
+                uploadFailed={uploadFailed}
+                setUploadFailed={setUploadFailed}
             />
         );
     };
