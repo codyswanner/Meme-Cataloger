@@ -38,12 +38,16 @@ function Tag(props) {
 
   // Click a tag to remove it.  Inform the backend of the change.
   const handleTagClick = (imageId, imageTagId, tagId) => {
-    socket.send(JSON.stringify({
-      'type': 'removeTag',
-      'imageId': imageId,
-      'imageTagId': imageTagId,
-      'tagId': tagId
-  }));
+    // TODO: rework the Tag component to use Chips and not as a button.
+    // See issue #4 for details.
+    console.log("This button is deprecated, use the Autocomplete component!")
+    
+  //  socket.send(JSON.stringify({
+  //    'type': 'removeTag',
+  //    'imageId': imageId,
+  //    'imageTagId': imageTagId,
+  //    'tagId': tagId
+  //}));
   };
 
   if (props.imageTag === 0) {

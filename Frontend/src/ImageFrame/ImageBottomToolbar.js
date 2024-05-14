@@ -35,7 +35,7 @@ function ImageBottomToolbar(props) {
   return(
     <Toolbar sx={[props.toolbarStyles, { bottom: 6.5 }]}>
       {generateTags(props.imageTags)} {/* Returns Tag components for image */}
-      <AddTagButton imageId={props.id} style={{ marginLeft: "auto" }}/>
+      <AddTagButton imageId={props.id} imageTags={props.imageTags} style={{ marginLeft: "auto" }}/>
     </Toolbar>
   );
 };
