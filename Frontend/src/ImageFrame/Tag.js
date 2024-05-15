@@ -1,8 +1,29 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
+import { ThemeProvider, alpha, createTheme } from '@mui/material/styles';
+import Chip from '@mui/material/Chip'
 
 import AppDataContext from '../SupportingModules/AppDataContext';
-import filterSocket from '../SupportingModules/FilterSocket';
 
+
+/**
+ * Wraps the name of the tag in a styled <p> element for easier reading.
+ * 
+ * @param {object} props Contains props passed to the component.
+ * @param {string} props.tagName The tag name to be displayed.
+ * @returns A styled HTML <p> element to display the name of the tag.
+ */
+function TagLabel(props) {
+  const tagLabelStyle = {
+    padding: 0,
+    color: '#ffffff'
+  }
+
+  return (
+    <p style={tagLabelStyle}>
+      {props.tagName}
+    </p>
+  )
+}
 
 /**
  * Displays the name of a tag assigned to this image.
@@ -15,36 +36,6 @@ import filterSocket from '../SupportingModules/FilterSocket';
  */
 function Tag(props) {
   const appData = useContext(AppDataContext);
-  const socket = filterSocket; // Used for communication with the backend.
-  const [isHovered, setIsHovered] = useState(false);
-
-  const buttonStyle = {
-    background: 'none',
-    border: 'none',
-    padding: 0,
-    font: 'inherit',
-    color: '#ffffff',
-    cursor: 'pointer',
-    textDecoration: isHovered ? 'underline' : 'none',
-  };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  // Click a tag to remove it.  Inform the backend of the change.
-  const handleTagClick = (imageId, imageTagId, tagId) => {
-    socket.send(JSON.stringify({
-      'type': 'removeTag',
-      'imageId': imageId,
-      'imageTagId': imageTagId,
-      'tagId': tagId
-  }));
-  };
 
   if (props.imageTag === 0) {
       // The zero tag is assigned to pictures with no other tags.
@@ -54,39 +45,29 @@ function Tag(props) {
         <p>{'Add tag'}</p>
       </div>
     );
-  } else {
-    // Display the name of the tag that was passed in.
-
-    /**
-     * Determines the numerical tag ID in an image-to-tag relationship.
-     * Uses the imageTagId (record of an image-to-tag pairing) as a starting point.
-     * 
-     * @param {array} imageTagArray Matches images with assigned tags.
-     * @param {number} imageTagId unique ID of the image-to-tag association.
-     * @returns The unique ID of the tag assigned to the image.
-     */
-    function getTagId(imageTagArray, imageTagId) {
-      const imageTag = imageTagArray.find(element => element.id === imageTagId);
-      const tagId = imageTag['tag_id'];
-      return tagId;
-    };
-
-    // appData[2] records which tags are assigned to which images
-    const tagId = getTagId(appData[2], props.imageTag);
-    
+  } else { // Display the name of the tag that was passed in.
+  
+    // appData[2] records relationships between tags and images
+    // We know the ID of this relationship, so we can find it
+    const imageTag = appData[2].find(element => element.id === props.imageTag);
+    // Then we can narrow that image-to-tag relationship down to just the tag
+    const tagId = imageTag['tag_id'];
     // appdata[1] matches tag IDs to tag names
     const tagName = appData[1].find(tagData => tagData.id === tagId)['name'];
 
+    // Custom coloring to improve tag readability on top of the images
+    const chipTheme = createTheme({
+      palette: {
+        primary: {
+          main: alpha('#333333', 0.6),
+        },
+      }
+    });
+
     return (
-      <div 
-        style={{ fontSize: "0.7rem", color: "white" }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
-        {/* Tag is a button so that it can register a click, which removes it from the image. */}
-        <button style={buttonStyle} onClick={() => handleTagClick(props.imageId, props.imageTag, tagId)}>
-          {tagName}
-        </button>
-      </div>
+      <ThemeProvider theme={chipTheme}>
+        <Chip color='primary' label={<TagLabel tagName={tagName}/>}/>
+      </ThemeProvider>
     );
   };
 };
