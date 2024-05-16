@@ -97,18 +97,28 @@ def upload(request: ASGIRequest) -> HttpResponse:
         On success, returns status 200.
     """
 
-    form_data: list = list(request.FILES.values())
-    # Future: accept all uploaded files,
-    # not just the first one
-    file_data: InMemoryUploadedFile = form_data[0]
-    image_match = filetype.image_match(file_data)
-    video_match = filetype.video_match(file_data)
-    if image_match or video_match:
-        handle_uploaded_file(file_data)
-        update_database(file_data)
+    files_list: list = list(request.FILES.getlist('file'))
+    print(f'files list is: {files_list}')
+    # print(f'files list 0 is: {files_list[0]}')
+    # print(f'files list 1 is: {files_list[1]}')
+
+    status_okay: bool = True
+    for file in files_list:
+        try:
+            print(f"Uploading file {file}")
+            image_match = filetype.image_match(file)
+            video_match = filetype.video_match(file)
+            if not image_match and not video_match:
+                ...  # raise an error, not sure what kind yet
+        except:  # error raised above
+            print("Incorrect file for upload")
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
+            return HttpResponse(status=415)
+
+    for file in files_list:
+        # if we made it here there was no error
+        handle_uploaded_file(file)
+        update_database(file)
         print("Done uploading file!")
         return HttpResponse(status=200)
-    else:
-        print("Incorrect file for upload")
-        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
-        return HttpResponse(status=415)
+
