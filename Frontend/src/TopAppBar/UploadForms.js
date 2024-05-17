@@ -45,7 +45,6 @@ function handleUploadFailed(uploadFailed) {
     }
 
     if (uploadFailed) {
-        console.log("received the prop, it's true!");
         return(
             <Box sx={uploadFailedStyles}>
             <Alert severity='error'>
@@ -53,8 +52,6 @@ function handleUploadFailed(uploadFailed) {
             </Alert>
             </Box>
         )
-    } else {
-        console.log("Recievied the prop, it's false!");
     }
 }
 

@@ -158,18 +158,15 @@ class FilterConsumer(WebsocketConsumer):
 
         self.send(text_data=json.dumps({'type': 'applyFilters', 'results': image_results}))
 
-    def add_tag(self, text_data_json: dict) -> None:
+    def add_tag(self, image_object: Image, tag_id: int) -> None:
         """Creates ImageTag association from request received from client for new tag on image.
 
         Parameters
         ----------
-        text_data_json: dict
-            Websocket JSON message, translated to a Python dict by receive method.
-            For add_tag, expected structure is:
-                {'type': 'addTag',
-                'imageId': (numerical imageId, represented as a str),
-                'tagId': (numerical tagId, represented as a str)
-                }
+        image_object: Image
+            Image model instance to be updated.
+        tag_id: int
+            ID of tag to be added.
 
         Returns
         -------
@@ -177,9 +174,6 @@ class FilterConsumer(WebsocketConsumer):
             {'type': 'tagAdded', 'id': new_imagetag.id, 'imageId': image_id, 'tagId': tag_id}
         """
 
-        image_id: str = text_data_json['imageId']
-        image_object: Image = Image.objects.get(id=image_id)  # Django requires Image object for query
-        tag_id: str = text_data_json['tagId']
         tag_object: Tag = Tag.objects.get(id=tag_id)  # Django requires Tag object for query
 
         if ImageTag.objects.filter(image_id=image_object, tag_id=tag_object).exists():
@@ -193,39 +187,77 @@ class FilterConsumer(WebsocketConsumer):
             return_message: dict = {
                 'type': 'tagAdded',
                 'id': new_imagetag.id,
-                'imageId': image_id,
+                'imageId': image_object.id,
                 'tagId': tag_id
             }
             self.send(text_data=json.dumps(return_message))
 
-    def remove_tag(self, text_data_json: dict) -> None:
-        """Deletes ImageTag association of tag on image specified by client.
+    def remove_tag(self, image_object: Image, tag_id: int) -> None:
+        """Deletes ImageTag association from request received from client for new tag on image.
+
+        Parameters
+        ----------
+        image_object: Image
+            Image model instance to be updated.
+        tag_id: int
+            ID of tag to be removed.
+
+        Returns
+        -------
+        None; however, sends a WebSocket message to client with the following structure:
+            {'type': 'tagRemoved', 'id': imagetag_id, 'imageId': image_id}
+        """
+
+        tag_object: Tag = Tag.objects.get(id=tag_id)  # Django requires Tag object for query
+
+        try:
+            imagetag_object: ImageTag = ImageTag.objects.get(image_id=image_object, tag_id=tag_object)
+            imagetag_id: int = imagetag_object.id
+            imagetag_object.delete()
+
+            return_message: dict = {
+                'type': 'tagRemoved',
+                'id': imagetag_id,
+                'imageId': image_object.id
+            }
+            self.send(text_data=json.dumps(return_message))
+        except ImageTag.DoesNotExist:
+            return_message = {'type': 'message', 'message': 'Tag association does not exist!'}
+            self.send(text_data=json.dumps(return_message))
+
+    def update_tags(self, text_data_json: dict) -> None:
+        """Updates ImageTag associations for an image.
+        Runs when client wants to add or remove a tag from an image.
 
         Parameters
         ----------
         text_data_json: dict
             Websocket JSON message, translated to a Python dict by receive method.
-            For remove_tag, expected structure is:
-                {'type': 'removeTag',
+            For update_tags, expected structure is:
+                {'type': 'updateTags',
                 'imageId': (numerical imageId, represented as a str),
-                'imageTagId': (numerical imageTagId, represented as a str),
-                'tagId': (numerical TagId, represented as a str)
-                }
+                'tagArray': (dict containing tags of this image)
 
         Returns
         -------
-         None; however, sends a WebSocket message to client with the following structure:
-            {'type': 'tagRemoved', 'id': imagetag_id, 'imageId': image_id}
+        None; however, sends a WebSocket message to client with the following structure:
         """
+
         image_id: str = text_data_json['imageId']
-        imagetag_id: str = text_data_json['imageTagId']
+        image_object: Image = Image.objects.get(id=image_id)  # Django requires Image object for query
+        imagetag_query: QuerySet = ImageTag.objects.filter(image_id=image_object)
+        tag_array: dict = text_data_json['tagArray']
 
-        # TODO: Check first if ImageTag exists?
-        imagetag_object: ImageTag = ImageTag.objects.get(id=imagetag_id)
-        imagetag_object.delete()
+        existing_tag_ids: set = set(result.tag_id.id for result in imagetag_query)
+        new_tag_ids: set = set(tag['id'] for tag in tag_array)
 
-        return_message: dict = {'type': 'tagRemoved', 'id': imagetag_id, 'imageId': image_id}
-        self.send(text_data=json.dumps(return_message))
+        add_tags: set = new_tag_ids.difference(existing_tag_ids)
+        remove_tags: set = existing_tag_ids.difference(new_tag_ids)
+
+        for tag_id in add_tags:
+            self.add_tag(image_object, tag_id)
+        for tag_id in remove_tags:
+            self.remove_tag(image_object, tag_id)
 
     def delete_image(self, text_data_json: dict) -> None:
         """Deletes image from persistent storage, and removes record from database.
@@ -327,10 +359,8 @@ class FilterConsumer(WebsocketConsumer):
                 self.filter_change(text_data_json)
             case 'activeFilters':
                 self.apply_filters(text_data_json)
-            case 'addTag':
-                self.add_tag(text_data_json)
-            case 'removeTag':
-                self.remove_tag(text_data_json)
+            case 'updateTags':
+                self.update_tags(text_data_json)
             case 'deleteImage':
                 self.delete_image(text_data_json)
             case 'updateDescription':
