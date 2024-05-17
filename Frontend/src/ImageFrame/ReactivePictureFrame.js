@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 
 import ImageTopToolbar from './ImageTopToolbar';
 import ImageBottomToolbar from './ImageBottomToolbar';
+import ImageDataContext from '../SupportingModules/ImageDataContext';
 
 
 /**
@@ -20,6 +21,12 @@ import ImageBottomToolbar from './ImageBottomToolbar';
  */
 function ReactivePictureFrame(props) {
   const [imageHovered, setImageHovered] = useState(false);
+  const imageData = {
+    'id': props.id,
+    'src': props.src,
+    'description': props.description,
+    'imageTags': props.imageTags
+  };
 
   const handleImageMouseEnter = () => {
     setImageHovered(true);
@@ -41,29 +48,31 @@ function ReactivePictureFrame(props) {
   };
 
   return (
-    <Box>
-      {/* Outer div detects mouseEnter/mouseLeave */}
-      <div
-        style={{ position: "relative" }}
-        onMouseEnter={handleImageMouseEnter}
-        onMouseLeave={handleImageMouseLeave}
-      >
-        {/* Picture top toolbar, includes description and share/archive/trash buttons */}
-        <ImageTopToolbar toolbarStyles = {toolbarStyles} id={props.id}/>
+    <ImageDataContext.Provider value={imageData}>
+      <Box>
+        {/* Outer div detects mouseEnter/mouseLeave */}
+        <div
+          style={{ position: "relative" }}
+          onMouseEnter={handleImageMouseEnter}
+          onMouseLeave={handleImageMouseLeave}
+        >
+          {/* Picture top toolbar, includes description and share/archive/trash buttons */}
+          <ImageTopToolbar toolbarStyles = {toolbarStyles} id={props.id}/>
 
-        {/* Actual image to be displayed */}
-        <div>
-          <img src={props.src} style={{ maxWidth: props.maxWidth }}/>
+          {/* Actual image to be displayed */}
+          <div>
+            <img src={props.src} style={{ maxWidth: props.maxWidth }}/>
+          </div>
+
+          {/* Picture lower toolbar, includes Tag(s) and AddTagButton */}
+          <ImageBottomToolbar 
+          toolbarStyles={toolbarStyles}
+          id={props.id}
+          imageTags={props.imageTags}
+          />
         </div>
-
-        {/* Picture lower toolbar, includes Tag(s) and AddTagButton */}
-        <ImageBottomToolbar 
-        toolbarStyles={toolbarStyles}
-        id={props.id}
-        imageTags={props.imageTags}
-        />
-      </div>
-    </Box>
+      </Box>
+    </ImageDataContext.Provider>
   );
 };
 

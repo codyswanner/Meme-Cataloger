@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { IconButton, TextField, Toolbar, Typography } from "@mui/material";
+import React, { useContext } from 'react';
+import { IconButton, TextField, Toolbar } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
 import DeleteImageButton from './DeleteImageButton';
 import filterSocket from '../SupportingModules/FilterSocket';
+import ImageDataContext from '../SupportingModules/ImageDataContext';
 
 
 /**
@@ -17,6 +18,9 @@ import filterSocket from '../SupportingModules/FilterSocket';
  * @returns The ImageTopToolbar component to be rendered in the app.
  */
 function ImageTopToolbar(props) {
+  const imageData = useContext(ImageDataContext);
+  const imageId = imageData['id'];
+  console.log(imageId);
   
   // Placeholder function until Archive/Share functionalities are implemented
   const handleButtonClick = (buttonType, id) => {
