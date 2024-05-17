@@ -17,10 +17,14 @@ function UploadBox() {
     // this is triggered when user clicks "Upload" button
     const handleInput = () => {
         // Select the DataTransfer (dt)
-        const dt = document.querySelector('#fileInput').files;
-        // Currently only appends the first file selected
-        // Future: accept all valid files selected
-        setFiles([...files, dt[0]]);
+        const dt = document.querySelector('#fileInput');
+        if (dt.files) { // If there are files, add them to state
+            const data = [];
+            for (const file of dt.files) {
+                data.push(file);
+            }
+            setFiles([...files, ...data]);
+        }
     };
     
     // this is triggered when user drags and drops file(s)
@@ -31,10 +35,11 @@ function UploadBox() {
         const isFile = dt.types.includes('application/x-moz-file') | dt.types.includes('Files');
         if (isFile) { // Check dataTransfer type for files
             if (dt.files) { // If there are files, add them to state
-                // Currently only appends the first file selected
-                // Future: accept all valid files selected
-                const data = dt.files[0];
-                setFiles([...files, data]);
+                const data = [];
+                for (const file of dt.files) {
+                    data.push(file);
+                }
+                setFiles([...files, ...data]);
             };
         };
     };
