@@ -23,7 +23,6 @@ function ReactivePictureFrame(props) {
   const [imageHovered, setImageHovered] = useState(false);
   const imageData = {
     'id': props.id,
-    'src': props.src,
     'description': props.description,
     'imageTags': props.imageTags
   };
@@ -57,7 +56,7 @@ function ReactivePictureFrame(props) {
           onMouseLeave={handleImageMouseLeave}
         >
           {/* Picture top toolbar, includes description and share/archive/trash buttons */}
-          <ImageTopToolbar toolbarStyles = {toolbarStyles} id={props.id}/>
+          <ImageTopToolbar toolbarStyles = {toolbarStyles}/>
 
           {/* Actual image to be displayed */}
           <div>
@@ -65,11 +64,7 @@ function ReactivePictureFrame(props) {
           </div>
 
           {/* Picture lower toolbar, includes Tag(s) and AddTagButton */}
-          <ImageBottomToolbar 
-          toolbarStyles={toolbarStyles}
-          id={props.id}
-          imageTags={props.imageTags}
-          />
+          <ImageBottomToolbar toolbarStyles={toolbarStyles}/>
         </div>
       </Box>
     </ImageDataContext.Provider>

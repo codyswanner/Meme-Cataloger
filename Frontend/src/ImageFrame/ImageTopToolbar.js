@@ -13,14 +13,14 @@ import ImageDataContext from '../SupportingModules/ImageDataContext';
  * This component renders at the top third of an image when the image is hovered.
  * 
  * @param {object} props Contains props passed to the component.
- * @param {number} props.id Unique ID of the image.
+ * @param {number} props.toolbarStyles for visual consistency of the toolbar.
  * 
  * @returns The ImageTopToolbar component to be rendered in the app.
  */
 function ImageTopToolbar(props) {
   const imageData = useContext(ImageDataContext);
   const imageId = imageData['id'];
-  console.log(imageId);
+  const imageDescription = imageData['description'];
   
   // Placeholder function until Archive/Share functionalities are implemented
   const handleButtonClick = (buttonType, id) => {
@@ -47,20 +47,20 @@ function ImageTopToolbar(props) {
         variant="outlined"
         sx={{background: 'rgba(0, 0, 0, 0)',
         input: { color: "white"}}}
-        defaultValue={props.description ? props.description : ''}
-        onChange={(e) => {handleDescriptionChange(e, props.id)}}
+        defaultValue={imageDescription ? imageDescription : ''}
+        onChange={(e) => {handleDescriptionChange(e, imageId)}}
       />
 
       {/* Image options should be placed to the right side */}
       <div style={{ marginLeft: "auto" }}>
         <Toolbar disableGutters> {/* MUI Gutters cause spacing issues */}
-          <IconButton onClick={() => handleButtonClick("Share", props.id)}>
+          <IconButton onClick={() => handleButtonClick("Share", imageId)}>
             <ShareIcon sx={{ color: "white" }} />
           </IconButton>
-          <IconButton onClick={() => handleButtonClick("Archive", props.id)}>
+          <IconButton onClick={() => handleButtonClick("Archive", imageId)}>
             <ArchiveIcon sx={{ color: "white" }} />
           </IconButton>
-          <DeleteImageButton id={props.id}/> {/* Custom component, see imports */}
+          <DeleteImageButton id={imageId}/>
         </Toolbar>
       </div>
     </Toolbar>
