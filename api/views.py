@@ -99,26 +99,22 @@ def upload(request: ASGIRequest) -> HttpResponse:
 
     files_list: list = list(request.FILES.getlist('file'))
     print(f'files list is: {files_list}')
-    # print(f'files list 0 is: {files_list[0]}')
-    # print(f'files list 1 is: {files_list[1]}')
 
-    status_okay: bool = True
     for file in files_list:
         try:
-            print(f"Uploading file {file}")
             image_match = filetype.image_match(file)
             video_match = filetype.video_match(file)
             if not image_match and not video_match:
-                ...  # raise an error, not sure what kind yet
-        except:  # error raised above
+                raise TypeError
+        except TypeError:
             print("Incorrect file for upload")
             # https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
             return HttpResponse(status=415)
+        # Future: implement other exception clauses, and a last-resort catch-all
 
     for file in files_list:
         # if we made it here there was no error
         handle_uploaded_file(file)
         update_database(file)
-        print("Done uploading file!")
-        return HttpResponse(status=200)
-
+        print(f"Done uploading {file}")
+    return HttpResponse(status=200)
