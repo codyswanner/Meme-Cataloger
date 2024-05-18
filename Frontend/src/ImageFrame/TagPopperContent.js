@@ -62,11 +62,11 @@ function TagPopperContent() {
     };
 
     /**
-     * Injects an option to `Add ${new}` if typed value does not match existing options.
+     * Injects an option to `Create ${new}` if typed value does not match existing options.
      * 
      * @param {array} options Options provided to the component; see tagOptions
      * @param {object} params Component-provided information about itself
-     * @returns Options to be displayed to the user, including `Add ${new}` if applicable.
+     * @returns Options to be displayed to the user, including `Create ${new}` if applicable.
      */
     const getFilterOptions = (options, params) => {
         // filtered returns results that match user input
@@ -77,15 +77,15 @@ function TagPopperContent() {
         const isExisting = options.some(
           (option) => inputValue.toLowerCase() === option.label.toLowerCase()
         );
-        // if it does not exist, suggest to add it with a new option
+        // if it does not exist, suggest to create it with a new option
         if (inputValue !== "" && !isExisting) {
             filtered.push({
               id: 0, // id of 0 signals to system that this tag doesn't exist yet
-              label: `Add "${inputValue}"`, // this is what is shown on the option
+              label: `Create "${inputValue}"`, // this is what is shown on the option
               inputValue: inputValue, // this will be used to create the permanent label
             });
           }
-        // return options, including `Add "${inputValue}"` if applicable
+        // return options, including `Create "${inputValue}"` if applicable
         return filtered;
     };
 
