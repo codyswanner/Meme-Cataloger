@@ -96,7 +96,7 @@ function TagPopperContent() {
      * @returns true if value corresponds to option
      */
     const checkOptions = (option, value) => {
-        if (value.id.includes('newTag')) {
+        if (typeof value.id === 'string' || value.id instanceof String) {
             // This is a new tag that shouldn't have an option exposed
             // return true to supress a false warning
             return true;
