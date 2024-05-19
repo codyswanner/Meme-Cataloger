@@ -21,13 +21,10 @@ function TagPopperContent() {
     const socket = filterSocket; // For communication with backend
     // To display "add new" option, see getFilterOptions function
     const optionsFilter = createFilterOptions();
-    const newTagOptions = useRef([]); // tags created in this session
     const tagOptions = appData[1].map((tag) => {
         const tagObject = {'id': tag.id, 'label': tag.name};
         return (tagObject)
     });
-    // Autocomplete needs to know about newly created options
-    tagOptions.push(...newTagOptions.current);
 
     /**
      * Determines details about the tag on the image.
@@ -91,6 +88,25 @@ function TagPopperContent() {
     };
 
     /**
+     * Checks if an option and a value correspond to each other.
+     * 
+     * @param {object} option Option visible to the user
+     * @param {object} value Value assigned in Autocomplete component
+     * 
+     * @returns true if value corresponds to option
+     */
+    const checkOptions = (option, value) => {
+        if (value.id.includes('newTag')) {
+            // This is a new tag that shouldn't have an option exposed
+            // return true to supress a false warning
+            return true;
+        } else {
+            // check normally
+            return option.id === value.id;
+        };
+    };
+
+    /**
      * Runs any updates on tag changes in the Autocomplete component.
      * 
      * Updates the value passed to Autocomplete indicating selected options,
@@ -114,8 +130,6 @@ function TagPopperContent() {
                 label: tag.inputValue,
                 };
                 newVal.push(newTag);
-                // Add to options as well, lest Autocomplete gets confused
-                newTagOptions.current.push(newTag);
             } else {
                 // Add object from available options (typical case)
                 newVal.push(tag);
@@ -129,7 +143,7 @@ function TagPopperContent() {
             'imageId': imageId,
             'tagArray': newVal
         }));
-    }
+    };
 
     // Declare state last to ensure functions are set up
     const [val, setVal] = useState(createExistingTagsList(imageTags));
@@ -140,7 +154,7 @@ function TagPopperContent() {
             style={{ width: 300 }}
             openOnFocus
             value={val}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={(option, value) => checkOptions(option, value)}
             // onChange returns an 'event' object that we don't need
             onChange={(event, value) => handleChange(value, imageId)}
             filterOptions={(options, params) => getFilterOptions(options, params)}
@@ -152,6 +166,11 @@ function TagPopperContent() {
                     variant='outlined'
                 />
             )}
+            renderOption={(props, option) =>
+                <li {...props} key={option.id}>
+                    {option.label}
+                </li>
+            }
         />
     )
 };
