@@ -90,6 +90,15 @@ function TagPopperContent() {
         return filtered;
     };
 
+    /**
+     * Runs any updates on tag changes in the Autocomplete component.
+     * 
+     * Updates the value passed to Autocomplete indicating selected options,
+     * and informs the backend of newly added/removed/created tags.
+     * 
+     * @param {array} tagArray The tags applied to this image (with any new changes).
+     * @param {number} imageId The id of the image to which these tags are applied.
+     */
     const handleChange = (tagArray, imageId) => {
         const newVal = []; // will populate with the new tag array
         
