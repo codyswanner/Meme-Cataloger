@@ -21,10 +21,13 @@ function TagPopperContent() {
     const socket = filterSocket; // For communication with backend
     // To display "add new" option, see getFilterOptions function
     const optionsFilter = createFilterOptions();
+    const newTagOptions = useRef([]); // tags created in this session
     const tagOptions = appData[1].map((tag) => {
         const tagObject = {'id': tag.id, 'label': tag.name};
         return (tagObject)
-    })
+    });
+    // Autocomplete needs to know about newly created options
+    tagOptions.push(...newTagOptions.current);
 
     /**
      * Determines details about the tag on the image.
@@ -102,6 +105,8 @@ function TagPopperContent() {
                 label: tag.inputValue,
                 };
                 newVal.push(newTag);
+                // Add to options as well, lest Autocomplete gets confused
+                newTagOptions.current.push(newTag);
             } else {
                 // Add object from available options (typical case)
                 newVal.push(tag);
