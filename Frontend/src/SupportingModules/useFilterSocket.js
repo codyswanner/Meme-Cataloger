@@ -132,6 +132,18 @@ function useFilterSocket(apiData) {
         setAppData(modifiedAppData);
     };
 
+    function handleTagCreated (response) {
+        const modifiedAppData = [...appData];
+        const newTag = {
+            'id': response.id,
+            'name': response.name,
+            'owner': response.owner
+        };
+        modifiedAppData[1].push(newTag);
+
+        setAppData(modifiedAppData);
+    }
+
     /**
      * Updates appData when an image is deleted.
      * 
@@ -193,6 +205,9 @@ function useFilterSocket(apiData) {
                     break;
                 case "tagRemoved":
                     handleTagRemoved(response);
+                    break;
+                case "tagCreated":
+                    handleTagCreated(response);
                     break;
                 case "imageDeleted":
                     handleImageDeleted(response);
