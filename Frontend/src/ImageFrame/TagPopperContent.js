@@ -13,7 +13,6 @@ import ImageDataContext from '../SupportingModules/ImageDataContext';
  * @returns The TagPopperContent component to be rendered in the app.
  */
 function TagPopperContent() {
-    const [val, setVal] = useState(createExistingTagsList(imageTags));
     const newTagCount = useRef(0); // To keep track of newly created tags
     const appData = useContext(AppDataContext);
     const imageData = useContext(ImageDataContext);
@@ -22,7 +21,6 @@ function TagPopperContent() {
     const socket = filterSocket; // For communication with backend
     // To display "add new" option, see getFilterOptions function
     const optionsFilter = createFilterOptions();
-
     const tagOptions = appData[1].map((tag) => {
         const tagObject = {'id': tag.id, 'label': tag.name};
         return (tagObject)
@@ -104,7 +102,6 @@ function TagPopperContent() {
                 label: tag.inputValue,
                 };
                 newVal.push(newTag);
-                console.log(newVal);
             } else {
                 // Add object from available options (typical case)
                 newVal.push(tag);
@@ -119,6 +116,9 @@ function TagPopperContent() {
             'tagArray': newVal
         }));
     }
+
+    // Declare state last to ensure functions are set up
+    const [val, setVal] = useState(createExistingTagsList(imageTags));
 
     return(
         <Autocomplete
