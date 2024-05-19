@@ -74,7 +74,8 @@ class FilterConsumer(WebsocketConsumer):
 
     def connect(self) -> None:
         """Initializes connection by creating and joining channel layer group.
-        (In the future, this method may also handle user/session identification.)
+
+        In the future, this method may also handle user/session identification.
         """
 
         self.user_id = 1  # Feature not yet implemented; only user is test_user, id=1
@@ -89,6 +90,7 @@ class FilterConsumer(WebsocketConsumer):
 
     def disconnect(self, code: int) -> None:
         """Cleans up connection; no current functionality.
+
         In the future this method will clean up any sessions or other
         leftover structures that were created by the connect method.
         """
@@ -98,6 +100,7 @@ class FilterConsumer(WebsocketConsumer):
 
     def filter_change(self, text_data_json: dict) -> None:
         """On filter change request from client, triggers filter change activity.
+
         Future change: this method seems redundant/roundabout.  Can it be removed?
 
         Parameters
@@ -261,6 +264,7 @@ class FilterConsumer(WebsocketConsumer):
 
     def delete_image(self, text_data_json: dict) -> None:
         """Deletes image from persistent storage, and removes record from database.
+
         Future change: check for existence of both file and DB entry before performing action
         Future change: Move image to "Trash" folder rather than deleting immediately
 
