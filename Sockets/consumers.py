@@ -8,6 +8,7 @@ https://channels.readthedocs.io/
 """
 
 import os
+import re
 import json
 from django.conf import settings
 from asgiref.sync import async_to_sync
@@ -228,9 +229,23 @@ class FilterConsumer(WebsocketConsumer):
             return_message = {'type': 'message', 'message': 'Tag association does not exist!'}
             self.send(text_data=json.dumps(return_message))
 
+    def create_tag(self, tag_label):
+        print(f'Will create new tag: {tag_label}')
+        app_user: AppUser = AppUser.objects.get(id=1)  # Hardcoded for now
+        new_tag: Tag = Tag(name=tag_label, owner=app_user)
+        new_tag.save()
+        print(f'Tag created with id {new_tag.id}')
+        return_message = {
+            'type': 'tagCreated',
+            'id': new_tag.id,
+            'name': new_tag.name,
+            'owner': app_user.id
+        }
+        self.send(text_data=json.dumps(return_message))
+        return {'id': new_tag.id, 'name': new_tag.name, 'owner': app_user.id}
+
     def update_tags(self, text_data_json: dict) -> None:
-        """Updates ImageTag associations for an image.
-        Runs when client wants to add or remove a tag from an image.
+        """Updates ImageTag associations for an image as requested by user.
 
         Parameters
         ----------
@@ -249,7 +264,15 @@ class FilterConsumer(WebsocketConsumer):
         image_id: str = text_data_json['imageId']
         image_object: Image = Image.objects.get(id=image_id)  # Django requires Image object for query
         imagetag_query: QuerySet = ImageTag.objects.filter(image_id=image_object)
-        tag_array: dict = text_data_json['tagArray']
+        tag_array: list = text_data_json['tagArray']
+
+        # create newly defined tags
+        for tag in tag_array:
+            # new tags will have a "newTag" prefix on their ID, ex. "newTag2"
+            if re.match('newTag\d+', str(tag['id'])):
+                tag_array.remove(tag)  # remove the temporary id
+                new_tag_id = self.create_tag(tag['label'])
+                tag_array.append(new_tag_id)  # add new permanent id
 
         existing_tag_ids: set = set(result.tag_id.id for result in imagetag_query)
         new_tag_ids: set = set(tag['id'] for tag in tag_array)
