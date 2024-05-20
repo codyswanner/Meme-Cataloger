@@ -6,7 +6,7 @@ In terms of usability, the eventual goal of this project is for it to replace Go
 
 In terms of programming experience, I would love for this project to be a showcase of what I can do in React and Python for potential employment opportunities, but the more realistic goal for me right now is simply to encounter real-world problems to spark reserach and learning.
 
-### Tools, Packages and Frameworks I am using
+### Tools, Packages, and Frameworks I am using
  1. [ReactJS](https://react.dev/) which has been the best intro to JavaScript that I could ask for, in that it's JavaScript that makes sense to a Python native.
  2. [Channels for Django](https://channels.readthedocs.io/en/latest/) (for Websockets) which has been immensely helpful for getting instant updates to a page, much more quickly and simply than standard HTTP requests.  There is a single aspect of the site still running on classic HTTP (the image uploader) and I'm considering switching to Websockets for this as well.  If you have tips/advice on Websocket security, I'd love to learn anything I can about it!
  3. [Material UI](https://mui.com/material-ui/getting-started/) which has been crucial for quickly implementing components that look better than I deserve to look.
