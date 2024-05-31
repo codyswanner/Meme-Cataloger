@@ -84,7 +84,7 @@ class FilterConsumer(WebsocketConsumer):
 
         # Join channel layer
         async_to_sync(self.channel_layer.group_add)(
-            self.layer_name, self.channel_name
+            self.layer_name, self.channel_name  # noqa (for false "unexpected argument")
         )
 
         self.accept()
@@ -229,10 +229,10 @@ class FilterConsumer(WebsocketConsumer):
             return_message = {'type': 'message', 'message': 'Tag association does not exist!'}
             self.send(text_data=json.dumps(return_message))
 
-    def create_tag(self, tag_label):
-        print(f'Will create new tag: {tag_label}')
+    def create_tag(self, tag_name):
+        print(f'Will create new tag: {tag_name}')
         app_user: AppUser = AppUser.objects.get(id=1)  # Hardcoded for now
-        new_tag: Tag = Tag(name=tag_label, owner=app_user)
+        new_tag: Tag = Tag(name=tag_name, owner=app_user)
         new_tag.save()
         print(f'Tag created with id {new_tag.id}')
         return_message = {
@@ -269,7 +269,7 @@ class FilterConsumer(WebsocketConsumer):
         # create newly defined tags
         for tag in tag_array:
             # new tags will have a "newTag" prefix on their ID, ex. "newTag2"
-            if re.match('newTag\d+', str(tag['id'])):
+            if re.match(r'newTag\d+', str(tag['id'])):
                 tag_array.remove(tag)  # remove the temporary id
                 new_tag_id = self.create_tag(tag['label'])
                 tag_array.append(new_tag_id)  # add new permanent id
