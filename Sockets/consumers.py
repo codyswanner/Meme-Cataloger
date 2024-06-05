@@ -99,39 +99,8 @@ class FilterConsumer(WebsocketConsumer):
         # Leave channel layer?
         pass
 
-    def filter_change(self, text_data_json: dict) -> None:
-        """On filter change request from client, triggers filter change activity.
-
-        Future change: this method seems redundant/roundabout.  Can it be removed?
-
-        Parameters
-        ----------
-        text_data_json: dict
-            Websocket JSON message, translated to a Python dict by receive method.
-            For filter_change, expected structure is:
-                {'type':'filterChange',
-                'filterName': (str),
-                'filterId': (numerical id represented as a str),
-                'filterState': ("on" | "off")
-                }
-
-        Returns
-        -------
-        None; however, forwards received WebSocket message back to client.
-        """
-
-        filter_name: str = text_data_json['filterName']
-        filter_id: str = text_data_json['filterId']
-        filter_state: str = text_data_json['filterState']
-
-        if filter_state == "on":
-            print(f'Filter selected: {filter_name} with id {filter_id}')
-        else:
-            print(f'Filter deselected: {filter_name} with id {filter_id}')
-
-        self.send(text_data=json.dumps(text_data_json))
-
-    def apply_filters(self, text_data_json: dict) -> None:
+    @staticmethod
+    def apply_filters(text_data_json: dict) -> dict:
         """Queries DB for objects matching filter array, and passes this list back to the client.
 
         Parameters
@@ -149,8 +118,6 @@ class FilterConsumer(WebsocketConsumer):
             {'type': 'applyFilters', 'results': image_results}
         """
 
-        print("\n\nNew Filter Array!")
-        print(text_data_json)
         active_filters: list = text_data_json['activeFilters']
         image_queryset: QuerySet = Image.objects.all()
         image_results: list = []
@@ -158,11 +125,12 @@ class FilterConsumer(WebsocketConsumer):
             image_queryset = image_queryset.filter(imagetag__tag_id=f)
         for result in image_queryset:
             image_results.append(result.id)
-        print(image_results)
 
-        self.send(text_data=json.dumps({'type': 'applyFilters', 'results': image_results}))
+        response_message: dict = {'type': 'applyFilters', 'results': image_results}
+        return response_message
 
-    def add_tag(self, image_object: Image, tag_id: int) -> None:
+    @staticmethod
+    def add_tag(image_object: Image, tag_id: int) -> dict:
         """Creates ImageTag association from request received from client for new tag on image.
 
         Parameters
@@ -182,21 +150,22 @@ class FilterConsumer(WebsocketConsumer):
 
         if ImageTag.objects.filter(image_id=image_object, tag_id=tag_object).exists():
             # if tag association already exists, inform the client and do not re-create it
-            return_message = {'type': 'message', 'message': 'This tag association already exists!'}
-            self.send(text_data=json.dumps(return_message))
+            response_message = {'type': 'message', 'message': 'This tag association already exists!'}
+            return response_message
         else:
             # if tag association does not exist, create it and inform client
             new_imagetag = ImageTag(image_id=image_object, tag_id=tag_object)
             new_imagetag.save()
-            return_message: dict = {
+            response_message: dict = {
                 'type': 'tagAdded',
                 'id': new_imagetag.id,
                 'imageId': image_object.id,
                 'tagId': tag_id
             }
-            self.send(text_data=json.dumps(return_message))
+            return response_message
 
-    def remove_tag(self, image_object: Image, tag_id: int) -> None:
+    @staticmethod
+    def remove_tag(image_object: Image, tag_id: int) -> dict:
         """Deletes ImageTag association from request received from client for new tag on image.
 
         Parameters
@@ -219,32 +188,32 @@ class FilterConsumer(WebsocketConsumer):
             imagetag_id: int = imagetag_object.id
             imagetag_object.delete()
 
-            return_message: dict = {
+            response_message: dict = {
                 'type': 'tagRemoved',
                 'id': imagetag_id,
                 'imageId': image_object.id
             }
-            self.send(text_data=json.dumps(return_message))
+            return response_message
         except ImageTag.DoesNotExist:
-            return_message = {'type': 'message', 'message': 'Tag association does not exist!'}
-            self.send(text_data=json.dumps(return_message))
+            response_message = {'type': 'message', 'message': 'Tag association does not exist!'}
+            return response_message
 
-    def create_tag(self, tag_label):
+    @staticmethod
+    def create_tag(tag_label: str) -> dict:
         print(f'Will create new tag: {tag_label}')
         app_user: AppUser = AppUser.objects.get(id=1)  # Hardcoded for now
         new_tag: Tag = Tag(name=tag_label, owner=app_user)
         new_tag.save()
         print(f'Tag created with id {new_tag.id}')
-        return_message = {
+        response_message = {
             'type': 'tagCreated',
             'id': new_tag.id,
             'name': new_tag.name,
             'owner': app_user.id
         }
-        self.send(text_data=json.dumps(return_message))
-        return {'id': new_tag.id, 'name': new_tag.name, 'owner': app_user.id}
+        return response_message
 
-    def update_tags(self, text_data_json: dict) -> None:
+    def update_tags(self, text_data_json: dict) -> list:
         """Updates ImageTag associations for an image as requested by user.
 
         Parameters
@@ -265,14 +234,16 @@ class FilterConsumer(WebsocketConsumer):
         image_object: Image = Image.objects.get(id=image_id)  # Django requires Image object for query
         imagetag_query: QuerySet = ImageTag.objects.filter(image_id=image_object)
         tag_array: list = text_data_json['tagArray']
+        responses_list: list = []
 
         # create newly defined tags
         for tag in tag_array:
             # new tags will have a "newTag" prefix on their ID, ex. "newTag2"
             if re.match('newTag\d+', str(tag['id'])):
                 tag_array.remove(tag)  # remove the temporary id
-                new_tag_id = self.create_tag(tag['label'])
-                tag_array.append(new_tag_id)  # add new permanent id
+                new_tag_details = self.create_tag(tag['label'])
+                tag_array.append(new_tag_details)  # add new permanent id
+                responses_list.append(new_tag_details)  # to inform frontend
 
         existing_tag_ids: set = set(result.tag_id.id for result in imagetag_query)
         new_tag_ids: set = set(tag['id'] for tag in tag_array)
@@ -281,11 +252,15 @@ class FilterConsumer(WebsocketConsumer):
         remove_tags: set = existing_tag_ids.difference(new_tag_ids)
 
         for tag_id in add_tags:
-            self.add_tag(image_object, tag_id)
+            tag_added_details: dict = self.add_tag(image_object, tag_id)
+            responses_list.append(tag_added_details)
         for tag_id in remove_tags:
-            self.remove_tag(image_object, tag_id)
+            tag_removed_details = self.remove_tag(image_object, tag_id)
+            responses_list.append(tag_removed_details)
+        return responses_list
 
-    def delete_image(self, text_data_json: dict) -> None:
+    @staticmethod
+    def delete_image(text_data_json: dict) -> dict:
         """Deletes image from persistent storage, and removes record from database.
 
         Future change: check for existence of both file and DB entry before performing action
@@ -328,8 +303,8 @@ class FilterConsumer(WebsocketConsumer):
             image_object.delete()
             print("Image object deleted from database")
             print("Delete image completed!")
-            return_message = {'type': 'imageDeleted', 'id': image_id}
-            self.send(text_data=json.dumps(return_message))
+            response_message = {'type': 'imageDeleted', 'id': image_id}
+            return response_message
         except FileNotFoundError:
             print("File not found!")
 
@@ -359,6 +334,9 @@ class FilterConsumer(WebsocketConsumer):
         image_object.save()
         print(f"Description for image %s update to %s" % (image_id, new_description))
 
+    def send_response(self, response_message: dict) -> None:
+        self.send(text_data=json.dumps(response_message))
+
     def receive(self, text_data: str = None, bytes_data: bytes = None) -> None:
         """Routes incoming messages by type to the proper method for handling.
 
@@ -383,14 +361,18 @@ class FilterConsumer(WebsocketConsumer):
                 websocket_message: str = text_data_json['message']
                 print(f'Websocket Message: {websocket_message}')
             case 'filterChange':
-                self.filter_change(text_data_json)
+                self.send_response(text_data_json)
             case 'activeFilters':
-                self.apply_filters(text_data_json)
+                response_message = self.apply_filters(text_data_json)
+                self.send_response(response_message)
             case 'updateTags':
-                self.update_tags(text_data_json)
+                responses_list: list = self.update_tags(text_data_json)
+                for response_message in responses_list:
+                    self.send_response(response_message)
             case 'deleteImage':
-                self.delete_image(text_data_json)
+                response_message = self.delete_image(text_data_json)
+                self.send_response(response_message)
             case 'updateDescription':
-                self.update_description(text_data_json)
+                self.update_description(text_data_json)  # no response needed
             case _:
                 print("Unexpected websocket message type!")
