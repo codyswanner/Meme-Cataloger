@@ -11,6 +11,7 @@ import os
 import re
 import json
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from asgiref.sync import async_to_sync
 from django.db.models.query import QuerySet
 from channels.generic.websocket import WebsocketConsumer
@@ -146,7 +147,11 @@ class FilterConsumer(WebsocketConsumer):
             {'type': 'tagAdded', 'id': new_imagetag.id, 'imageId': image_id, 'tagId': tag_id}
         """
 
-        tag_object: Tag = Tag.objects.get(id=tag_id)  # Django requires Tag object for query
+        try:
+            tag_object: Tag = Tag.objects.get(id=tag_id)  # Django requires Tag object for query
+        except ObjectDoesNotExist:
+            response_message = {'type': 'message', 'message': "Can't add a tag that doesn't exist!"}
+            return response_message
 
         if ImageTag.objects.filter(image_id=image_object, tag_id=tag_object).exists():
             # if tag association already exists, inform the client and do not re-create it
@@ -181,7 +186,11 @@ class FilterConsumer(WebsocketConsumer):
             {'type': 'tagRemoved', 'id': imagetag_id, 'imageId': image_id}
         """
 
-        tag_object: Tag = Tag.objects.get(id=tag_id)  # Django requires Tag object for query
+        try:
+            tag_object: Tag = Tag.objects.get(id=tag_id)  # Django requires Tag object for query
+        except ObjectDoesNotExist:
+            response_message = {'type': 'message', 'message': "Can't remove a tag that doesn't exist!"}
+            return response_message
 
         try:
             imagetag_object: ImageTag = ImageTag.objects.get(image_id=image_object, tag_id=tag_object)
