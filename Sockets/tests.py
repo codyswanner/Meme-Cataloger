@@ -7,33 +7,42 @@ from api.models import *
 
 
 class TestSocketConsumer(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        test_user = AppUser.objects.create(username="test_user")
-        image_1 = Image.objects.create(
+
+    def setUp(self):
+        self.test_user = AppUser.objects.create(username="test_user")
+        self.image_1 = Image.objects.create(
+            id=1,
             source="/test-image-1.png",
-            owner=test_user,
+            owner=self.test_user,
             description="I got some banana bread at work today dude, hell yeah"
         )
-        image_2 = Image.objects.create(
+        self.image_2 = Image.objects.create(
+            id=2,
             source="/test-image-2.jpg",
-            owner=test_user,
-            description="Aw wuold ya luuk at that, anotha loveli dae"
+            owner=self.test_user,
+            description="Aw wuold ya luuk at that, anotha loveli dae"  # noqa for spelling
         )
-        image_3 = Image.objects.create(
+        self.image_3 = Image.objects.create(
+            id=3,
             source="/test-image-3.gif",
-            owner=test_user,
+            owner=self.test_user,
             description="SHE WORE A CROWN AND SHE CAME DOWN IN A BUBBLE, DOUG"
         )
-        for i in range(0, 10):
-            Tag.objects.create(name=f"Tag{i}", owner=test_user)
+        for i in range(1, 11):
+            Tag.objects.create(id=i, name=f"Tag{i}", owner=self.test_user)
         for i in [1, 2, 3, 5, 7]:  # assign primes to image_1
-            ImageTag.objects.create(image_id=image_1, tag_id=Tag.objects.get(id=i))
+            ImageTag.objects.create(image_id=self.image_1, tag_id=Tag.objects.get(id=i))
         for i in range(2, 10, 2):  # assign evens to image_2
-            ImageTag.objects.create(image_id=image_2, tag_id=Tag.objects.get(id=i))
+            ImageTag.objects.create(image_id=self.image_2, tag_id=Tag.objects.get(id=i))
         for i in range(3, 10, 3):  # assign multiples of three to image_3
-            ImageTag.objects.create(image_id=image_3, tag_id=Tag.objects.get(id=i))
+            ImageTag.objects.create(image_id=self.image_3, tag_id=Tag.objects.get(id=i))
+
+    def tearDown(self) -> None:
+        """Reset the DB between tests."""
+        ImageTag.objects.all().delete()
+        Tag.objects.all().delete()
+        Image.objects.all().delete()
+        AppUser.objects.all().delete()
 
     # def test_FilterConsumer_connect(self):
     #     ...
@@ -97,16 +106,13 @@ class TestSocketConsumer(TestCase):
     def test_FilterConsumer_add_tag(self):
         """Tests that tags are added correctly."""
 
-        image_1: Image = Image.objects.get(id=1)
-        test_user: AppUser = AppUser.objects.get(username="test_user")
-        new_tag: Tag = Tag.objects.create(name="test_add_tag", owner=test_user)
-
         """Typical scenario: Assigning a new tag to an image"""
-        result = FilterConsumer.add_tag(image_1, new_tag.id)
+        new_tag: Tag = Tag.objects.create(name="test_add_tag", owner=self.test_user)
+        result = FilterConsumer.add_tag(self.image_1, new_tag.id)
 
         # make sure the image_tag was created in the database
         try:
-            new_imagetag_query = ImageTag.objects.filter(image_id=image_1, tag_id=new_tag)
+            new_imagetag_query = ImageTag.objects.filter(image_id=self.image_1, tag_id=new_tag)
             if new_imagetag_query.exists():
                 # if exists, get object for further testing
                 new_imagetag: ImageTag = new_imagetag_query.get()
@@ -119,34 +125,32 @@ class TestSocketConsumer(TestCase):
         expected_response: dict = {
             'type': 'tagAdded',
             'id': new_imagetag.id,
-            'imageId': image_1.id,
+            'imageId': self.image_1.id,
             'tagId': new_tag.id
         }
         self.assertEqual(result, expected_response)
 
         """Atypical scenario: trying to add a tag that's already added"""
-        result = FilterConsumer.add_tag(image_1, new_tag.id)
+        result = FilterConsumer.add_tag(self.image_1, new_tag.id)
         expected_response = {'type': 'message', 'message': 'This tag association already exists!'}
         self.assertEqual(result, expected_response)
 
         """Atypical scenario: tag does not exist"""
-        result = FilterConsumer.add_tag(image_1, 256)  # non-existent tag id
+        result = FilterConsumer.add_tag(self.image_1, 256)  # non-existent tag id
         expected_response = {'type': 'message', 'message': "Can't add a tag that doesn't exist!"}
         self.assertEqual(result, expected_response)
 
     def test_FilterConsumer_remove_tag(self):
         """Test that tags are removed correctly."""
 
-        test_user: AppUser = AppUser.objects.get(username="test_user")
-        image_1: Image = Image.objects.get(id=1)
-        tag_to_remove: Tag = Tag.objects.create(name="remove me!", owner=test_user)
-        imagetag_to_delete: ImageTag = ImageTag.objects.create(image_id=image_1, tag_id=tag_to_remove)
+        tag_to_remove: Tag = Tag.objects.create(name="remove me!", owner=self.test_user)
+        imagetag_to_delete: ImageTag = ImageTag.objects.create(image_id=self.image_1, tag_id=tag_to_remove)
 
         """Typical scenario: remove existing ImageTag"""
-        result: dict = FilterConsumer.remove_tag(image_1, tag_to_remove.id)
+        result: dict = FilterConsumer.remove_tag(self.image_1, tag_to_remove.id)
 
         # Make sure ImageTag was deleted
-        removed_imagetag_query = ImageTag.objects.filter(image_id=image_1, tag_id=tag_to_remove)
+        removed_imagetag_query = ImageTag.objects.filter(image_id=self.image_1, tag_id=tag_to_remove)
         if removed_imagetag_query.exists():
             self.fail("ImageTag should have been deleted!")
 
@@ -154,7 +158,7 @@ class TestSocketConsumer(TestCase):
         expected_response: dict = {
             'type': 'tagRemoved',
             'id': imagetag_to_delete.id,
-            'imageId': image_1.id
+            'imageId': self.image_1.id
         }
         self.assertEqual(result, expected_response)
 
