@@ -188,11 +188,6 @@ class FilterConsumer(WebsocketConsumer):
 
         try:
             tag_object: Tag = Tag.objects.get(id=tag_id)  # Django requires Tag object for query
-        except ObjectDoesNotExist:
-            response_message = {'type': 'message', 'message': "Can't remove a tag that doesn't exist!"}
-            return response_message
-
-        try:
             imagetag_object: ImageTag = ImageTag.objects.get(image_id=image_object, tag_id=tag_object)
             imagetag_id: int = imagetag_object.id
             imagetag_object.delete()
@@ -203,22 +198,22 @@ class FilterConsumer(WebsocketConsumer):
                 'imageId': image_object.id
             }
             return response_message
+        except Tag.DoesNotExist:
+            response_message = {'type': 'message', 'message': "Can't remove a tag that doesn't exist!"}
+            return response_message
         except ImageTag.DoesNotExist:
             response_message = {'type': 'message', 'message': 'Tag association does not exist!'}
             return response_message
 
     @staticmethod
-    def create_tag(tag_label: str) -> dict:
-        print(f'Will create new tag: {tag_label}')
-        app_user: AppUser = AppUser.objects.get(id=1)  # Hardcoded for now
-        new_tag: Tag = Tag(name=tag_label, owner=app_user)
+    def create_tag(tag_label: str, tag_owner: AppUser) -> dict:
+        new_tag: Tag = Tag(name=tag_label, owner=tag_owner)
         new_tag.save()
-        print(f'Tag created with id {new_tag.id}')
         response_message = {
             'type': 'tagCreated',
             'id': new_tag.id,
             'name': new_tag.name,
-            'owner': app_user.id
+            'owner': tag_owner.id
         }
         return response_message
 
@@ -239,18 +234,20 @@ class FilterConsumer(WebsocketConsumer):
         None; however, sends a WebSocket message to client with the following structure:
         """
 
+        user_id: int = text_data_json['user']
+        user: AppUser = AppUser.objects.get(id=user_id)
         image_id: str = text_data_json['imageId']
         image_object: Image = Image.objects.get(id=image_id)  # Django requires Image object for query
         imagetag_query: QuerySet = ImageTag.objects.filter(image_id=image_object)
         tag_array: list = text_data_json['tagArray']
-        responses_list: list = []
+        responses_list: list = []  # Used to inform client of changes
 
         # create newly defined tags
         for tag in tag_array:
             # new tags will have a "newTag" prefix on their ID, ex. "newTag2"
             if re.match('newTag\d+', str(tag['id'])):
                 tag_array.remove(tag)  # remove the temporary id
-                new_tag_details = self.create_tag(tag['label'])
+                new_tag_details = self.create_tag(tag['label'], user)
                 tag_array.append(new_tag_details)  # add new permanent id
                 responses_list.append(new_tag_details)  # to inform frontend
 

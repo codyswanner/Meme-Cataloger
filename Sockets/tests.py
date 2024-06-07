@@ -1,6 +1,7 @@
 """Tests for the Channels Websocket Consumer."""
 from django.core.exceptions import EmptyResultSet
 from django.test import TestCase
+from unittest.mock import Mock, patch
 
 from Sockets.consumers import FilterConsumer
 from api.models import *
@@ -136,7 +137,7 @@ class TestSocketConsumer(TestCase):
         self.assertEqual(result, expected_response)
 
         """Atypical scenario: tag does not exist"""
-        result = FilterConsumer.add_tag(self.image_1, 256)  # non-existent tag id
+        result = FilterConsumer.add_tag(self.image_1, 404)  # non-existent tag id
         expected_response = {'type': 'message', 'message': "Can't add a tag that doesn't exist!"}
         self.assertEqual(result, expected_response)
 
@@ -162,12 +163,113 @@ class TestSocketConsumer(TestCase):
         }
         self.assertEqual(result, expected_response)
 
-    # def test_FilterConsumer_create_tag(self):
-    #     ...
-    #
-    # def test_FilterConsumer_update_tags(self):
-    #     ...
-    #
+        """Atypical scenario: attempt to remove a tag that isn't added"""
+        result: dict = FilterConsumer.remove_tag(self.image_1, 4)
+        expected_response: dict = {'type': 'message', 'message': 'Tag association does not exist!'}
+        self.assertEqual(result, expected_response)
+
+        """Atypical scenario: attempt to remove a tag that doesn't exist"""
+        result: dict = FilterConsumer.remove_tag(self.image_1, 404)  # nonexistent tag id
+        expected_response: dict = {'type': 'message', 'message': "Can't remove a tag that doesn't exist!"}
+        self.assertEqual(result, expected_response)
+
+    def test_FilterConsumer_create_tag(self):
+        """Test that new Tags are created correctly."""
+
+        result: dict = FilterConsumer().create_tag("new_test_tag", self.test_user)
+        new_tag: Tag = Tag.objects.get(name="new_test_tag")
+        expected_response: dict = {
+            'type': 'tagCreated',
+            'id': new_tag.id,
+            'name': new_tag.name,
+            'owner': self.test_user.id
+        }
+        self.assertEqual(result, expected_response)
+
+    @patch('Sockets.consumers.FilterConsumer.create_tag')
+    @patch('Sockets.consumers.FilterConsumer.remove_tag')
+    @patch('Sockets.consumers.FilterConsumer.add_tag')
+    def test_FilterConsumer_update_tags(self, mock_add_tag: Mock, mock_remove_tag: Mock, mock_create_tag: Mock):
+        """Tests that tags are updated correctly."""
+
+        """Typical case: add existing tag to image"""
+        tag_array: list[dict] = [
+            {'id': 1, 'label': 'No'},
+            {'id': 2, 'label': 'I'},
+            {'id': 3, 'label': 'am'},
+            {'id': 5, 'label': 'your'},
+            {'id': 7, 'label': 'father'},
+            {'id': 9, 'label': 'NOOOOOOOOO'}
+        ]
+        input_message: dict = {
+            'type': 'updateTags',
+            'imageId': 1,  # image_1
+            'tagArray': tag_array,  # "9" was added
+            'user': self.test_user.id
+        }
+        mock_add_tag.return_value = {
+            'type': 'tagAdded',
+            'id': 999,  # fake imageTag id
+            'imageId': 1,  # image_1
+            'tagId': 9  # id of the newly added tag
+        }
+        result = FilterConsumer().update_tags(input_message)
+        expected_response = [mock_add_tag.return_value]
+        self.assertEqual(result, expected_response)
+
+        """Typical case: remove existing tag from image"""
+        tag_array: list[dict] = [
+            {'id': 1, 'label': 'This'},
+            {'id': 3, 'label': 'is'},
+            {'id': 5, 'label': 'the'},
+            {'id': 7, 'label': 'way'}
+        ]
+        input_message: dict = {
+            'type': 'updateTags',
+            'imageId': 1,  # image_1
+            'tagArray': tag_array,  # "2" was removed
+            'user': self.test_user.id
+        }
+        mock_remove_tag.return_value = {
+            'type': 'tagRemoved',
+            'id': 998,  # fake imageTag id
+            'imageId': 1  # image_1
+        }
+        result = FilterConsumer().update_tags(input_message)
+        expected_response = [mock_remove_tag.return_value]
+        self.assertEqual(result, expected_response)
+
+        """Typical case: create new tag and apply to image"""
+        tag_array: list[dict] = [
+            {'id': 1, 'label': 'This'},
+            {'id': 2, 'label': 'is'},
+            {'id': 3, 'label': 'getting'},
+            {'id': 5, 'label': 'out'},
+            {'id': 7, 'label': 'of'},
+            {'id': 'newTag1', 'label': 'hand'}
+        ]
+        input_message: dict = {
+            'type': 'updateTags',
+            'imageId': 1,  # image_1
+            'tagArray': tag_array,  # "11" to be created
+            'user': self.test_user.id
+        }
+        mock_create_tag.return_value = {
+            'type': 'tagCreated',
+            'id': 256,  # making up an id
+            'name': 1,
+            'owner': self.test_user.id
+        }
+        mock_add_tag.return_value = {
+            'type': 'tagAdded',
+            'id': 997,
+            'imageId': 1,  # image_1
+            'tagId': 256  # match with mock_create_tag.return_value
+        }
+        result = FilterConsumer().update_tags(input_message)
+        expected_response = [mock_create_tag.return_value, mock_add_tag.return_value]
+        self.assertEqual(result, expected_response)
+
     # def test_FilterConsumer_delete_image(self):
     #     ...
     #
