@@ -1,7 +1,11 @@
 """Tests for the Channels Websocket Consumer."""
+import unittest
+
 from django.core.exceptions import EmptyResultSet
 from django.test import TestCase
+from django.conf import settings
 from unittest.mock import Mock, patch
+from tempfile import NamedTemporaryFile
 
 from Sockets.consumers import FilterConsumer
 from api.models import *
@@ -216,6 +220,7 @@ class TestSocketConsumer(TestCase):
         result = FilterConsumer().update_tags(input_message)
         expected_response = [mock_add_tag.return_value]
         self.assertEqual(result, expected_response)
+        mock_add_tag.assert_called_once()
 
         """Typical case: remove existing tag from image"""
         tag_array: list[dict] = [
@@ -238,6 +243,7 @@ class TestSocketConsumer(TestCase):
         result = FilterConsumer().update_tags(input_message)
         expected_response = [mock_remove_tag.return_value]
         self.assertEqual(result, expected_response)
+        mock_remove_tag.assert_called_once()
 
         """Typical case: create new tag and apply to image"""
         tag_array: list[dict] = [
@@ -269,9 +275,46 @@ class TestSocketConsumer(TestCase):
         result = FilterConsumer().update_tags(input_message)
         expected_response = [mock_create_tag.return_value, mock_add_tag.return_value]
         self.assertEqual(result, expected_response)
+        mock_create_tag.assert_called_once()
 
-    # def test_FilterConsumer_delete_image(self):
-    #     ...
+    def test_FilterConsumer_delete_image(self):
+        """Tests that images are deleted properly."""
+
+        """Typical case: delete an existing image from storage and DB"""
+
+        mock_file: Mock = Mock()
+        mock_file.name = "images/test_file.webp"
+        mock_file.src = (
+            b"52494646be000000574542505650384c0d0a0055000000c4401e32"
+            b"0500000070bf17f57c9f0412003c078000100c28064000a24b0e52"
+            b"a0002000000004600"
+        )
+        app_media_root: str = settings.MEDIA_ROOT
+        file = open(f"{app_media_root}/{mock_file.name}", "w+b")
+        file.write(mock_file.src)
+        file.close()
+        image_record_to_delete: Image = Image.objects.create(
+            id=100, source=f"{mock_file.name}", owner=self.test_user
+        )
+
+        # Pass in file name (not path)
+        input_message: dict = {
+            'type': 'deleteImage',
+            'imageId': '100'
+        }
+        result: dict = FilterConsumer.delete_image(input_message)
+        expected_response: dict = {
+            'type': 'imageDeleted',
+            'id': '100'
+        }
+        self.assertEqual(result, expected_response)
+
+        # Method deletes image from storage
+        ...
+
+        # Method removes image name from database
+        image_exists: bool = Image.objects.filter(id=100).exists()
+        self.assertFalse(image_exists)  # make sure image was deleted
     #
     # def test_FilterConsumer_update_description(self):
     #     ...

@@ -293,26 +293,21 @@ class FilterConsumer(WebsocketConsumer):
         """
 
         image_id: str = text_data_json['imageId']
-        print(f"Delete request received for image %s" % image_id)
 
         image_object: Image = Image.objects.get(id=image_id)
         source_filename: str = image_object.source
-        print(f"Image filename is %s" % source_filename)
         app_media_root: str = settings.MEDIA_ROOT
         full_file_path: str = \
             f'{app_media_root}/{source_filename}'
 
-        # TODO: check for existence of both file and DB entry before performing action
         try:
             os.remove(full_file_path)
-            print("File deleted from disk")
             image_object.delete()
-            print("Image object deleted from database")
-            print("Delete image completed!")
             response_message = {'type': 'imageDeleted', 'id': image_id}
             return response_message
         except FileNotFoundError:
-            print("File not found!")
+            # TODO: add logging for this error
+            ...
 
     @staticmethod
     def update_description(text_data_json: dict) -> None:
