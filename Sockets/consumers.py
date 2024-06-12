@@ -85,7 +85,7 @@ class FilterConsumer(WebsocketConsumer):
 
         # Join channel layer
         async_to_sync(self.channel_layer.group_add)(
-            self.layer_name, self.channel_name
+            self.layer_name, self.channel_name  # noqa for false warning
         )
 
         self.accept()
@@ -245,7 +245,7 @@ class FilterConsumer(WebsocketConsumer):
         # create newly defined tags
         for tag in tag_array:
             # new tags will have a "newTag" prefix on their ID, ex. "newTag2"
-            if re.match('newTag\d+', str(tag['id'])):
+            if re.match(r'newTag\d+', str(tag['id'])):
                 tag_array.remove(tag)  # remove the temporary id
                 new_tag_details = self.create_tag(tag['label'], user)
                 tag_array.append(new_tag_details)  # add new permanent id
