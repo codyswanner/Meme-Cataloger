@@ -1,11 +1,11 @@
 """Tests for the Channels Websocket Consumer."""
 import unittest
 
+from pathlib import Path
 from django.core.exceptions import EmptyResultSet
 from django.test import TestCase
 from django.conf import settings
 from unittest.mock import Mock, patch
-from tempfile import NamedTemporaryFile
 
 from Sockets.consumers import FilterConsumer
 from api.models import *
@@ -13,7 +13,7 @@ from api.models import *
 
 class TestSocketConsumer(TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.test_user = AppUser.objects.create(username="test_user")
         self.image_1 = Image.objects.create(
             id=1,
@@ -145,41 +145,49 @@ class TestSocketConsumer(TestCase):
         expected_response = {'type': 'message', 'message': "Can't add a tag that doesn't exist!"}
         self.assertEqual(result, expected_response)
 
-    def test_FilterConsumer_remove_tag(self):
-        """Test that tags are removed correctly."""
 
-        tag_to_remove: Tag = Tag.objects.create(name="remove me!", owner=self.test_user)
-        imagetag_to_delete: ImageTag = ImageTag.objects.create(image_id=self.image_1, tag_id=tag_to_remove)
+class TestRemoveTag(TestSocketConsumer):
+    """Test that tags are removed correctly."""
 
+    def setUp(self):
+        super().setUp()
+        self.tag_to_remove: Tag = Tag.objects.create(name="remove me!", owner=self.test_user)
+        self.imagetag_to_delete: ImageTag = ImageTag.objects.create(image_id=self.image_1, tag_id=self.tag_to_remove)
+
+    def test_typical_case(self):
         """Typical scenario: remove existing ImageTag"""
-        result: dict = FilterConsumer.remove_tag(self.image_1, tag_to_remove.id)
+        result: dict = FilterConsumer.remove_tag(self.image_1, self.tag_to_remove.id)
 
         # Make sure ImageTag was deleted
-        removed_imagetag_query = ImageTag.objects.filter(image_id=self.image_1, tag_id=tag_to_remove)
+        removed_imagetag_query = ImageTag.objects.filter(image_id=self.image_1, tag_id=self.tag_to_remove)
         if removed_imagetag_query.exists():
             self.fail("ImageTag should have been deleted!")
 
         # Check the returned response
         expected_response: dict = {
             'type': 'tagRemoved',
-            'id': imagetag_to_delete.id,
+            'id': self.imagetag_to_delete.id,
             'imageId': self.image_1.id
         }
         self.assertEqual(result, expected_response)
 
+    def test_tag_not_on_image(self):
         """Atypical scenario: attempt to remove a tag that isn't added"""
         result: dict = FilterConsumer.remove_tag(self.image_1, 4)
         expected_response: dict = {'type': 'message', 'message': 'Tag association does not exist!'}
         self.assertEqual(result, expected_response)
 
+    def test_tag_does_not_exist(self):
         """Atypical scenario: attempt to remove a tag that doesn't exist"""
         result: dict = FilterConsumer.remove_tag(self.image_1, 404)  # nonexistent tag id
         expected_response: dict = {'type': 'message', 'message': "Can't remove a tag that doesn't exist!"}
         self.assertEqual(result, expected_response)
 
-    def test_FilterConsumer_create_tag(self):
-        """Test that new Tags are created correctly."""
 
+class TestCreateTag(TestSocketConsumer):
+    """Test that new Tags are created correctly."""
+
+    def test_typical_case(self):
         result: dict = FilterConsumer().create_tag("new_test_tag", self.test_user)
         new_tag: Tag = Tag.objects.get(name="new_test_tag")
         expected_response: dict = {
@@ -190,10 +198,16 @@ class TestSocketConsumer(TestCase):
         }
         self.assertEqual(result, expected_response)
 
+    # def test_user_does_not_exist(self):
+    #     ...
+
+
+class TestUpdateTags(TestSocketConsumer):
+
     @patch('Sockets.consumers.FilterConsumer.create_tag')
     @patch('Sockets.consumers.FilterConsumer.remove_tag')
     @patch('Sockets.consumers.FilterConsumer.add_tag')
-    def test_FilterConsumer_update_tags(self, mock_add_tag: Mock, mock_remove_tag: Mock, mock_create_tag: Mock):
+    def test_typical_case(self, mock_add_tag: Mock, mock_remove_tag: Mock, mock_create_tag: Mock):
         """Tests that tags are updated correctly."""
 
         """Typical case: add existing tag to image"""
@@ -277,7 +291,16 @@ class TestSocketConsumer(TestCase):
         self.assertEqual(result, expected_response)
         mock_create_tag.assert_called_once()
 
-    def test_FilterConsumer_delete_image(self):
+    # def test_user_does_not_exist(self):
+    #     ...
+    #
+    # def test_image_does_not_exist(self):
+    #     ...
+
+
+class TestDeleteImage(TestSocketConsumer):
+
+    def test_typical_case(self):
         """Tests that images are deleted properly."""
 
         """Typical case: delete an existing image from storage and DB"""
@@ -293,11 +316,13 @@ class TestSocketConsumer(TestCase):
         file = open(f"{app_media_root}/{mock_file.name}", "w+b")
         file.write(mock_file.src)
         file.close()
-        image_record_to_delete: Image = Image.objects.create(
-            id=100, source=f"{mock_file.name}", owner=self.test_user
+        Image.objects.create(
+            id=100,
+            source=f"{mock_file.name}",
+            owner=self.test_user
         )
 
-        # Pass in file name (not path)
+        # Pass in Image id
         input_message: dict = {
             'type': 'deleteImage',
             'imageId': '100'
@@ -310,14 +335,13 @@ class TestSocketConsumer(TestCase):
         self.assertEqual(result, expected_response)
 
         # Method deletes image from storage
-        ...
+        self.assertFalse(Path(f"{app_media_root}/{mock_file.name}").is_file())
 
         # Method removes image name from database
-        image_exists: bool = Image.objects.filter(id=100).exists()
-        self.assertFalse(image_exists)  # make sure image was deleted
-    #
-    # def test_FilterConsumer_update_description(self):
+        self.assertFalse(Image.objects.filter(id=100).exists())
+
+    # def test_image_file_does_not_exist(self):
     #     ...
     #
-    # def test_FilterConsumer_receive(self):
+    # def test_database_record_does_not_exist(self):
     #     ...
