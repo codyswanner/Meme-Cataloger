@@ -1,5 +1,4 @@
 """Tests for the Channels Websocket Consumer."""
-import unittest
 
 from pathlib import Path
 from django.core.exceptions import EmptyResultSet
@@ -12,7 +11,9 @@ from api.models import *
 
 
 class TestSocketConsumer(TestCase):
+    """Shared setup methods for testing FilterConsumer class.
 
+    Meant to be inherited by classes that test methods of consumers.FilterConsumer."""
     def setUp(self) -> None:
         self.test_user = AppUser.objects.create(username="test_user")
         self.image_1 = Image.objects.create(
@@ -49,15 +50,20 @@ class TestSocketConsumer(TestCase):
         Image.objects.all().delete()
         AppUser.objects.all().delete()
 
+
+class TestConnectDisconnect(TestSocketConsumer):
+    ...
     # def test_FilterConsumer_connect(self):
     #     ...
     #
     # def test_FilterConsumer_disconnect(self):
     #     ...
 
-    def test_FilterConsumer_apply_filters(self):
-        """Test that apply_filters returns the correct images."""
 
+class TestApplyFilters(TestSocketConsumer):
+    """Test that apply_filters returns the correct images."""
+
+    def test_typical_case(self):
         # Should return 1
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [1]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
@@ -108,16 +114,20 @@ class TestSocketConsumer(TestCase):
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [])
 
-    def test_FilterConsumer_add_tag(self):
-        """Tests that tags are added correctly."""
 
-        """Typical scenario: Assigning a new tag to an image"""
-        new_tag: Tag = Tag.objects.create(name="test_add_tag", owner=self.test_user)
-        result = FilterConsumer.add_tag(self.image_1, new_tag.id)
+class TestAddTag(TestSocketConsumer):
+
+    def setUp(self):
+        super().setUp()
+        self.new_tag: Tag = Tag.objects.create(name="test_add_tag", owner=self.test_user)
+
+    def test_typical_case(self):
+        """Typical case: Assigning a new tag to an image"""
+        result = FilterConsumer.add_tag(self.image_1, self.new_tag.id)
 
         # make sure the image_tag was created in the database
         try:
-            new_imagetag_query = ImageTag.objects.filter(image_id=self.image_1, tag_id=new_tag)
+            new_imagetag_query = ImageTag.objects.filter(image_id=self.image_1, tag_id=self.new_tag)
             if new_imagetag_query.exists():
                 # if exists, get object for further testing
                 new_imagetag: ImageTag = new_imagetag_query.get()
@@ -131,16 +141,18 @@ class TestSocketConsumer(TestCase):
             'type': 'tagAdded',
             'id': new_imagetag.id,
             'imageId': self.image_1.id,
-            'tagId': new_tag.id
+            'tagId': self.new_tag.id
         }
         self.assertEqual(result, expected_response)
 
-        """Atypical scenario: trying to add a tag that's already added"""
-        result = FilterConsumer.add_tag(self.image_1, new_tag.id)
+    def test_tag_already_added(self):
+        """Atypical case: trying to add a tag that's already added"""
+        result = FilterConsumer.add_tag(self.image_1, 1)
         expected_response = {'type': 'message', 'message': 'This tag association already exists!'}
         self.assertEqual(result, expected_response)
 
-        """Atypical scenario: tag does not exist"""
+    def test_tag_does_not_exist(self):
+        """Atypical case: tag does not exist"""
         result = FilterConsumer.add_tag(self.image_1, 404)  # non-existent tag id
         expected_response = {'type': 'message', 'message': "Can't add a tag that doesn't exist!"}
         self.assertEqual(result, expected_response)
