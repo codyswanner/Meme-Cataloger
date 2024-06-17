@@ -449,3 +449,35 @@ class TestDeleteImage(TestSocketConsumer):
             'message': f'File images/test_file.webp not found!'
         }
         self.assertEqual(result, expected_response)
+
+
+class TestSendMessage(TestSocketConsumer):
+    ...
+
+    # def test_send_message(self):
+    #     ...
+
+
+class TestReceive(TestSocketConsumer):
+    ...
+
+    # def test_receive_message(self):
+    #     ...
+    #
+    # def test_receive_filterChange(self):
+    #     ...
+    #
+    # def test_receive_activeFilters(self):
+    #     ...
+    #
+    # def test_receive_updateTags(self):
+    #     ...
+    #
+    # def test_receive_deleteImage(self):
+    #     ...
+    #
+    # def test_receive_updateDescription(self):
+    #     ...
+    #
+    # def test_receive_unexpected(self):
+    #     ...
