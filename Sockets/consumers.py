@@ -234,13 +234,22 @@ class FilterConsumer(WebsocketConsumer):
         None; however, sends a WebSocket message to client with the following structure:
         """
 
-        user_id: int = text_data_json['user']
-        user: AppUser = AppUser.objects.get(id=user_id)
-        image_id: str = text_data_json['imageId']
-        image_object: Image = Image.objects.get(id=image_id)  # Django requires Image object for query
-        imagetag_query: QuerySet = ImageTag.objects.filter(image_id=image_object)
-        tag_array: list = text_data_json['tagArray']
         responses_list: list = []  # Used to inform client of changes
+        try:
+            user_id: int = text_data_json['user']
+            user: AppUser = AppUser.objects.get(id=user_id)
+            image_id: str = text_data_json['imageId']
+            image_object: Image = Image.objects.get(id=image_id)  # Django requires Image object for query
+            imagetag_query: QuerySet = ImageTag.objects.filter(image_id=image_object)
+            tag_array: list = text_data_json['tagArray']
+        except AppUser.DoesNotExist:
+            response_message: dict = {'type': 'message', 'message': 'Specified user does not exist!'}
+            responses_list.append(response_message)
+            return responses_list
+        except Image.DoesNotExist:
+            response_message: dict = {'type': 'message', 'message': 'Specified image does not exist!'}
+            responses_list.append(response_message)
+            return responses_list
 
         # create newly defined tags
         for tag in tag_array:
@@ -293,8 +302,15 @@ class FilterConsumer(WebsocketConsumer):
         """
 
         image_id: str = text_data_json['imageId']
+        try:
+            image_object: Image = Image.objects.get(id=image_id)
+        except Image.DoesNotExist:
+            response_message: dict = {
+                'type': 'message',
+                'message': 'Specified image does not exist!'
+            }
+            return response_message
 
-        image_object: Image = Image.objects.get(id=image_id)
         source_filename: str = image_object.source
         app_media_root: str = settings.MEDIA_ROOT
         full_file_path: str = \
@@ -307,7 +323,11 @@ class FilterConsumer(WebsocketConsumer):
             return response_message
         except FileNotFoundError:
             # TODO: add logging for this error
-            ...
+            response_message: dict = {
+                'type': 'message',
+                'message': f'File {source_filename} not found!'
+            }
+            return response_message
 
     @staticmethod
     def update_description(text_data_json: dict) -> None:

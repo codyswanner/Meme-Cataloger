@@ -1,5 +1,5 @@
 """Tests for the Channels Websocket Consumer."""
-
+import os
 from pathlib import Path
 from django.core.exceptions import EmptyResultSet
 from django.test import TestCase
@@ -219,9 +219,6 @@ class TestCreateTag(TestSocketConsumer):
         }
         self.assertEqual(result, expected_response)
 
-    # def test_user_does_not_exist(self):
-    #     ...
-
 
 class TestUpdateTags(TestSocketConsumer):
 
@@ -315,11 +312,33 @@ class TestUpdateTags(TestSocketConsumer):
         self.assertEqual(result, expected_response)
         mock_create_tag.assert_called_once()
 
-    # def test_user_does_not_exist(self):
-    #     ...
-    #
-    # def test_image_does_not_exist(self):
-    #     ...
+    def test_user_does_not_exist(self):
+        input_message: dict = {
+            'type': 'updateTags',
+            'imageId': 1,  # image_1
+            'tagArray': [],  # test won't get this far
+            'user': 404  # non-existent user
+        }
+        result: list = FilterConsumer().update_tags(input_message)
+        expected_response: list = [{
+            'type': 'message',
+            'message': 'Specified user does not exist!'
+        }]
+        self.assertEqual(result, expected_response)
+
+    def test_image_does_not_exist(self):
+        input_message: dict = {
+            'type': 'updateTags',
+            'imageId': 404,  # non-existent image
+            'tagArray': [],  # test won't get this far
+            'user': self.test_user.id
+        }
+        result: list = FilterConsumer().update_tags(input_message)
+        expected_response: list = [{
+            'type': 'message',
+            'message': 'Specified image does not exist!'
+        }]
+        self.assertEqual(result, expected_response)
 
 
 class TestDeleteImage(TestSocketConsumer):
@@ -364,8 +383,69 @@ class TestDeleteImage(TestSocketConsumer):
         # Method removes image name from database
         self.assertFalse(Image.objects.filter(id=100).exists())
 
-    # def test_image_file_does_not_exist(self):
-    #     ...
-    #
-    # def test_database_record_does_not_exist(self):
-    #     ...
+    def test_database_record_does_not_exist(self):
+        mock_file: Mock = Mock()
+        mock_file.name = "images/test_file.webp"
+        mock_file.src = (
+            b"52494646be000000574542505650384c0d0a0055000000c4401e32"
+            b"0500000070bf17f57c9f0412003c078000100c28064000a24b0e52"
+            b"a0002000000004600"
+        )
+        app_media_root: str = settings.MEDIA_ROOT
+        file = open(f"{app_media_root}/{mock_file.name}", "w+b")
+        file.write(mock_file.src)
+        file.close()
+
+        # Skip object creation to raise error
+        # Image.objects.create(
+        #     id=100,
+        #     source=f"{mock_file.name}",
+        #     owner=self.test_user
+        # )
+
+        # Pass in Image id
+        input_message: dict = {
+            'type': 'deleteImage',
+            'imageId': '100'
+        }
+        result: dict = FilterConsumer.delete_image(input_message)
+        expected_response: dict = {
+            'type': 'message',
+            'message': 'Specified image does not exist!'
+        }
+        self.assertEqual(result, expected_response)
+
+        # clean up created file
+        os.remove(f'{app_media_root}/{mock_file.name}')
+
+    def test_image_file_does_not_exist(self):
+        mock_file: Mock = Mock()
+        mock_file.name = "images/test_file.webp"
+
+        # Skip creation of actual file to induce error
+        # mock_file.src = (
+        #     b"52494646be000000574542505650384c0d0a0055000000c4401e32"
+        #     b"0500000070bf17f57c9f0412003c078000100c28064000a24b0e52"
+        #     b"a0002000000004600"
+        # )
+        # app_media_root: str = settings.MEDIA_ROOT
+        # file = open(f"{app_media_root}/{mock_file.name}", "w+b")
+        # file.write(mock_file.src)
+        # file.close()
+        Image.objects.create(
+            id=100,
+            source=f"{mock_file.name}",
+            owner=self.test_user
+        )
+
+        # Pass in Image id
+        input_message: dict = {
+            'type': 'deleteImage',
+            'imageId': '100'
+        }
+        result: dict = FilterConsumer.delete_image(input_message)
+        expected_response: dict = {
+            'type': 'message',
+            'message': f'File images/test_file.webp not found!'
+        }
+        self.assertEqual(result, expected_response)
