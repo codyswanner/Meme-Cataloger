@@ -63,52 +63,61 @@ class TestConnectDisconnect(TestSocketConsumer):
 class TestApplyFilters(TestSocketConsumer):
     """Test that apply_filters returns the correct images."""
 
-    def test_typical_case(self):
+    def test_typical_case_1(self):
         # Should return 1
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [1]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [1])
 
+    def test_typical_case_2(self):
         # Should return 1 and 2
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [2]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [1, 2])
 
+    def test_typical_case_3(self):
         # Should return 1 and 3
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [3]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [1, 3])
 
+    def test_typical_case_4(self):
         # Should return 2
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [4]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [2])
 
+    def test_typical_case_5(self):
         # Should return 1
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [5]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [1])
 
+    def test_typical_case_6(self):
         # Should return 2 and 3
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [6]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [2, 3])
 
+    def test_typical_case_7(self):
         # Should return 1
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [7]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [1])
 
+    def test_typical_case_8(self):
         # Should return 2
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [8]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [2])
 
+    def test_typical_case_9(self):
         # Should return 3
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [9]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
         self.assertEqual(image_result_data['results'], [3])
 
+    def test_typical_case_10(self):
         # Should return none
         text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [10]}
         image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
@@ -216,10 +225,8 @@ class TestCreateTag(TestSocketConsumer):
 
 class TestUpdateTags(TestSocketConsumer):
 
-    @patch('Sockets.consumers.FilterConsumer.create_tag')
-    @patch('Sockets.consumers.FilterConsumer.remove_tag')
     @patch('Sockets.consumers.FilterConsumer.add_tag')
-    def test_typical_case(self, mock_add_tag: Mock, mock_remove_tag: Mock, mock_create_tag: Mock):
+    def test_typical_add_tag(self, mock_add_tag: Mock):
         """Tests that tags are updated correctly."""
 
         """Typical case: add existing tag to image"""
@@ -248,6 +255,8 @@ class TestUpdateTags(TestSocketConsumer):
         self.assertEqual(result, expected_response)
         mock_add_tag.assert_called_once()
 
+    @patch('Sockets.consumers.FilterConsumer.remove_tag')
+    def test_typical_remove_tag(self, mock_remove_tag: Mock):
         """Typical case: remove existing tag from image"""
         tag_array: list[dict] = [
             {'id': 1, 'label': 'This'},
@@ -271,6 +280,9 @@ class TestUpdateTags(TestSocketConsumer):
         self.assertEqual(result, expected_response)
         mock_remove_tag.assert_called_once()
 
+    @patch('Sockets.consumers.FilterConsumer.create_tag')
+    @patch('Sockets.consumers.FilterConsumer.add_tag')
+    def test_typical_create_tag(self, mock_add_tag: Mock, mock_create_tag: Mock):
         """Typical case: create new tag and apply to image"""
         tag_array: list[dict] = [
             {'id': 1, 'label': 'This'},
