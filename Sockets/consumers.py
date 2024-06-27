@@ -84,7 +84,7 @@ class FilterConsumer(WebsocketConsumer):
 
         # Join channel layer
         async_to_sync(self.channel_layer.group_add)(
-            self.layer_name, self.channel_name  # noqa (for false "unexpected argument")
+            self.layer_name, self.channel_name  # noqa for false warning
         )
 
         self.accept()
