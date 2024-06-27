@@ -39,9 +39,9 @@ function TagPopperContent() {
       const imageTag = imageTagArray.find(element => element.id === imageTagId);
       const tagId = imageTag['tag_id'];
       // Now, find the name of the tag
-      const tagLabel = appData[1].find(tagData => tagData.id === tagId)['name'];
+      const tagName = appData[1].find(tagData => tagData.id === tagId)['name'];
       // Package the info into an object and return
-      const tagObject = {'id': tagId, 'label': tagLabel};
+      const tagObject = {'id': tagId, 'label': tagName};
       return tagObject;
     };
 

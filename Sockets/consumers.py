@@ -229,10 +229,10 @@ class FilterConsumer(WebsocketConsumer):
             return_message = {'type': 'message', 'message': 'Tag association does not exist!'}
             self.send(text_data=json.dumps(return_message))
 
-    def create_tag(self, tag_label):
-        print(f'Will create new tag: {tag_label}')
+    def create_tag(self, tag_name):
+        print(f'Will create new tag: {tag_name}')
         app_user: AppUser = AppUser.objects.get(id=1)  # Hardcoded for now
-        new_tag: Tag = Tag(name=tag_label, owner=app_user)
+        new_tag: Tag = Tag(name=tag_name, owner=app_user)
         new_tag.save()
         print(f'Tag created with id {new_tag.id}')
         return_message = {
