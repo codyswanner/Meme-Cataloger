@@ -4,7 +4,9 @@ import { ThemeProvider } from '@emotion/react';
 
 import useFilterSocket from './SupportingModules/useFilterSocket';
 import AppDataContext from './SupportingModules/AppDataContext';
+import DropHandler from './DropHandler';
 import ContentFrame from './ContentFrame';
+import UploadFilesContextProvider from './SupportingModules/UploadFilesContext';
 
 // createTheme sets background color
 const theme = createTheme({
@@ -37,7 +39,11 @@ function App(props) {
     <ThemeProvider theme={theme}>
       {/* https://react.dev/reference/react/useContext */}
       <AppDataContext.Provider value={appData}>
-        <ContentFrame />
+      <UploadFilesContextProvider>
+        <DropHandler>
+          <ContentFrame />
+        </DropHandler>
+      </UploadFilesContextProvider>
       </AppDataContext.Provider>
     </ThemeProvider>
     </>
