@@ -36,7 +36,7 @@ function LeftDrawer() {
                     {tagsList.map((tag) => {
                         const tagId = tag.id;
                         const tagName = tag.name;
-                        return(<FilterCheckbox text={tagName} key={tagId} tagId={tagId}/>)
+                        return(<FilterCheckbox data-testid={'filter-checkbox'} text={tagName} key={tagId} tagId={tagId}/>)
                     })}
                 </List>
                 <Divider/>
