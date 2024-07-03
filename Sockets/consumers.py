@@ -205,6 +205,7 @@ class FilterConsumer(WebsocketConsumer):
             response_message = {'type': 'message', 'message': 'Tag association does not exist!'}
             return response_message
 
+
     @staticmethod
     def create_tag(tag_label: str, tag_owner: AppUser) -> dict:
         new_tag: Tag = Tag(name=tag_label, owner=tag_owner)
