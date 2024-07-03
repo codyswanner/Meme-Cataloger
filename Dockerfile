@@ -61,6 +61,11 @@ WORKDIR /home/appuser/Frontend/
 RUN sudo /usr/bin/npm install
 # RUN sudo -b /usr/bin/npm run dev
 
+VOLUME /home/appuser/Frontend/src/
+VOLUME /home/appuser/MemeCataloger2/
+VOLUME /home/appuser/api/
+VOLUME /home/appuser/Sockets/
+
 WORKDIR /home/appuser/
 
 # Expose the port that the application listens on.

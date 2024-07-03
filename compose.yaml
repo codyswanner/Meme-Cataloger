@@ -16,8 +16,8 @@ services:
     secrets:
       - db-password
       - django-db-password
-    # volumes:
-    #   - db-data:/var/lib/postgresql/data
+    volumes:
+      - db-data:/var/lib/mysql
     # environment:
       # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-password
       # MYSQL_USER: django
@@ -29,8 +29,6 @@ services:
         retries: 3
     expose:
       - 3306:3306
-  # volumes:
-  #   db-data:
 
   redis:
     image: redis:7
@@ -40,13 +38,24 @@ services:
   server:
     build:
       context: .
+    volumes:
+        - ./Frontend/src:/home/appuser/Frontend/src:rshared
+        - ./MemeCataloger2:/home/appuser/MemeCataloger2:rshared
+        - ./api:/home/appuser/api:rshared
+        - ./Sockets:/home/appuser/Sockets:rshared
+
     ports:
       - 8000:8000
-    environment:
-        - DB_HOST=db
     depends_on:
         db:
             condition: service_healthy
+
+volumes:
+    db-data:
+    server-frontend-src:
+    server-memecataloger2:
+    server-api:
+    server-sockets:
 
 secrets:
   db-password:
