@@ -141,7 +141,8 @@ function TagPopperContent() {
         socket.send(JSON.stringify({
             'type': 'updateTags',
             'imageId': imageId,
-            'tagArray': newVal
+            'tagArray': newVal,
+            'user': 1 // Hardcoded for now
         }));
     };
 
