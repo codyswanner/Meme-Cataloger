@@ -59,7 +59,10 @@ ROOT_URLCONF = 'MemeCataloger2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR,
+            os.path.join(BASE_DIR, "/Frontend/templates/frontend")
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,7 +85,7 @@ DATABASES = {
         'NAME': 'memecataloger2',
         'USER': 'django',
         'PASSWORD': 'wheeze',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': '3306'
     }
 }
@@ -141,7 +144,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("redis", 6379)],
         },
     },
 }
