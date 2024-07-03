@@ -112,8 +112,6 @@ function FileButton(props) {
  * Form displayed when files have been selected; allows submit, or further file selection.
  * 
  * @param {object} props Contains props passed to the component.
- * @param {function} props.handleDrop passed from parent, which handles drag-and-drop behavior.
- * @param {function} props.handleDragOver passed from parent, which handles drag-and-drop behavior.
  * @param {Array} props.files the files to be uploaded; state passed from parent.
  * @param {function} props.setFiles state updater for 'files' state.
  * @param {function} props.setUploadFailed allows for display of error on a failed upload.
@@ -137,9 +135,7 @@ function FileUploadForm(props) {
             verticalAlign: 'center',
             margin: '5% 0 5% 0',
             padding: '2%'
-            }}
-            onDrop={props.handleDrop}
-            onDragOver={props.handleDragOver}>
+            }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <List>
                     {props.files.map((file, index) => (
@@ -170,8 +166,6 @@ function FileUploadForm(props) {
 /**
  * 
  * @param {object} props Contains props passed to the component.
- * @param {function} props.handleDrop passed from parent, which handles drag-and-drop behavior.
- * @param {function} props.handleDragOver passed from parent, which handles drag-and-drop behavior.
  * @param {function} props.handleInput passed from parent, for when "Upload" button is clicked.
  * @param {function} props.uploadFailed allows for display of error on a failed upload.
  * 
@@ -207,9 +201,7 @@ function EmptyUploadForm(props) {
             justifyContent: 'center',
             verticalAlign: 'center',
             margin: '5% 0 5% 0'
-            }}
-            onDrop={props.handleDrop}
-            onDragOver={props.handleDragOver}>
+            }}>
             {handleUploadFailed(props.uploadFailed)}
             <Button
             component="label"

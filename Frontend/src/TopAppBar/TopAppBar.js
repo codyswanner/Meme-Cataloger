@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Button, AppBar, Toolbar, Typography } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload'
 
 import UploadDialog from './UploadDialog';
+import { UploadFilesContext } from '../SupportingModules/UploadFilesContext';
 
 
 /**
@@ -12,14 +13,16 @@ import UploadDialog from './UploadDialog';
  * @returns The TopAppBar component to be rendered in the app.
  */
 function TopAppBar() {
-    const [open, setOpen] = useState(false);
+    const uploadFilesStates = useContext(UploadFilesContext);
+    const uploadDialogOpen = uploadFilesStates[2];
+    const setUploadDialogOpen = uploadFilesStates[3]; 
     
     const handleOpenUpload = () => {
-        setOpen(true);
+        setUploadDialogOpen(true);
     };
 
     const handleCloseUpload = () => {
-        setOpen(false);
+        setUploadDialogOpen(false);
     };
 
     return(
@@ -36,7 +39,7 @@ function TopAppBar() {
                     onClick={handleOpenUpload}>
                     Upload
                 </Button>
-                <UploadDialog open={open} onClose={handleCloseUpload}/>
+                <UploadDialog open={uploadDialogOpen} onClose={handleCloseUpload}/>
             </Toolbar>
         </AppBar>
     );
