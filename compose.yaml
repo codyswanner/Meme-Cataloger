@@ -1,64 +1,67 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
-
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
 services:
   db:
-    build:
-      context: ./MySqlDockerSetup
+    image: mysql:8
     restart: always
     user: root
     secrets:
-      - db-password
-      - django-db-password
+      - db-root-pw
+      - django-db-pw
+    environment:
+      MYSQL_ROOT_PASSWORD: db-root-pw
+      MYSQL_DATABASE: memecataloger
+      MYSQL_USER: django
+      MYSQL_PASSWORD_FILE: /run/secrets/django-db-pw
     volumes:
       - db-data:/var/lib/mysql
-    # environment:
-      # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-password
-      # MYSQL_USER: django
-      # MYSQL_PASSWORD_FILE: /run/secrets/django-db-password
     healthcheck:
-        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-        interval: 10s
-        timeout: 10s
-        retries: 3
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
     expose:
       - 3306:3306
-
+  
   redis:
     image: redis:7
     ports:
-     - 6379:6379
-
+      - 6379:6379
+  
+  node:
+    build:
+      context: ./Node
+      secrets:
+        - "node-sudo-pw"
+    volumes:
+      - ./Node/Frontend/:/home/front-runner/Frontend/:rshared
+  
   server:
     build:
-      context: .
+      context: ./Django
+      secrets:
+       - django-db-pw
+    secrets:
+      - django-db-pw
+    environment:
+        DB_PW_FILE: /run/secrets/django-db-pw
     volumes:
-        - ./Frontend/src:/home/appuser/Frontend/src:rshared
-        - ./MemeCataloger2:/home/appuser/MemeCataloger2:rshared
-        - ./api:/home/appuser/api:rshared
-        - ./Sockets:/home/appuser/Sockets:rshared
-
+      - ./Django/MemeCataloger2:/home/django-server/MemeCataloger2:rshared
+      - ./Node/Frontend/:/home/django-server/Frontend/:rshared
+      - ./Django/api:/home/django-server/api:rshared
+      - ./Django/Sockets:/home/django-server/Sockets:rshared
+      
     ports:
       - 8000:8000
     depends_on:
-        db:
-            condition: service_healthy
+      db:
+        condition: service_healthy
 
 volumes:
-    db-data:
-    server-frontend-src:
-    server-memecataloger2:
-    server-api:
-    server-sockets:
+  db-data:
 
 secrets:
-  db-password:
-    file: ./MySqlDockerSetup/db-password.txt
-  django-db-password:
-    file: ./MySqlDockerSetup/django-db-password.txt
+  django-db-pw:
+    file: ./django-db-pw.txt
+  db-root-pw:
+    file: ./db-pw.txt
+  node-sudo-pw:
+    file: ./node-sudo-pw.txt

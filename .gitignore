@@ -1,23 +1,29 @@
 # dependencies
-/Frontend/node_modules
+/Node/Frontend/node_modules
+/Django/venv
 /.pnp
 .pnp.js
+
+# media
+/Django/media
 
 # testing
 /coverage
 
 # production
 /build
+/Node/Frontend/static
 
 # system-specific project files
-/api/__pycache__/
-/api/management/
-/api/migrations/
-/Frontend/__pycache__/
-/Frontend/migrations/
-/MemeCataloger2/__pycache__/
-/Sockets/__pycache__/
-/Sockets/migrations/
+/Django/api/__pycache__/
+/Django/api/management/
+/Django/api/migrations/
+/Node/Frontend/__pycache__/
+/Node/Frontend/migrations/
+/Django/MemeCataloger2/__pycache__/
+/Django/Sockets/__pycache__/
+/Django/Sockets/migrations/
+*.pyc
 
 # misc
 .DS_Store
