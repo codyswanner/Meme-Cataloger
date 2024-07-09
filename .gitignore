@@ -1,6 +1,7 @@
 # dependencies
-/Node/Frontend/node_modules
-/Django/venv
+/Frontend/node_modules/
+/Node/Frontend/node_modules/
+/Django/venv/
 /.pnp
 .pnp.js
 
@@ -12,7 +13,8 @@
 
 # production
 /build
-/Node/Frontend/static
+/Node/Frontend/static/
+/Django/Frontend/
 
 # system-specific project files
 /Django/api/__pycache__/
