@@ -28,15 +28,15 @@ services:
   
   node:
     build:
-      context: ./Node
+      context: ./Frontend
       secrets:
         - "node-sudo-pw"
     volumes:
-      - ./Node/Frontend/:/home/front-runner/Frontend/:rshared
+      - ./Frontend/:/home/front-runner/Frontend/:rshared
   
   server:
     build:
-      context: ./Django
+      context: .
       secrets:
        - django-db-pw
     secrets:
@@ -44,10 +44,11 @@ services:
     environment:
         DB_PW_FILE: /run/secrets/django-db-pw
     volumes:
-      - ./Django/MemeCataloger2:/home/django-server/MemeCataloger2:rshared
-      - ./Node/Frontend/:/home/django-server/Frontend/:rshared
-      - ./Django/api:/home/django-server/api:rshared
-      - ./Django/Sockets:/home/django-server/Sockets:rshared
+      - ./MemeCataloger2:/home/django-server/MemeCataloger2:rshared
+      - ./Frontend/:/home/django-server/Frontend/:rshared
+      - ./api:/home/django-server/api:rshared
+      - ./Sockets:/home/django-server/Sockets:rshared
+      - ./media/images:/home/django-server/media/images:rshared
       
     ports:
       - 8000:8000
