@@ -27,6 +27,11 @@
 /Django/Sockets/migrations/
 *.pyc
 
+# secrets
+db-pw.txt
+django-db-pw.txt
+node-sudo-pw.txt
+
 # misc
 .DS_Store
 .env.local
