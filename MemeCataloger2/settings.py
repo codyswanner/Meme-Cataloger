@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-cc5^k1_hh(z%2n1mtzo_g$8umnm^^%n6ii)3(ws7en0*3x906k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'thebigkahuna', '192.168.50.62']
 
 
 # Application definition
@@ -59,7 +59,10 @@ ROOT_URLCONF = 'MemeCataloger2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR,
+            os.path.join(BASE_DIR, "/Frontend/templates/frontend")
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,13 +79,20 @@ TEMPLATES = [
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+def get_secret(key, default):
+    value = os.getenv(key, default)
+    if os.path.isfile(value):
+        with open(value) as f:
+            return f.read()
+    return value
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'memecataloger2',
+        'NAME': 'memecataloger',
         'USER': 'django',
-        'PASSWORD': 'wheeze',
-        'HOST': '127.0.0.1',
+        'PASSWORD': get_secret("DB_PW_FILE", "cannot obtain secret!"),
+        'HOST': 'db',
         'PORT': '3306'
     }
 }
@@ -141,7 +151,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("redis", 6379)],
         },
     },
 }

@@ -1,13 +1,13 @@
 # dependencies
-/Frontend/node_modules
+/Frontend/node_modules/
 /.pnp
 .pnp.js
 
-# testing
-/coverage
+# media
+/media
 
 # production
-/build
+/Frontend/static/
 
 # system-specific project files
 /api/__pycache__/
@@ -16,21 +16,23 @@
 /Frontend/__pycache__/
 /Frontend/migrations/
 /MemeCataloger2/__pycache__/
-/Sockets/__pycache__/
 /Sockets/migrations/
+*.pyc
+
+# secrets
+db-pw.txt
+django-db-pw.txt
+node-sudo-pw.txt
 
 # misc
+npm-debug.log*
+/python312/
+/venv/
+.idea/
+
+# Do these exist on this project?
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-/Frontend/static/Frontend/
-/media/images/
-/python312/
-/venv/
-.idea/*
