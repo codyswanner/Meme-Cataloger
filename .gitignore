@@ -1,30 +1,22 @@
 # dependencies
 /Frontend/node_modules/
-/Node/Frontend/node_modules/
-/Django/venv/
 /.pnp
 .pnp.js
 
 # media
-/Django/media
-
-# testing
-/coverage
+/media
 
 # production
-/build
-/Node/Frontend/static/
-/Django/Frontend/
+/Frontend/static/
 
 # system-specific project files
-/Django/api/__pycache__/
-/Django/api/management/
-/Django/api/migrations/
-/Node/Frontend/__pycache__/
-/Node/Frontend/migrations/
-/Django/MemeCataloger2/__pycache__/
-/Django/Sockets/__pycache__/
-/Django/Sockets/migrations/
+/api/__pycache__/
+/api/management/
+/api/migrations/
+/Frontend/__pycache__/
+/Frontend/migrations/
+/MemeCataloger2/__pycache__/
+/Sockets/migrations/
 *.pyc
 
 # secrets
@@ -33,17 +25,14 @@ django-db-pw.txt
 node-sudo-pw.txt
 
 # misc
+npm-debug.log*
+/python312/
+/venv/
+.idea/
+
+# Do these exist on this project?
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-/Frontend/static/Frontend/
-/media/images/
-/python312/
-/venv/
-.idea/*
