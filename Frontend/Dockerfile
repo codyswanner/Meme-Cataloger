@@ -1,4 +1,4 @@
-FROM node
+FROM node:lts-slim
 
 RUN apt-get update \
 	&& apt-get upgrade -y \
@@ -7,7 +7,6 @@ RUN apt-get update \
 # Create a non-privileged user to run processes
 ARG UID=10001
 RUN useradd -m --uid "${UID}" front-runner
-RUN --mount=type=secret,id=node-sudo-pw echo "front-runner:$(cat /run/secrets/node-sudo-pw)" | chpasswd
 RUN usermod -aG sudo front-runner
 
 # Create a sudoers configuration file in /etc/sudoers.d/
@@ -17,9 +16,10 @@ RUN echo 'front-runner localhost=(root) NOPASSWD: /usr/local/bin/npm' > /etc/sud
 
 COPY . /home/front-runner/
 
-WORKDIR /home/front-runner/Frontend
-RUN sudo /usr/local/bin/npm install
+WORKDIR /home/front-runner/
+RUN npm install
 
 VOLUME /home/front-runner/src
+VOLUME /home/front-runner/static
 
 CMD ["bash", "-c", "npm run dev"]
