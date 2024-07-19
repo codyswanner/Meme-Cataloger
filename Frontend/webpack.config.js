@@ -2,7 +2,10 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    main: "./src/index.js",
+    whatAboutSecondScript: "./src/Thumbnail.js",
+  },
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
     filename: "[name].js",

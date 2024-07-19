@@ -18,4 +18,7 @@ from django.http import HttpRequest, HttpResponse
 # For details, see https://docs.djangoproject.com/en/5.0/howto/csrf/
 @ensure_csrf_cookie
 def index(request: HttpRequest) -> HttpResponse:
-    return render(request, 'Frontend/index.html')
+    return render(request, 'frontend/index.html')
+
+def imageView(request: HttpRequest) -> HttpResponse:
+    return render(request, 'frontend/image_view.html')
