@@ -7,7 +7,7 @@ services:
       - db-root-pw
       - django-db-pw
     environment:
-      MYSQL_ROOT_PASSWORD: db-root-pw
+      MYSQL_ROOT_PASSWORD: /run/secrets/db-root-pw
       MYSQL_DATABASE: memecataloger
       MYSQL_USER: django
       MYSQL_PASSWORD_FILE: /run/secrets/django-db-pw
@@ -29,10 +29,9 @@ services:
   node:
     build:
       context: ./Frontend
-      secrets:
-        - "node-sudo-pw"
     volumes:
-      - ./Frontend/:/home/front-runner/Frontend/:rshared
+      - ./Frontend/src:/home/front-runner/src:rshared
+      - ./Frontend/static:/home/front-runner/static:rshared
   
   server:
     build:
@@ -64,5 +63,3 @@ secrets:
     file: ./django-db-pw.txt
   db-root-pw:
     file: ./db-pw.txt
-  node-sudo-pw:
-    file: ./node-sudo-pw.txt
