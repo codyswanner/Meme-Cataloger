@@ -26,7 +26,7 @@ function MainContentArea() {
 
   return (
     <div className='flex-container'>
-      <ImageList variant='masonry' cols={4} gap={4}> {/* Future: change cols based on screen width */}
+      <ImageList variant='masonry' cols={3} gap={4}> {/* Future: change cols based on screen width */}
         {appData[0].map((pic) => { // appData[0] is the image array
           return (
             <ImageListItem key={pic.id}>
