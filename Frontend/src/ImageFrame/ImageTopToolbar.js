@@ -18,7 +18,7 @@ import ImageDataContext from '../SupportingModules/ImageDataContext';
  * @returns The ImageTopToolbar component to be rendered in the app.
  */
 function ImageTopToolbar(props) {
-  const imageData = useContext(ImageDataContext)
+  const imageData = useContext(ImageDataContext);
   const imageId = imageData['id'];
   const imageDescription = imageData['description'];
   
