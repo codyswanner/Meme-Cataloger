@@ -26,12 +26,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 	&& pip install --root-user-action=ignore mysqlclient \
 	&& pip install --root-user-action=ignore -r requirements.txt
 
-VOLUME /home/django-server/Frontend/src
-VOLUME /home/django-server/MemeCataloger2/
-VOLUME /home/django-server/api/
-VOLUME /home/django-server/Sockets/
-
 WORKDIR /home/django-server/
+USER django-server
 
 # Expose the port that the application listens on
 EXPOSE 8000

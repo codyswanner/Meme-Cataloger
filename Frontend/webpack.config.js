@@ -4,7 +4,7 @@ const webpack = require("webpack");
 module.exports = {
   entry: {
     main: "./src/index.js",
-    whatAboutSecondScript: "./src/Thumbnail.js",
+    imageView: "./src/ImageViewIndex.js",
   },
   output: {
     path: path.resolve(__dirname, "./static/frontend"),

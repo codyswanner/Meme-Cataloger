@@ -58,9 +58,10 @@ const formatTags = (imageTags, imageId) => {
  * @returns The ImageBottomToolbar component to be rendered in the app.
  */
 function ImageBottomToolbar(props) {
-  const imageData = useContext(ImageDataContext);
+  const imageData = useContext(ImageDataContext)
   const imageId = imageData['id'];
   const imageTags = imageData['imageTags'];
+  console.log(imageTags);
 
   return(
     <Toolbar sx={[props.toolbarStyles, { bottom: 6.5 }]}>

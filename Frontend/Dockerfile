@@ -17,9 +17,8 @@ RUN echo 'front-runner localhost=(root) NOPASSWD: /usr/local/bin/npm' > /etc/sud
 COPY . /home/front-runner/
 
 WORKDIR /home/front-runner/
+
 RUN npm install
 
-VOLUME /home/front-runner/src
-VOLUME /home/front-runner/static
-
+# USER front-runner
 CMD ["bash", "-c", "npm run dev"]
