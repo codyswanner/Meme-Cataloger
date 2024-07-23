@@ -1,5 +1,7 @@
 import React from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import filterSocket from '../SupportingModules/FilterSocket';
 
@@ -34,10 +36,16 @@ const handleChange = (props, event) => {
  * @returns The FilterCheckbox component to be rendered in the app.
  */
 function FilterCheckbox(props) {
+    const theme = useTheme();
+    const largeScreen = useMediaQuery(theme.breakpoints.up('md'));
+    const largeScreenStyle = {transform: "scale(1.15)", margin: "0 0 0 3%"};
+    const smallScreenStyle = {transform: "scale(1.75)", margin: "0 1% 0 2.5%"};
+
     return(
-        <FormControlLabel control={<Checkbox/>}
+        <FormControlLabel control={<Checkbox style={ largeScreen ? largeScreenStyle : smallScreenStyle }/>}
         label={props.text}
-        sx={{ width: 1 }} // Future: Change with screen width
+        componentsProps={{ typography: {fontSize: {'xs': 40, 'md': 25}}}}
+        sx = {{ width: 1 }} // ensures that one item takes up one row
         onChange={(event) => handleChange(props, event)}/>
     );
 };
