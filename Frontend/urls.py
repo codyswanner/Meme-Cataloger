@@ -9,4 +9,5 @@ from . import views
 app_name: str = 'Frontend'
 urlpatterns: list = [
     path('', views.index, name="index"),
+    path('image/<int:image_id>', views.imageView, name="imageView")
 ]

@@ -8,6 +8,8 @@ import axios from 'axios';
  */
 async function ApiCall() {
 
+  axios.defaults.baseURL = window.location.origin
+
   const fetchImages = async () => {
     // Fetch Image data from API/backend
     const response = await axios.get('/api/image');

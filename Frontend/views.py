@@ -19,3 +19,6 @@ from django.http import HttpRequest, HttpResponse
 @ensure_csrf_cookie
 def index(request: HttpRequest) -> HttpResponse:
     return render(request, 'Frontend/index.html')
+
+def imageView(request: HttpRequest, image_id: int) -> HttpResponse:
+    return render(request, 'Frontend/image_view.html')
