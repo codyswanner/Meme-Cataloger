@@ -37,7 +37,8 @@ function FilterCheckbox(props) {
     return(
         <FormControlLabel control={<Checkbox/>}
         label={props.text}
-        sx={{ width: 1 }} // Future: Change with screen width
+        componentsProps={{ typography: {fontSize: {'xs': 40, 'md': 25}}}}
+        sx = {{ width: 0.98 }} // ensures that one item takes up one row
         onChange={(event) => handleChange(props, event)}/>
     );
 };
