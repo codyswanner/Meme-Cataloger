@@ -13,16 +13,26 @@ import LeftDrawer from './LeftDrawer/LeftDrawer';
  * @returns The ContentFrame component to be rendered in the app.
  */
 function ContentFrame() {
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [isClosingDrawer, setIsClosingDrawer] = React.useState(false);
+
     return (
         <Box sx={{ display: 'flex' }}>
             {/* Provided by MUI Material for basic styling */}
             <CssBaseline />
 
             {/* Navigation banner/AppBar at top of the page */}
-            <TopAppBar/>
+            <TopAppBar
+                drawerOpen={drawerOpen}
+                setDrawerOpen={setDrawerOpen}
+                setIsClosingDrawer={setIsClosingDrawer}/>
 
             {/* Drawer on left side, holds tag filter options */}
-            <LeftDrawer />
+            <LeftDrawer
+                drawerOpen={drawerOpen}
+                setDrawerOpen={setDrawerOpen}
+                isClosingDrawer={isClosingDrawer}
+                setIsClosingDrawer={setIsClosingDrawer}/>
 
             {/* Main content area */}
             <Box component="main" sx={{ flexGrow: 1 }}>
