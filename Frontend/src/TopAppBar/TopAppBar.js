@@ -40,10 +40,11 @@ function TopAppBar(props) {
                     color="inherit"
                     aria-label="open drawer"
                     edge="start"
+                    size="large"
                     onClick={handleDrawerToggle}
-                    sx={{ mr: 2, display: { md: 'none' } }}
+                    sx={{ mr: 2, display: { md: 'none' }, fontSize:'5em' }}
                 >
-                    <MenuIcon />
+                    <MenuIcon fontSize="inherit"/>
                 </IconButton>
                 <Typography variant='h5' noWrap component='div'>
                     Meme-opolis

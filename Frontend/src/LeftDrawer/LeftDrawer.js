@@ -16,7 +16,6 @@ function DrawerContents() {
 
     return (
         <>
-        <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
         <Box sx={{ overflow: 'auto' }}>
             <List> {/* List tags available for filtering */}
                 {tagsList.map((tag) => {
@@ -69,6 +68,7 @@ function LeftDrawer(props) {
                 marginRight: '0.5%',
                 display: { xs: 'none', md: 'block' }
             }}>
+            <Toolbar/> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
             <DrawerContents />
         </Drawer>
 
@@ -89,6 +89,7 @@ function LeftDrawer(props) {
                 marginRight: '0.5%',
                 display: { xs: 'block', md: 'none' }  }}
         >
+            <Toolbar sx={{ height: '6.5em' }}/> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
             <DrawerContents/>
         </Drawer>
         </>
