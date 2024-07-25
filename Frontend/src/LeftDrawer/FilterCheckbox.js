@@ -45,7 +45,7 @@ function FilterCheckbox(props) {
         <FormControlLabel control={<Checkbox style={ largeScreen ? largeScreenStyle : smallScreenStyle }/>}
         label={props.text}
         componentsProps={{ typography: {fontSize: {'xs': 40, 'md': 25}}}}
-        sx = {{ width: 1 }} // ensures that one item takes up one row
+        sx = {{ width: 0.98 }} // ensures that one item takes up one row
         onChange={(event) => handleChange(props, event)}/>
     );
 };
