@@ -28,7 +28,6 @@ function TopAppBar(props) {
 
     const handleDrawerToggle = () => {
         if (!props.isClosingDrawer) {
-            console.log("setting props.drawerOpen to: " + !props.drawerOpen);
             props.setDrawerOpen(!props.drawerOpen);
         };
     };

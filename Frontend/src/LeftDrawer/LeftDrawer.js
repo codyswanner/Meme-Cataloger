@@ -47,12 +47,12 @@ function LeftDrawer(props) {
     const drawerWidth = 240; // Future: Variable based on screen size?
 
     const handleDrawerClose = () => {
-        setIsClosing(true);
-        setMobileOpen(false);
+        setIsClosingDrawer(true);
+        setDrawerOpen(false);
     };
 
     const handleDrawerTransitionEnd = () => {
-        props.setIsClosing(false);
+        props.setIsClosingDrawer(false);
     };
     
     return (
