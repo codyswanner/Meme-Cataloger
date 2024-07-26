@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, CssBaseline, Toolbar } from '@mui/material';
 
+import AppDataContext from './SupportingModules/AppDataContext';
 import TopAppBar from './TopAppBar/TopAppBar';
-import MainContentArea from './MainContentArea';
 import LeftDrawer from './LeftDrawer/LeftDrawer';
+import VirtualizedImageList from './VirtualizedImageList';
 
 
 /**
@@ -13,6 +14,7 @@ import LeftDrawer from './LeftDrawer/LeftDrawer';
  * @returns The ContentFrame component to be rendered in the app.
  */
 function ContentFrame() {
+    const appData = useContext(AppDataContext);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [isClosingDrawer, setIsClosingDrawer] = React.useState(false);
 
@@ -37,7 +39,9 @@ function ContentFrame() {
             {/* Main content area */}
             <Box component="main" sx={{ flexGrow: 1 }}>
                 <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
-                <MainContentArea />
+                <div className='flex-container'>
+                    <VirtualizedImageList imageList={appData[0]}/>
+                </div>
             </Box>
         </Box>
     );
