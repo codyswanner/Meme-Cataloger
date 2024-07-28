@@ -61,7 +61,7 @@ const ItemWrapper = ({ children, ...props }) => (
 export default function VirtualizedImageList(props) {
   return (
       <VirtuosoGrid
-        style={{ height: 500 }}
+        style={{ height: "100vh" }}
         totalCount={props.imageList.length}
         components={gridComponents}
         itemContent={(index) => 
