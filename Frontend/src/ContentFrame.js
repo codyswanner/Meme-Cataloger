@@ -4,7 +4,7 @@ import { Box, CssBaseline, Toolbar } from '@mui/material';
 import AppDataContext from './SupportingModules/AppDataContext';
 import TopAppBar from './TopAppBar/TopAppBar';
 import LeftDrawer from './LeftDrawer/LeftDrawer';
-import VirtualizedImageList from './VirtualizedImageList';
+import VirtuosoGridWrapper from './VirtualizedImageList';
 
 
 /**
@@ -40,7 +40,7 @@ function ContentFrame() {
             <Box component="main" sx={{ flexGrow: 1 }}>
                 <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
                 <div className='flex-container'>
-                    <VirtualizedImageList imageList={appData[0]}/>
+                    <VirtuosoGridWrapper imageList={appData[0]}/>
                 </div>
             </Box>
         </Box>
