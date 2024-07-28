@@ -147,15 +147,26 @@ function FileUploadForm(props) {
                     ))}
                 </List>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button
-                        type='submit'
-                        onClick={(e) => handleUpload(
-                            e, props.files, props.setFiles, props.setUploadFailed
-                        )}
-                    >
-                        Upload
-                    </Button>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <Button
+                            type='submit'
+                            variant='contained'
+                            onClick={(e) => handleUpload(
+                                e, props.files, props.setFiles, props.setUploadFailed
+                            )}
+                            sx={{ width: '120px' }}
+                        >
+                            Upload
+                        </Button>
+                    </div>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <Button
+                            onClick={() => props.setFiles([])}
+                            sx={{ width: '120px' }}>
+                            Clear all
+                        </Button>
+                    </div>
                 </Box>
                 <CSRFToken/>
             </Box>
