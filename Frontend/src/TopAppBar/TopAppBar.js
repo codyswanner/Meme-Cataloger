@@ -1,5 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import UploadIcon from '@mui/icons-material/Upload'
 import MenuIcon from '@mui/icons-material/Menu'
 
@@ -17,6 +19,23 @@ function TopAppBar(props) {
     const uploadFilesStates = useContext(UploadFilesContext);
     const uploadDialogOpen = uploadFilesStates[2];
     const setUploadDialogOpen = uploadFilesStates[3];
+    const theme = useTheme();
+    const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [uploadButtonSize, setUploadButtonSize] = useState('100%');
+    const [titleSize, setTitleSize] = useState("120%");
+
+    const handleResize = () => {
+        if (smallScreen) {
+        console.log("Detected small screen!");
+        setUploadButtonSize('1.6em');  // Larger button for mobile/small screens
+        setTitleSize('2em');
+        } else {
+        setUploadButtonSize('100%'); // Default size button otherwise
+        setTitleSize("150%");
+        };
+    };
+
+    useEffect(() => {handleResize();}, [smallScreen])
     
     const handleOpenUpload = () => {
         setUploadDialogOpen(true);
@@ -28,7 +47,6 @@ function TopAppBar(props) {
 
     const handleDrawerToggle = () => {
         if (!props.isClosingDrawer) {
-            console.log("setting props.drawerOpen to: " + !props.drawerOpen);
             props.setDrawerOpen(!props.drawerOpen);
         };
     };
@@ -46,14 +64,13 @@ function TopAppBar(props) {
                 >
                     <MenuIcon fontSize="inherit"/>
                 </IconButton>
-                <Typography variant='h5' noWrap component='div'>
+                <Typography variant='h5' noWrap component='div' sx={{ fontSize: titleSize }}>
                     Meme-opolis
                 </Typography>
                 <Button
-                    component="label"
                     variant="contained"
-                    sx={{marginLeft: "auto"}}
-                    startIcon={<UploadIcon/>}
+                    sx={{marginLeft: "auto", fontSize: uploadButtonSize}}
+                    startIcon={<UploadIcon fontSize="inherit"/>}
                     onClick={handleOpenUpload}>
                     Upload
                 </Button>
