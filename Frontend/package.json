@@ -35,6 +35,7 @@
     "react-scripts": "^5.0.1",
     "react-window": "^1.8.10",
     "url-loader": "^4.1.1",
+    "react-virtuoso": "^4.7.13",
     "webpack": "^5.88.2"
   },
   "devDependencies": {
