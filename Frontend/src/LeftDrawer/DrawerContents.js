@@ -32,42 +32,73 @@ export default function DrawerContents() {
         setEditTags(!editTags);
     };
 
-    if (!editTags) {
+    if (!editTags) {  // Use FilterCheckbox, not TagEditor
         return (
             <Box sx={{ overflow: 'auto' }}>
                 <List> {/* List tags available for filtering */}
                     {tagsList.map((tag) => {
                         const tagId = tag.id;
                         const tagName = tag.name;
-                        return(<FilterCheckbox data-testid={'filter-checkbox'} text={tagName} key={tagId} tagId={tagId}/>)
+                        return(<FilterCheckbox  // This one uses FilterCheckbox
+                            data-testid={'filter-checkbox'}
+                            text={tagName}
+                            key={tagId}
+                            tagId={tagId}/>)
                     })}
                 </List>
                 <Divider/>
                 <List> {/* Misc non-tag/filter options */}
-                    <FeatureButton name="Archive" startIcon={<ArchiveIcon/>} action={handleArchiveButtonClick} active={false}/>
-                    <FeatureButton name="Trash" startIcon={<DeleteIcon/>} action={handleTrashButtonClick} active={false}/>
-                    <FeatureButton name="Edit Tags" startIcon={<EditIcon/>} action={handleEditTagsButtonClick} active={editTags}/>
+                    <FeatureButton
+                        name="Archive"
+                        startIcon={<ArchiveIcon/>}
+                        action={handleArchiveButtonClick}
+                        active={false}/>
+                    <FeatureButton
+                        name="Trash"
+                        startIcon={<DeleteIcon/>}
+                        action={handleTrashButtonClick}
+                        active={false}/>
+                    <FeatureButton
+                        name="Edit Tags"
+                        startIcon={<EditIcon/>}
+                        action={handleEditTagsButtonClick}
+                        active={editTags}/>
                 </List>
             </Box>
         );
-    } else if (editTags) {
+    } else if (editTags) {  // Use TagEditor, not FilterCheckbox
         return (
             <Box sx={{ overflow: 'auto' }}>
                 <List> {/* List tags available for filtering */}
                     {tagsList.map((tag) => {
                         const tagId = tag.id;
                         const tagName = tag.name;
-                        return(<TagEditor data-testid={'tag-editor'} text={tagName} key={tagId} tagId={tagId}/>)
+                        return(<TagEditor  // This one uses TagEditor
+                            data-testid={'tag-editor'}
+                            text={tagName}
+                            key={tagId}
+                            tagId={tagId}/>)
                     })}
                 </List>
                 <Divider/>
                 <List> {/* Misc non-tag/filter options */}
-                    <FeatureButton name="Archive" startIcon={<ArchiveIcon/>} action={handleArchiveButtonClick} active={false}/>
-                    <FeatureButton name="Trash" startIcon={<DeleteIcon/>} action={handleTrashButtonClick} active={false}/>
-                    <FeatureButton name="Edit Tags" startIcon={<EditIcon/>} action={handleEditTagsButtonClick} active={editTags}/>
+                    <FeatureButton
+                        name="Archive"
+                        startIcon={<ArchiveIcon/>}
+                        action={handleArchiveButtonClick}
+                        active={false}/>
+                    <FeatureButton
+                        name="Trash"
+                        startIcon={<DeleteIcon/>}
+                        action={handleTrashButtonClick}
+                        active={false}/>
+                    <FeatureButton
+                        name="Edit Tags"
+                        startIcon={<EditIcon/>}
+                        action={handleEditTagsButtonClick}
+                        active={editTags}/>
                 </List>
             </Box> 
         );
     };
-    
 };
