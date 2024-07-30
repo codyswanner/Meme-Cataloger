@@ -1,42 +1,8 @@
-import React, { useContext } from 'react';
-import { Box, Drawer, Toolbar, List, Divider, ListItemButton, ListItemText } from '@mui/material';
+import React from 'react';
+import { Drawer, Toolbar } from '@mui/material';
 
-import AppDataContext from '../SupportingModules/AppDataContext';
-import FilterCheckbox from './FilterCheckbox';
+import DrawerContents from './DrawerContents';
 
-
-function handleButtonClick() {
-    // handle click for Archive and Trash buttons
-    null;
-};
-
-function DrawerContents() {
-    const appData = useContext(AppDataContext);
-    let tagsList = appData[1];
-
-    return (
-        <>
-        <Box sx={{ overflow: 'auto' }}>
-            <List> {/* List tags available for filtering */}
-                {tagsList.map((tag) => {
-                    const tagId = tag.id;
-                    const tagName = tag.name;
-                    return(<FilterCheckbox data-testid={'filter-checkbox'} text={tagName} key={tagId} tagId={tagId}/>)
-                })}
-            </List>
-            <Divider/>
-            <List> {/* Misc non-tag/filter options */}
-                {['Archive', 'Trash'].map((text, index) => (
-                    // handleButtonClick not implemented for Archive and Trash features yet
-                    <ListItemButton key={index} onClick={() => handleButtonClick(text)}>
-                        <ListItemText primary={text} primaryTypographyProps={{fontSize: {'xs': 40, 'md': 25}}}/>
-                    </ListItemButton>
-                ))}
-            </List>
-        </Box>
-        </>
-    );
-};
 
 /**
  * LeftDrawer contains checkboxes to select tags for image filtering.
@@ -44,7 +10,7 @@ function DrawerContents() {
  * @returns The LeftDrawer component to be rendered in the app.
  */
 function LeftDrawer(props) {
-    const drawerWidth = 240; // Future: Variable based on screen size?
+    const drawerWidth = 240;
 
     const handleDrawerClose = () => {
         setIsClosingDrawer(true);

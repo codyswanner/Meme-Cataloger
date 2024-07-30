@@ -172,6 +172,23 @@ function useFilterSocket(apiData) {
         setAppData(modifiedAppData);
     };
 
+    function handleTagUpdated (response) {
+        const modifiedAppData = {...appData}; // Create a mutable copy
+
+        // Find the tag
+        const tagArray = modifiedAppData[1];
+        const targetTag = tagArray.find(function(item) {
+            return item.id == response.id
+        });
+        // Update the tag
+        const targetIndex = tagArray.indexOf(targetTag);
+        tagArray[targetIndex]['name'] = response.name;
+        
+        // push updates to state
+        modifiedAppData[1] = tagArray;
+        setAppData(modifiedAppData);
+    }
+
     /**
      * Displays a message from WebSockets to the console.
      * 
@@ -212,8 +229,12 @@ function useFilterSocket(apiData) {
                 case "imageDeleted":
                     handleImageDeleted(response);
                     break;
+                case "tagUpdated":
+                    handleTagUpdated(response);
+                    break;
                 default:
                     console.log("Unexpected websocket message type received!");
+                    console.log(response);  // Helps to know what is unexpected
                 };
         };
 
