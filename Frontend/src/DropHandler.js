@@ -13,31 +13,31 @@ function DropHandler(props) {
 
     const handleDrop = (e) => {
         e.preventDefault(); // Allow drop on page
-        console.log("Item dropped!");
         setModalActive(false);
         setUploadDialogOpen(true);
 
         const dt = e.dataTransfer;
-        const isFile = dt.types.includes('application/x-moz-file') | dt.types.includes('Files');
+        const isFile = dt.types.includes('application/x-moz-file')
+            | dt.types.includes('Files');
         if (isFile) { // Check dataTransfer type for files
             if (dt.files) { // If there are files, add them to state
                 const data = [];
                 for (const file of dt.files) {
                     data.push(file);
-                }
+                };
                 setFiles([...files, ...data]);
             };
         };
-    }
+    };
 
     const handleDragOver = (e) => {
         e.preventDefault(); // Allow dragover on page
         setModalActive(true); // Activate dragOver modal
-    }
+    };
 
     const handleDragLeave = (e) => {
         setModalActive(false); // Disappear dragOver modal
-    }
+    };
 
     const handleActiveModal = () => {
         const modalStyles = {
@@ -47,20 +47,18 @@ function DropHandler(props) {
         transform: 'translate(-50%, -50%)',
         background: '#cccccc',
         padding: '5%',
-        }
+        };
 
         return(
-            <Modal
-                open={modalActive}
-            >
+            <Modal open={modalActive}>
                 <Box style={modalStyles}>
                     <Typography>
                         Drop to Upload Your Files!
                     </Typography>
                 </Box>
             </Modal>
-        )
-    }
+        );
+    };
 
     return(
         <div
@@ -72,8 +70,7 @@ function DropHandler(props) {
             {/* render the other components */}
             {props.children}
         </div>
-    )
-
-}
+    );
+};
 
 export default DropHandler;
