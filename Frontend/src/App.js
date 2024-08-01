@@ -29,6 +29,16 @@ const theme = createTheme({
   }
 });
 
+export function AppContents() {
+  return(
+    <UploadFilesContextProvider>
+      <DropHandler>
+        <ContentFrame />
+      </DropHandler>
+    </UploadFilesContextProvider>
+  );
+};
+
 /**
  * Root component that renders all other components.
  * Activates useFilterSocket hook,
@@ -39,11 +49,12 @@ const theme = createTheme({
  * 
  * @returns The root App component to render all other components.
  */
-function App(props) {
+export default function App(props) {
 
   // useFilterSocket receives messages for updates to appData.
   // appData contains Image, Tag and ImageTag data.
   const appData = useFilterSocket(props.apiData);
+  console.log(props.apiData);
 
   return (
     <>
@@ -51,15 +62,9 @@ function App(props) {
     <ThemeProvider theme={theme}>
       {/* https://react.dev/reference/react/useContext */}
       <AppDataContext.Provider value={appData}>
-      <UploadFilesContextProvider>
-        <DropHandler>
-          <ContentFrame />
-        </DropHandler>
-      </UploadFilesContextProvider>
+        {props.children}
       </AppDataContext.Provider>
     </ThemeProvider>
     </>
   );
-}
-
-export default App;
+};
