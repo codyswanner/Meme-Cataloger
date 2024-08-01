@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Box, List, Divider } from '@mui/material';
+import { Box, Divider, IconButton, List, Toolbar, Typography } from '@mui/material';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -35,6 +35,20 @@ export default function DrawerContents() {
     if (!editTags) {  // Use FilterCheckbox, not TagEditor
         return (
             <Box sx={{ overflow: 'auto' }}>
+                <Toolbar sx={{ marginTop: {'xs': "5%", 'md': 0}}}>
+                    <Typography
+                        sx={{ fontSize: {'xs': 40, 'md': 25} }}>
+                        Filter by Tag
+                    </Typography>
+                    <IconButton
+                        onClick={handleEditTagsButtonClick}
+                        sx={{
+                            marginLeft: 'auto',
+                            transform: {'xs': 'scale(1.7)', 'md': 'scale(1.15)'}
+                        }}>
+                        <EditIcon/>
+                    </IconButton>
+                </Toolbar>
                 <List> {/* List tags available for filtering */}
                     {tagsList.map((tag) => {
                         const tagId = tag.id;
@@ -58,17 +72,26 @@ export default function DrawerContents() {
                         startIcon={<DeleteIcon/>}
                         action={handleTrashButtonClick}
                         active={false}/>
-                    <FeatureButton
-                        name="Edit Tags"
-                        startIcon={<EditIcon/>}
-                        action={handleEditTagsButtonClick}
-                        active={editTags}/>
                 </List>
             </Box>
         );
     } else if (editTags) {  // Use TagEditor, not FilterCheckbox
         return (
             <Box sx={{ overflow: 'auto' }}>
+                <Toolbar sx={{ marginTop: {'xs': "5%", 'md': 0}}}>
+                    <Typography
+                        sx={{ fontSize: {'xs': 40, 'md': 25} }}>
+                        Filter by Tag
+                    </Typography>
+                    <IconButton
+                        onClick={handleEditTagsButtonClick}
+                        sx={{
+                            marginLeft: 'auto',
+                            transform: {'xs': 'scale(1.7)', 'md': 'scale(1.15)'}
+                        }}>
+                        <EditIcon/>
+                    </IconButton>
+                </Toolbar>
                 <List> {/* List tags available for filtering */}
                     {tagsList.map((tag) => {
                         const tagId = tag.id;
@@ -92,11 +115,6 @@ export default function DrawerContents() {
                         startIcon={<DeleteIcon/>}
                         action={handleTrashButtonClick}
                         active={false}/>
-                    <FeatureButton
-                        name="Edit Tags"
-                        startIcon={<EditIcon/>}
-                        action={handleEditTagsButtonClick}
-                        active={editTags}/>
                 </List>
             </Box> 
         );
