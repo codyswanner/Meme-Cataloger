@@ -38,7 +38,7 @@ function ContentFrame() {
 
             {/* Main content area */}
             <Box component="main" sx={{ flexGrow: 1 }}>
-                <Toolbar /> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
+                <Toolbar />{/* Hides under AppBar, push below to open space */}
                 <div className='flex-container'>
                     <VirtuosoGridWrapper imageList={appData[0]}/>
                 </div>

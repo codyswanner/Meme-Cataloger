@@ -354,7 +354,42 @@ class FilterConsumer(WebsocketConsumer):
         image_object: Image = Image.objects.get(id=image_id)
         image_object.description = new_description
         image_object.save()
-        print(f"Description for image %s update to %s" % (image_id, new_description))
+        print(f"Description for image %s updated to %s" % (image_id, new_description))
+
+    @staticmethod
+    def update_tag_name(text_data_json: dict) -> dict:
+        """Updates name of specified tag.
+        
+        Parameters
+        ----------
+        text_data_json: dict
+            Websocket JSON message, translated to a Python dict by receive method.
+            For update_tag_name, expected structure is:
+            {'type': 'updateTagName', 
+            'tagId': (numerical tagId, represented as a str),
+            'name': (str)
+            }
+
+        Returns
+        -------
+        WebSocket message with the following structure:
+            {'type': 'tagUpdated', 'id': tag_id, 'name': new_name}
+          
+        """
+        
+        tag_id: str = text_data_json['tagId']
+        new_name: str = text_data_json['name']
+        tag_object: Tag = Tag.objects.get(id=tag_id)
+        tag_object.name = new_name
+        tag_object.save()
+        print(f"Name for tag %s updated to %s" % (tag_id, new_name))
+        response_message = {
+            'type': 'tagUpdated',
+            'id': tag_id,
+            'name': new_name,
+            'owner': tag_object.owner.id
+        }
+        return response_message
 
     def send_response(self, response_message: dict) -> None:
         self.send(text_data=json.dumps(response_message))
@@ -396,5 +431,9 @@ class FilterConsumer(WebsocketConsumer):
                 self.send_response(response_message)
             case 'updateDescription':
                 self.update_description(text_data_json)  # no response needed
+            case 'updateTagName':
+                response_message = self.update_tag_name(text_data_json)
+                self.send_response(response_message)
             case _:
                 print("Unexpected websocket message type!")
+                print(text_data_json)
