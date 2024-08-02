@@ -51,7 +51,6 @@ function LeftDrawer(props) {
             ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
             }}
-            style={{ drawerStyles }}
             sx={[drawerStyles('temporary'), {display: { xs: 'block', md: 'none' }}]}>
             {/* Toolbar hides under AppBar, pushes below into open space */}
             <Toolbar sx={{ height: '6.5em' }}/>
