@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, Toolbar } from '@mui/material';
 
-import DrawerContents from './DrawerContents';
+import DrawerModeSwitcher from './DrawerModeSwitcher';
 
 
 /**
@@ -10,7 +10,18 @@ import DrawerContents from './DrawerContents';
  * @returns The LeftDrawer component to be rendered in the app.
  */
 function LeftDrawer(props) {
-    const drawerWidth = 240;
+
+    const drawerStyles = (style) => {
+        const widthChooser = style=='permanent' ? 240: "100%"
+        return {
+            backgroundColor: '#666666',
+            width: widthChooser,
+            flexShrink: 0,
+            ['& .MuiDrawer-paper']:
+                { width: widthChooser, backgroundColor: '#aaaaaa' },
+            marginRight: '0.5%',
+        };
+    };
 
     const handleDrawerClose = () => {
         setIsClosingDrawer(true);
@@ -23,22 +34,15 @@ function LeftDrawer(props) {
     
     return (
         <>
-        {/* Permanent-style drawer for large screens -- hides on small screens */}
+        {/* Permanent drawer for large screens -- hides on small screens */}
         <Drawer
             variant='permanent'
-            sx={{
-                backgroundColor: '#666666',
-                width: drawerWidth,
-                flexShrink: 0,
-                ['& .MuiDrawer-paper']: { width: drawerWidth, backgroundColor: '#aaaaaa' },
-                marginRight: '0.5%',
-                display: { xs: 'none', md: 'block' }
-            }}>
-            <Toolbar/> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
-            <DrawerContents />
+            sx={[drawerStyles('permanent'), {display: { xs: 'none', md: 'block' }}]}>
+            <Toolbar/> {/* Hides under AppBar, push below into open space */}
+            <DrawerModeSwitcher />
         </Drawer>
 
-        {/* Temporary/hidable drawer for small screens -- hides on large screens */}
+        {/* Hidable drawer for small screens -- hides on large screens */}
         <Drawer
             variant='temporary'
             open={props.drawerOpen}
@@ -47,16 +51,11 @@ function LeftDrawer(props) {
             ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
             }}
-            sx={{
-                backgroundColor: '#666666',
-                width: '100%',
-                flexShrink: 0,
-                ['& .MuiDrawer-paper']: { width: '100%', backgroundColor: '#aaaaaa' },
-                marginRight: '0.5%',
-                display: { xs: 'block', md: 'none' }  }}
-        >
-            <Toolbar sx={{ height: '6.5em' }}/> {/* Empty toolbar hides under fixed position AppBar, pushes elements into visible space */}
-            <DrawerContents/>
+            style={{ drawerStyles }}
+            sx={[drawerStyles('temporary'), {display: { xs: 'block', md: 'none' }}]}>
+            {/* Toolbar hides under AppBar, pushes below into open space */}
+            <Toolbar sx={{ height: '6.5em' }}/>
+            <DrawerModeSwitcher />
         </Drawer>
         </>
     );
