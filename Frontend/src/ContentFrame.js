@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Box, CssBaseline, Toolbar } from '@mui/material';
 
-import AppDataContext from './SupportingModules/AppDataContext';
 import TopAppBar from './TopAppBar/TopAppBar';
 import LeftDrawer from './LeftDrawer/LeftDrawer';
 import VirtuosoGridWrapper from './VirtualizedImageList';
@@ -14,7 +13,6 @@ import VirtuosoGridWrapper from './VirtualizedImageList';
  * @returns The ContentFrame component to be rendered in the app.
  */
 function ContentFrame() {
-    const appData = useContext(AppDataContext);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [isClosingDrawer, setIsClosingDrawer] = React.useState(false);
 
@@ -40,7 +38,7 @@ function ContentFrame() {
             <Box component="main" sx={{ flexGrow: 1 }}>
                 <Toolbar />{/* Hides under AppBar, push below to open space */}
                 <div className='flex-container'>
-                    <VirtuosoGridWrapper imageList={appData[0]}/>
+                    <VirtuosoGridWrapper/>
                 </div>
             </Box>
         </Box>

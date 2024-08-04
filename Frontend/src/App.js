@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
@@ -43,7 +43,19 @@ function App(props) {
 
   // useFilterSocket receives messages for updates to appData.
   // appData contains Image, Tag and ImageTag data.
-  const appData = useFilterSocket(props.apiData);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isClosingDrawer, setIsClosingDrawer] = useState(false);
+  const [editTags, setEditTags] = useState(false);
+  const rawAppData = {
+    ...props.apiData,
+    drawerOpen: drawerOpen,
+    setDrawerOpen: setDrawerOpen,
+    isClosingDrawer: isClosingDrawer,
+    setIsClosingDrawer: setIsClosingDrawer,
+    editTags: editTags,
+    setEditTags: setEditTags
+  };
+  const appData = useFilterSocket(rawAppData);
 
   return (
     <>
@@ -53,7 +65,7 @@ function App(props) {
       <AppDataContext.Provider value={appData}>
       <UploadFilesContextProvider>
         <DropHandler>
-          <ContentFrame />
+          <ContentFrame setDrawerOpen={setDrawerOpen} />
         </DropHandler>
       </UploadFilesContextProvider>
       </AppDataContext.Provider>

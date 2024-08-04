@@ -16,7 +16,7 @@ export default function StandardDrawerContents(props) {
         <Box sx={{ overflow: 'auto' }}>
             <DrawerHeader handleEdit={props.handleEdit}/>
             <List> {/* List tags available for filtering */}
-                {appData[1].map((tag) => {
+                {appData.tagData.map((tag) => {
                     const tagId = tag.id;
                     const tagName = tag.name;
                     return(<FilterCheckbox

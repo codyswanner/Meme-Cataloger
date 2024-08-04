@@ -12,19 +12,27 @@ import filterSocket from './FilterSocket';
  * deleting images as backend requests
  * and displaying simple messages sent over websocket to the console.
  * 
- * @param {Array} apiData initial data from the API.
- * @param {Array} apiData[0] holds Image data; id, src, description, imageTags.
- * @param {Array} apiData[1] holds Tag data; id, name, owner.
- * @param {Array} apiData[2] holds ImageTag data; id, image_id, tag_id.
+ * @param {object} rawAppData contains starting data and properties.
+ * rawAppData = {
+      imageData: {Array},
+      tagData: {Array},
+      imageTagData: {Array},
+      drawerOpen: {useState(false)},
+      setDrawerOpen: {useState(false)},
+      isClosingDrawer: {useState(false)},
+      setIsClosingDrawer: {useState(false)},
+      editTags: {useState(false)},
+      setEditTags: {useState(false)}
+   }
  *  "ImageTag" refers to an association between an image and a tag.
  *  e.g., ImageTag: {id: 3, image_id: 12, tag_id: 7}
  *  represents that image 12 has tag 7 applied to it.
  * 
- * @returns updated appData array, which mirrors apiData in structure.
+ * @returns updated appData array according to messages from backend.
  */
-function useFilterSocket(apiData) {
-    // appData contains Image, Tag and ImageTag data
-    const [appData, setAppData] = useState(apiData);
+function useFilterSocket(rawAppData) {
+    // create appData object to be returned (after modifications)
+    const [appData, setAppData] = useState(rawAppData);
     // activeFilters refers to filters for image search
     const [activeFilters, setActiveFilters] = useState([]);
     
@@ -68,17 +76,16 @@ function useFilterSocket(apiData) {
     function handleApplyFilters (response) {
         if (response.results.length == 0) {
             console.log("No matching photos!");
-            // apiData[0] contains image data;
-            // empty set represents no images rendered.
-            setAppData([[], apiData[1], apiData[2]]);
+            // empty array represents no images rendered.
+            setAppData({...rawAppData, imageData: []});
         } else {
             let imagesToRender = [];
-            // apiData[0] contains image data;
-            // sort according to response data.
-            apiData[0].forEach(image => {
+            // populate according to response data
+            rawAppData.imageData.forEach(image => {
                 if (response.results.includes(image.id)) {imagesToRender.push(image)};
             });
-            const newData = [imagesToRender, apiData[1], apiData[2]];
+            // const newData = [imagesToRender, apiData[1], apiData[2]];
+            const newData = {...rawAppData, imageData: imagesToRender};
             setAppData(newData);
         };
     }
@@ -97,15 +104,15 @@ function useFilterSocket(apiData) {
     function handleTagAdded (response) {
         const modifiedAppData = {...appData}; // Create a mutable copy
 
-        // Locate relevant object in appData[0] (image data)
-        const findInAppData = (id) => modifiedAppData[0].find(element => element.id == id); 
+        // Locate relevant object in imageData
+        const findInAppData = (id) => modifiedAppData.imageData.find(element => element.id == id); 
         const imageObject = findInAppData(response.imageId);
         // Modify image object to match updates
         imageObject.imageTags.push(response.id);
         
-        // Add imageTag object to appData[2] (imageTag data) to reflect updates
+        // Add imageTag object to imageTagData to reflect updates
         const newImageTag = {'id': response.id, 'image_id': response.imageId, 'tag_id': response.tagId};
-        modifiedAppData[2].push(newImageTag);
+        modifiedAppData.imageTagData.push(newImageTag);
 
         setAppData(modifiedAppData); // push updates to state
     };
@@ -120,14 +127,14 @@ function useFilterSocket(apiData) {
     function handleTagRemoved (response) {
         const modifiedAppData = {...appData}; // Create a mutable copy
 
-        // remove imageTag from image data (modifiedAppData[0])
-        const findImage = (id) => modifiedAppData[0].find(element => element.id == id);
+        // remove imageTag from image data
+        const findImage = (id) => modifiedAppData.imageData.find(element => element.id == id);
         const imageObject = findImage(response.imageId);
         imageObject['imageTags'] = imageObject['imageTags'].filter(function(item) {return item !== response.id})
         
-        // remove imageTag from imageTag data (modifiedAppData[2])
-        let index = modifiedAppData[2].findIndex(element => element.id === response.id);
-        modifiedAppData[2].splice(index, 1);
+        // remove imageTag from imageTagData
+        let index = modifiedAppData.imageTagData.findIndex(element => element.id === response.id);
+        modifiedAppData.imageTagData.splice(index, 1);
 
         setAppData(modifiedAppData);
     };
@@ -139,7 +146,7 @@ function useFilterSocket(apiData) {
             'name': response.name,
             'owner': response.owner
         };
-        modifiedAppData[1].push(newTag);
+        modifiedAppData.tagData.push(newTag);
 
         setAppData(modifiedAppData);
     }
@@ -154,15 +161,15 @@ function useFilterSocket(apiData) {
         const modifiedAppData = {...appData}; // Create a mutable copy
 
         // Delete image from the image array
-        var imageArray = modifiedAppData[0];
+        var imageArray = modifiedAppData.imageData;
         imageArray = imageArray.filter(function(item) {
             return item.id !== response.id
         });
-        modifiedAppData[0] = imageArray;
+        modifiedAppData.imageData = imageArray;
 
         // Delete any tag association records for image
         // (Can this be changed to match the structure of handleTagRemoved?)
-        const imageTagData = modifiedAppData[2];
+        const imageTagData = modifiedAppData.imageTagData;
         for (const [key, value] of Object.entries(imageTagData)) {
             if (value.image_id === response.id) {
                 delete imageTagData[key];
@@ -176,7 +183,7 @@ function useFilterSocket(apiData) {
         const modifiedAppData = {...appData}; // Create a mutable copy
 
         // Find the tag
-        const tagArray = modifiedAppData[1];
+        const tagArray = modifiedAppData.tagData;
         const targetTag = tagArray.find(function(item) {
             return item.id == response.id
         });
@@ -185,7 +192,7 @@ function useFilterSocket(apiData) {
         tagArray[targetIndex]['name'] = response.name;
         
         // push updates to state
-        modifiedAppData[1] = tagArray;
+        modifiedAppData.tagData = tagArray;
         setAppData(modifiedAppData);
     }
 

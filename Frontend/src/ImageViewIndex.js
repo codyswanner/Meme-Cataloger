@@ -18,7 +18,7 @@ const theme = createTheme({
 let apiData = await ApiCall();
 const urlPath = window.location.pathname;
 const imageID = urlPath.match(/\d+/)[0]
-const findImage = (id) => apiData[0].find(element => element.id == id);
+const findImage = (id) => apiData.imageData.find(element => element.id == id);
 const imageObject = findImage(imageID)
 console.log(imageObject);
 

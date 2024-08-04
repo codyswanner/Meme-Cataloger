@@ -10,7 +10,6 @@ import AppDataContext from './SupportingModules/AppDataContext';
 export default function FullScreenPictureFrame(props) {
   const appData = useFilterSocket(props.apiData);
   const imageData = useContext(ImageDataContext);
-  console.log(imageData);
   const toolbarStyles = {
     display: "flex",
     justifyContent: "space-between"
