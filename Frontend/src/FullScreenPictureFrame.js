@@ -22,5 +22,4 @@ export default function FullScreenPictureFrame(props) {
       <ImageBottomToolbar toolbarStyles={toolbarStyles}/>
     </AppDataContext.Provider>
   );
-
 };

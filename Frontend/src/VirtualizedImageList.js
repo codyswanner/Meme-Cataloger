@@ -87,7 +87,7 @@ export default function VirtuosoGridWrapper (props) {
   );
 
   function VirtualizedImageList() {
-    const appData = useContext(AppDataContext);
+    const {appData} = useContext(AppDataContext);
     const imageList = appData.imageData;
 
     return (

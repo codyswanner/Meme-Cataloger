@@ -10,7 +10,7 @@ import DrawerHeader from './DrawerHeader';
 
 
 export default function EditDrawerContents(props) {
-    const appData = useContext(AppDataContext);
+    const {appData} = useContext(AppDataContext);
 
     return(
         <Box sx={{ overflow: 'auto' }}>

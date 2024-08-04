@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 import UploadDialog from './UploadDialog';
 import { UploadFilesContext } from '../SupportingModules/UploadFilesContext';
+import AppDataContext from '../SupportingModules/AppDataContext';
 
 
 /**
@@ -15,7 +16,8 @@ import { UploadFilesContext } from '../SupportingModules/UploadFilesContext';
  * 
  * @returns The TopAppBar component to be rendered in the app.
  */
-function TopAppBar(props) {
+function TopAppBar() {
+    const {appState} = useContext(AppDataContext);
     const uploadFilesStates = useContext(UploadFilesContext);
     const uploadDialogOpen = uploadFilesStates[2];
     const setUploadDialogOpen = uploadFilesStates[3];
@@ -46,8 +48,8 @@ function TopAppBar(props) {
     };
 
     const handleDrawerToggle = () => {
-        if (!props.isClosingDrawer) {
-            props.setDrawerOpen(!props.drawerOpen);
+        if (!appState.isClosingDrawer) {
+            appState.setDrawerOpen(!appState.drawerOpen);
         };
     };
 

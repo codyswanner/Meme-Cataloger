@@ -10,7 +10,7 @@ import DrawerHeader from './DrawerHeader';
 
 
 export default function StandardDrawerContents(props) {
-    const appData = useContext(AppDataContext);
+    const {appData} = useContext(AppDataContext);
 
     return(
         <Box sx={{ overflow: 'auto' }}>
