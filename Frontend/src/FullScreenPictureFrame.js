@@ -18,7 +18,15 @@ export default function FullScreenPictureFrame(props) {
   return (
     <AppDataContext.Provider value={appData}>
       <ImageTopToolbar toolbarStyles={toolbarStyles}/>
-        <img src={imageData.source} style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}/>
+        <img
+          src={imageData.source}
+          style={{
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto",
+            maxWidth: "98%"
+          }}
+        />
       <ImageBottomToolbar toolbarStyles={toolbarStyles}/>
     </AppDataContext.Provider>
   );

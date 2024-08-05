@@ -47,12 +47,12 @@ function Tag(props) {
     );
   } else { // Display the name of the tag that was passed in.
   
-    // appData.imageTagData records relationships between tags and images
+    // imageTagData records relationships between tags and images
     // We know the ID of this relationship, so we can find it
     const imageTag = imageTagData.find(element => element.id === props.imageTag);
     // Then we can narrow that image-to-tag relationship down to just the tag
     const tagId = imageTag['tag_id'];
-    // appdata.tagData matches tag IDs to tag names
+    // tagData matches tag IDs to tag names
     const tagName = tagData.find(tagData => tagData.id === tagId)['name'];
 
     // Custom coloring to improve tag readability on top of the images
