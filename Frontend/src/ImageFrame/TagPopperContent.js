@@ -14,7 +14,7 @@ import ImageDataContext from '../SupportingModules/ImageDataContext';
  */
 function TagPopperContent() {
     const newTagCount = useRef(0); // To keep track of newly created tags
-    const appData = useContext(AppDataContext);
+    const {appData} = useContext(AppDataContext);
     const imageData = useContext(ImageDataContext);
     const imageId = imageData['id'];
     const imageTags = imageData['imageTags'];

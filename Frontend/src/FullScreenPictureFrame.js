@@ -14,9 +14,15 @@ export default function FullScreenPictureFrame(props) {
     display: "flex",
     justifyContent: "space-between"
   };
+  const appState = {
+    // There is no state currently in this part of the app,
+    // but this object is here to mirror the setup found in
+    // App.js that is used for the main page view.
+    // If shared state is introduced, it will go here.
+  }
 
   return (
-    <AppDataContext.Provider value={appData}>
+    <AppDataContext.Provider value={{appData, appState}}>
       <ImageTopToolbar toolbarStyles={toolbarStyles}/>
         <img
           src={imageData.source}
