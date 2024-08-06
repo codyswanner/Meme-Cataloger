@@ -13,17 +13,9 @@ import filterSocket from './FilterSocket';
  * and displaying simple messages sent over websocket to the console.
  * 
  * @param {object} rawAppData contains starting data and properties.
- * rawAppData = {
-      imageData: {Array},
-      tagData: {Array},
-      imageTagData: {Array},
-      drawerOpen: {useState(false)},
-      setDrawerOpen: {useState(false)},
-      isClosingDrawer: {useState(false)},
-      setIsClosingDrawer: {useState(false)},
-      editTags: {useState(false)},
-      setEditTags: {useState(false)}
-   }
+ * @param {Array} rawAppData.imageData contains id, src, desc for each image.
+ * @param {Array} rawAppData.tagData contains id, name, owner of each tag.
+ * @param {Array} rawAppData.imageTagData maps tags to images, and vice versa.
  *  "ImageTag" refers to an association between an image and a tag.
  *  e.g., ImageTag: {id: 3, image_id: 12, tag_id: 7}
  *  represents that image 12 has tag 7 applied to it.
