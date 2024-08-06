@@ -16,14 +16,14 @@ function TagLabel(props) {
   const tagLabelStyle = {
     padding: 0,
     color: '#ffffff'
-  }
+  };
 
   return (
     <p style={tagLabelStyle}>
       {props.tagName}
     </p>
-  )
-}
+  );
+};
 
 /**
  * Displays the name of a tag assigned to this image.
@@ -35,7 +35,7 @@ function TagLabel(props) {
  * @returns The Tag component to be rendered in the app.
  */
 function Tag(props) {
-  const appData = useContext(AppDataContext);
+  const {appData} = useContext(AppDataContext);
 
   if (props.imageTag === 0) {
       // The zero tag is assigned to pictures with no other tags.
@@ -47,13 +47,13 @@ function Tag(props) {
     );
   } else { // Display the name of the tag that was passed in.
   
-    // appData[2] records relationships between tags and images
+    // appData.imageTagData records relationships between tags and images
     // We know the ID of this relationship, so we can find it
-    const imageTag = appData[2].find(element => element.id === props.imageTag);
+    const imageTag = appData.imageTagData.find(element => element.id === props.imageTag);
     // Then we can narrow that image-to-tag relationship down to just the tag
     const tagId = imageTag['tag_id'];
-    // appdata[1] matches tag IDs to tag names
-    const tagName = appData[1].find(tagData => tagData.id === tagId)['name'];
+    // appData.tagData matches tag IDs to tag names
+    const tagName = appData.tagData.find(tagData => tagData.id === tagId)['name'];
 
     // Custom coloring to improve tag readability on top of the images
     const chipTheme = createTheme({

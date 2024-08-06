@@ -18,11 +18,8 @@ const theme = createTheme({
 let apiData = await ApiCall();
 const urlPath = window.location.pathname;
 const imageID = urlPath.match(/\d+/)[0]
-const findImage = (id) => apiData[0].find(element => element.id == id);
-const imageObject = findImage(imageID)
-console.log(imageObject);
-
-const imageData = imageObject;
+const findImage = (id) => apiData.imageData.find(element => element.id == id);
+const imageData = findImage(imageID)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

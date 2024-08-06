@@ -3,12 +3,13 @@
 * https://virtuoso.dev/grid-responsive-columns/
 */
 
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useContext, useEffect, useState } from 'react';
 import { VirtuosoGrid } from 'react-virtuoso';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import Thumbnail from './Thumbnail';
+import AppDataContext from './SupportingModules/AppDataContext';
 
 
 export default function VirtuosoGridWrapper (props) {
@@ -85,15 +86,18 @@ export default function VirtuosoGridWrapper (props) {
     </div>
   );
 
-  function VirtualizedImageList(props) {
+  function VirtualizedImageList() {
+    const {appData} = useContext(AppDataContext);
+    const imageList = appData.imageData;
+
     return (
         <VirtuosoGrid
           style={{ height: "100vh" }}
-          totalCount={props.imageList.length}
+          totalCount={imageList.length}
           components={gridComponents}
           itemContent={(index) => 
             <ItemWrapper>
-              <Thumbnail src={props.imageList[index].source} id={props.imageList[index].id}/>
+              <Thumbnail src={imageList[index].source} id={imageList[index].id}/>
             </ItemWrapper>
           }
         />

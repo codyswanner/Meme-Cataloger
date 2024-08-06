@@ -14,14 +14,14 @@ import ImageDataContext from '../SupportingModules/ImageDataContext';
  */
 function TagPopperContent() {
     const newTagCount = useRef(0); // To keep track of newly created tags
-    const appData = useContext(AppDataContext);
+    const {appData} = useContext(AppDataContext);
     const imageData = useContext(ImageDataContext);
     const imageId = imageData['id'];
     const imageTags = imageData['imageTags'];
     const socket = filterSocket; // For communication with backend
     // To display "add new" option, see getFilterOptions function
     const optionsFilter = createFilterOptions();
-    const tagOptions = appData[1].map((tag) => {
+    const tagOptions = appData.tagData.map((tag) => {
         const tagObject = {'id': tag.id, 'label': tag.name};
         return (tagObject)
     });
@@ -39,7 +39,7 @@ function TagPopperContent() {
       const imageTag = imageTagArray.find(element => element.id === imageTagId);
       const tagId = imageTag['tag_id'];
       // Now, find the name of the tag
-      const tagName = appData[1].find(tagData => tagData.id === tagId)['name'];
+      const tagName = appData.tagData.find(tagData => tagData.id === tagId)['name'];
       // Package the info into an object and return
       const tagObject = {'id': tagId, 'label': tagName};
       return tagObject;
@@ -53,7 +53,7 @@ function TagPopperContent() {
      */
     const createExistingTagsList = (imageTags) => {
         const existingTagsList = imageTags.map((imageTag) => {
-            const tagInfo = getTagInfo(appData[2], imageTag);
+            const tagInfo = getTagInfo(appData.imageTagData, imageTag);
             return tagInfo;
         });
         return existingTagsList;

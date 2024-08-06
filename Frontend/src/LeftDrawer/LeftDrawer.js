@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Drawer, Toolbar } from '@mui/material';
 
 import DrawerModeSwitcher from './DrawerModeSwitcher';
+import AppDataContext from '../SupportingModules/AppDataContext';
 
 
 /**
@@ -9,7 +10,8 @@ import DrawerModeSwitcher from './DrawerModeSwitcher';
  * 
  * @returns The LeftDrawer component to be rendered in the app.
  */
-function LeftDrawer(props) {
+function LeftDrawer() {
+    const {appState} = useContext(AppDataContext);
 
     const drawerStyles = (style) => {
         const widthChooser = style=='permanent' ? 240: "100%"
@@ -29,7 +31,7 @@ function LeftDrawer(props) {
     };
 
     const handleDrawerTransitionEnd = () => {
-        props.setIsClosingDrawer(false);
+        appState.setIsClosingDrawer(false);
     };
     
     return (
@@ -45,7 +47,7 @@ function LeftDrawer(props) {
         {/* Hidable drawer for small screens -- hides on large screens */}
         <Drawer
             variant='temporary'
-            open={props.drawerOpen}
+            open={appState.drawerOpen}
             onTransitionEnd={handleDrawerTransitionEnd}
             onClose={handleDrawerClose}
             ModalProps={{

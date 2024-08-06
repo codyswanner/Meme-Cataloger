@@ -6,23 +6,24 @@ import axios from 'axios';
  * 
  * @returns {Array} ApiData -- Initial data for the app
  */
-async function ApiCall() {
+export default async function ApiCall() {
 
   axios.defaults.baseURL = window.location.origin
 
   const fetchImages = async () => {
     // Fetch Image data from API/backend
     const response = await axios.get('/api/image');
-    // We'll fill this array in a second
-    const imageDataList = [];
+    const imageDataList = [];  // We'll fill this array in a second
 
-    // For each Image, record the id, source(filepath), and description,
+    // For each Image, record the id, source, and description,
     // Then push to the imageDataList.
     response.data.forEach(responseData => {
-      const imageId = responseData.id;
-      const imageSource = responseData.source;
-      const imageDescription = responseData.description;
-      const imageData = {id: imageId, source: imageSource, description: imageDescription, tags: [], imageTags: []};
+      const imageData = {
+        id: responseData.id,
+        source: responseData.source,
+        description: responseData.description,
+        imageTags: []  // will be filled later
+      };
       imageDataList.push(imageData);
     });
 
@@ -33,21 +34,15 @@ async function ApiCall() {
   const fetchTags = async () => {
     // Fetch Tag data from API/backend
     const response = await axios.get('api/tag');
-    const tagData = response.data;
-
-    // This goes back to the main function for further processing.
-    return tagData;
+    return response.data;
   };
 
   const fetchImageTags = async () => {
     // Fetch ImageTag data from API/backend
     // "ImageTag" refers to an association between an image and a tag.
-    // See api.models module for more details.
+    // See the api.models module for more details.
     const response = await axios.get('api/image-tag');
-    const imageTagData = response.data;
-
-    // This goes back to the main function for further processing.
-    return imageTagData;
+    return response.data;
   };
 
   /**
@@ -85,10 +80,12 @@ async function ApiCall() {
   let picturesArray = await assignImageTags(raw_pictures, imageTagsArray);
 
   // Full complement of data needed for initial page load
-  let apiData = [picturesArray, tagsArray, imageTagsArray];
+  let apiData = {
+      imageData: picturesArray,
+      tagData: tagsArray,
+      imageTagData: imageTagsArray
+    };
 
   // Returns to index.js to be used in various pieces of the app
   return apiData;
 };
-
-export default ApiCall;
