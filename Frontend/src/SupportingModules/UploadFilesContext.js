@@ -3,7 +3,7 @@ import React, { createContext, useState } from 'react';
 
 export const UploadFilesContext = createContext(null);
 
-function UploadFilesContextProvider(props) {
+export default function UploadFilesContextProvider(props) {
     const [files, setFiles] = useState([]);
     const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
 
@@ -20,5 +20,3 @@ function UploadFilesContextProvider(props) {
         </UploadFilesContext.Provider>
     )
 }
-
-export default UploadFilesContextProvider;

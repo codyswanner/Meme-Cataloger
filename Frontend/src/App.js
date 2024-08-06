@@ -35,6 +35,16 @@ export function AppChildren() {
 
 }
 
+export function AppContents() {
+  return(
+    <UploadFilesContextProvider>
+      <DropHandler>
+        <ContentFrame />
+      </DropHandler>
+    </UploadFilesContextProvider>
+  );
+};
+
 /**
  * Root component that renders all other components.
  * Activates useFilterSocket hook,
@@ -45,7 +55,7 @@ export function AppChildren() {
  * 
  * @returns The root App component to render all other components.
  */
-function App(props) {
+export default function App(props) {
 
   // useFilterSocket receives messages for updates to appData.
   // appData contains Image, Tag and ImageTag data.
@@ -85,8 +95,6 @@ function App(props) {
     }
   });
 
-
-
   return (
     <>
     {/* https://mui.com/material-ui/customization/theming/#themeprovider */}
@@ -102,6 +110,4 @@ function App(props) {
     </ThemeProvider>
     </>
   );
-}
-
-export default App;
+};
