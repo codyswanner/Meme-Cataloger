@@ -1,9 +1,9 @@
 import React, { useContext, useState, useRef } from 'react';
 import { Autocomplete, TextField, createFilterOptions } from '@mui/material';
 
-import AppDataContext from '../SupportingModules/AppDataContext';
-import filterSocket from '../SupportingModules/FilterSocket';
-import ImageDataContext from '../SupportingModules/ImageDataContext';
+import AppDataContext from '../../SupportingModules/AppDataContext';
+import filterSocket from '../../SupportingModules/FilterSocket';
+import ImageDataContext from '../ImageDataContext';
 
 
 /**

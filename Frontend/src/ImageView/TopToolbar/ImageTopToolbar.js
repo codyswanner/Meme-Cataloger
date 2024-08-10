@@ -4,8 +4,8 @@ import ShareIcon from "@mui/icons-material/Share";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
 import DeleteImageButton from './DeleteImageButton';
-import filterSocket from '../SupportingModules/FilterSocket';
-import ImageDataContext from '../SupportingModules/ImageDataContext';
+import filterSocket from '../../SupportingModules/FilterSocket';
+import ImageDataContext from '../ImageDataContext';
 
 
 /**

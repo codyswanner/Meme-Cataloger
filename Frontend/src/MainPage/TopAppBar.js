@@ -5,8 +5,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import UploadIcon from '@mui/icons-material/Upload'
 import MenuIcon from '@mui/icons-material/Menu'
 
-import UploadDialog from './UploadDialog';
-import { UploadFilesContext } from '../SupportingModules/UploadFilesContext';
+import UploadDialog from './Uploads/UploadDialog';
+import { UploadFilesContext } from './Uploads/UploadFilesContext';
 import AppDataContext from '../SupportingModules/AppDataContext';
 
 

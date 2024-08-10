@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Box, Modal, Typography } from '@mui/material';
 
-import { UploadFilesContext } from './SupportingModules/UploadFilesContext';
+import { UploadFilesContext } from './UploadFilesContext';
 
 
 function DropHandler(props) {

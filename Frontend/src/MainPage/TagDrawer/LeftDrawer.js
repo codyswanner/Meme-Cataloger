@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Drawer, Toolbar } from '@mui/material';
 
 import DrawerModeSwitcher from './DrawerModeSwitcher';
-import AppDataContext from '../SupportingModules/AppDataContext';
+import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
 /**

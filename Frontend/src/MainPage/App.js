@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Box, createTheme, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
-import TopAppBar from './TopAppBar/TopAppBar';
-import LeftDrawer from './LeftDrawer/LeftDrawer';
-import VirtuosoGridWrapper from './VirtualizedImageList';
-import useFilterSocket from './SupportingModules/useFilterSocket';
-import AppDataContext from './SupportingModules/AppDataContext';
-import DropHandler from './DropHandler';
-import UploadFilesContextProvider from './SupportingModules/UploadFilesContext';
+import TopAppBar from './TopAppBar';
+import LeftDrawer from './TagDrawer/LeftDrawer';
+import VirtuosoGridWrapper from './ImageList/VirtualizedImageList';
+import useFilterSocket from '../SupportingModules/useFilterSocket';
+import AppDataContext from '../SupportingModules/AppDataContext';
+import DropHandler from './Uploads/DropHandler';
+import UploadFilesContextProvider from './Uploads/UploadFilesContext';
 
 
 export function AppChildren() {

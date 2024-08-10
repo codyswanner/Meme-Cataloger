@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 
-import ImageTopToolbar from './ImageFrame/ImageTopToolbar';
-import ImageBottomToolbar from './ImageFrame/ImageBottomToolbar';
-import useFilterSocket from './SupportingModules/useFilterSocket';
-import ImageDataContext from './SupportingModules/ImageDataContext';
-import AppDataContext from './SupportingModules/AppDataContext';
+import ImageTopToolbar from './TopToolbar/ImageTopToolbar';
+import ImageBottomToolbar from './BottomToolbar/ImageBottomToolbar';
+import useFilterSocket from '../SupportingModules/useFilterSocket';
+import ImageDataContext from './ImageDataContext';
+import AppDataContext from '../SupportingModules/AppDataContext';
 
 
 export default function FullScreenPictureFrame(props) {

@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
-import ApiCall from './SupportingModules/ApiCall';
+import ApiCall from '../SupportingModules/ApiCall';
 import FullScreenPictureFrame from './FullScreenPictureFrame';
-import ImageDataContext from './SupportingModules/ImageDataContext';
+import ImageDataContext from './ImageDataContext';
 
 const theme = createTheme({
   palette: {

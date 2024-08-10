@@ -3,7 +3,7 @@ import { FormControlLabel, Checkbox } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import filterSocket from '../SupportingModules/FilterSocket';
+import filterSocket from '../../SupportingModules/FilterSocket';
 
 
 /**

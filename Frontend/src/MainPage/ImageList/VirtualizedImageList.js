@@ -9,7 +9,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import Thumbnail from './Thumbnail';
-import AppDataContext from './SupportingModules/AppDataContext';
+import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
 export default function VirtuosoGridWrapper (props) {

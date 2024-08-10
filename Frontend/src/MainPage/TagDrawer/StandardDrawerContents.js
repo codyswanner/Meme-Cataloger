@@ -3,13 +3,13 @@ import { Box, Divider, List } from '@mui/material';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import AppDataContext from '../SupportingModules/AppDataContext';
-import TagEditor from './TagEditor';
+import AppDataContext from '../../SupportingModules/AppDataContext';
+import FilterCheckbox from './FilterCheckbox';
 import FeatureButton from './FeatureButton';
 import DrawerHeader from './DrawerHeader';
 
 
-export default function EditDrawerContents(props) {
+export default function StandardDrawerContents(props) {
     const {appData} = useContext(AppDataContext);
 
     return(
@@ -19,8 +19,8 @@ export default function EditDrawerContents(props) {
                 {appData.tagData.map((tag) => {
                     const tagId = tag.id;
                     const tagName = tag.name;
-                    return(<TagEditor
-                        data-testid={'tag-editor'}
+                    return(<FilterCheckbox
+                        data-testid={'filter-checkbox'}
                         text={tagName}
                         key={tagId}
                         tagId={tagId}/>)

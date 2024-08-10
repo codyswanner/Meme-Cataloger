@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 
 import { FileUploadForm, EmptyUploadForm } from './UploadForms';
-import { UploadFilesContext } from '../SupportingModules/UploadFilesContext';
+import { UploadFilesContext } from './UploadFilesContext';
 
 
 /**

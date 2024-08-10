@@ -4,7 +4,7 @@ import { Toolbar } from "@mui/material";
 import Tag from './Tag';
 import AddTagButton from './AddTagButton';
 import ExcessTagsChip from './ExcessTagsChip';
-import ImageDataContext from '../SupportingModules/ImageDataContext';
+import ImageDataContext from '../ImageDataContext';
 
 
 /**

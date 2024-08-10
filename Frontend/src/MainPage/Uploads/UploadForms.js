@@ -3,8 +3,8 @@ import { Alert, Box, Button, List } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload'
 import { styled } from '@mui/material/styles';
 
-import CSRFToken from '../SupportingModules/CSRFToken';
-import { sendCSRFRequest } from '../SupportingModules/CSRFToken';
+import CSRFToken from '../../SupportingModules/CSRFToken';
+import { sendCSRFRequest } from '../../SupportingModules/CSRFToken';
 
 
 /**
