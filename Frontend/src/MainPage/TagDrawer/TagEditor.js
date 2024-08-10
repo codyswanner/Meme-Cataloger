@@ -16,11 +16,11 @@ export default function TagEditor(props) {
     const handleTagNameChange = (e, tagId) => {
         // Inform the backend of the change
         const socket = filterSocket;
-        socket.send(JSON.stringify({
-            'type': 'updateTagName', 
+        filterSocket.sendMessage({
+            'type': 'updateTagName',
             'tagId': tagId,
             'name': e.target.value
-        }));
+        });
     };
 
     return(

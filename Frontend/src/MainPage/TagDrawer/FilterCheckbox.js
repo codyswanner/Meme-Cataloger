@@ -15,16 +15,12 @@ import filterSocket from '../../SupportingModules/FilterSocket';
  * @param {event} event Detects when box has been clicked (checked or unchecked).
  */
 const handleChange = (props, event) => {
-    const checkboxLabel = props.text;
-    const socket = filterSocket;
-    const selectionMessage = "FilterCheckbox: " + (event.target.checked ? "" : "un") + "checked " + props.tagId;
-    console.log(selectionMessage);
-    socket.send(JSON.stringify({
+    filterSocket.sendMessage({
         'type':'filterChange',
-        'filterName': checkboxLabel,
+        'filterName': props.text,
         'filterId': props.tagId,
         'filterState': (event.target.checked ? "on" : "off")
-    }));
+    });
 };
 
 /**

@@ -20,7 +20,11 @@ filterSocket.onopen = () => {
 };
 
 filterSocket.onclose = function(e) {
-    console.log('Filter socket has closed unexpectedly')
+    console.log('Filter socket has closed unexpectedly');
+};
+
+filterSocket.sendMessage = function(message) {
+    filterSocket.send(JSON.stringify(message));
 };
 
 export default filterSocket;

@@ -20,7 +20,6 @@ export default function EditDrawerContents(props) {
                     const tagId = tag.id;
                     const tagName = tag.name;
                     return(<TagEditor
-                        data-testid={'tag-editor'}
                         text={tagName}
                         key={tagId}
                         tagId={tagId}/>)
