@@ -3,8 +3,8 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {
-    main: "./src/index.js",
-    imageView: "./src/ImageViewIndex.js",
+    main: "./src/MainPage/index.js",
+    imageView: "./src/ImageView/ImageViewIndex.js",
   },
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
