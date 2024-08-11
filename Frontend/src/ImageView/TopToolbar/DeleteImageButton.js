@@ -20,10 +20,12 @@ function DeleteImageButton (props) {
     // Inform the backend of the deletion
     console.log("Delete button pressed, image " + id);
     const socket = filterSocket;
-    socket.send(JSON.stringify({
+    filterSocket.sendMessage({
       'type': 'deleteImage',
       'imageId': id
-    }))
+    });
+    // Need to redirect back to main page
+    window.location.href = window.location.origin;
   };
 
   return(
