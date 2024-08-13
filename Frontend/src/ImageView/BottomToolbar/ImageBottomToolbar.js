@@ -64,16 +64,19 @@ function ImageBottomToolbar(props) {
   // Used by AddTagPopper for click-away handling.
   const buttonRef = useRef(null);
 
+  const handleAddTagButtonClick = (e) => {
+    // On click, toggle AddTagPopper open or closed.
+    setAnchorEl(anchorEl ? null : e.currentTarget);
+    setOpen((prev) => !prev);
+  };
+
   return(
     <Toolbar sx={[props.toolbarStyles, { bottom: 6.5 }]}>
       {formatTags(imageTags, imageId)} {/* Returns Tag components for image */}
       <AddTagButton
         style={{ marginLeft: "auto" }}
         buttonRef={buttonRef}
-        open={open}
-        setOpen={setOpen}
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}/>
+        handleClick={handleAddTagButtonClick}/>
       <TagPopper
         open={open}
         setOpen={setOpen}
