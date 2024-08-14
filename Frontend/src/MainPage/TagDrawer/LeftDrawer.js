@@ -1,8 +1,15 @@
-import React, { useContext } from 'react';
-import { Drawer, Toolbar } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import { Box, Divider, Drawer, List, Toolbar } from '@mui/material';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
-import DrawerModeSwitcher from './DrawerModeSwitcher';
 import AppDataContext from '../../SupportingModules/AppDataContext';
+import FilterCheckbox from './FilterCheckbox';
+import TagEditor from './TagEditor';
+import FeatureButton from './FeatureButton';
+import DrawerHeader from './DrawerHeader';
 
 
 /**
@@ -10,8 +17,11 @@ import AppDataContext from '../../SupportingModules/AppDataContext';
  * 
  * @returns The LeftDrawer component to be rendered in the app.
  */
-function LeftDrawer() {
-    const {appState} = useContext(AppDataContext);
+export default function TagDrawer() {
+    const {appData, appState} = useContext(AppDataContext);
+    const [editTags, setEditTags] = useState(false);
+    const theme = useTheme();
+    const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const drawerStyles = (style) => {
         const widthChooser = style=='permanent' ? 240: "100%"
@@ -33,33 +43,75 @@ function LeftDrawer() {
     const handleDrawerTransitionEnd = () => {
         appState.setIsClosingDrawer(false);
     };
+
+    const handleArchive = () => {
+        // Not yet implemented
+        console.log("Archive button clicked!");
+    };
+
+    const handleTrash = () => {
+        // Not yet implemented
+        console.log("Trash button clicked!");
+    };
+
+    const handleEdit = () => {
+        // Toggle edit mode
+        setEditTags(!editTags);
+    };
+
+
+    const permanentDrawerProps = {
+        variant: 'permanent',
+        sx: [drawerStyles('permanent'), {display: { xs: 'none', md: 'block' }}]
+    };
+
+    const temporaryDrawerProps = {
+        variant: 'temporary',
+        open: appState.drawerOpen,
+        onTransitionEnd: handleDrawerTransitionEnd,
+        onClose: handleDrawerClose,
+        ModalProps: {keepMounted: true},
+        sx: [drawerStyles('temporary'), {display: { xs: 'block', md: 'none' }}]
+    };
     
     return (
-        <>
-        {/* Permanent drawer for large screens -- hides on small screens */}
-        <Drawer
-            variant='permanent'
-            sx={[drawerStyles('permanent'), {display: { xs: 'none', md: 'block' }}]}>
-            <Toolbar/> {/* Hides under AppBar, push below into open space */}
-            <DrawerModeSwitcher />
+        <Drawer {...(smallScreen ? temporaryDrawerProps : permanentDrawerProps)}>
+            <Toolbar/>
+            <Box sx={{ overflow: 'auto' }}>
+                <DrawerHeader handleEdit={handleEdit}/>
+                <List> {/* List tags available for filtering */}
+                        {(appData.tagData.map((tag) => {
+                            const tagId = tag.id;
+                            const tagName = tag.name;
+                            return(
+                                editTags ?
+                                
+                                <TagEditor
+                                text={tagName}
+                                key={tagId}
+                                tagId={tagId}/>
+                                :
+                                <FilterCheckbox
+                                text={tagName}
+                                key={tagId}
+                                tagId={tagId}/>
+                            )
+                        }))}
+                </List>
+                <Divider/>
+                <List> {/* Misc non-tag/filter options */}
+                    <FeatureButton
+                        name="Archive"
+                        startIcon={<ArchiveIcon/>}
+                        action={handleArchive}
+                        active={false}/>
+                    <FeatureButton
+                        name="Trash"
+                        startIcon={<DeleteIcon/>}
+                        action={handleTrash}
+                        active={false}/>
+                </List>
+            </Box>
         </Drawer>
-
-        {/* Hidable drawer for small screens -- hides on large screens */}
-        <Drawer
-            variant='temporary'
-            open={appState.drawerOpen}
-            onTransitionEnd={handleDrawerTransitionEnd}
-            onClose={handleDrawerClose}
-            ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={[drawerStyles('temporary'), {display: { xs: 'block', md: 'none' }}]}>
-            {/* Toolbar hides under AppBar, pushes below into open space */}
-            <Toolbar sx={{ height: '6.5em' }}/>
-            <DrawerModeSwitcher />
-        </Drawer>
-        </>
     );
 };
-
-export default LeftDrawer;
