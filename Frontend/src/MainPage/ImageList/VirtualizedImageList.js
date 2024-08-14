@@ -97,7 +97,10 @@ export default function VirtuosoGridWrapper (props) {
           components={gridComponents}
           itemContent={(index) => 
             <ItemWrapper>
-              <Thumbnail src={imageList[index].source} id={imageList[index].id}/>
+              <Thumbnail
+                // Provide images in reverse order -- (length - index)
+                src={imageList[(imageList.length-1)-index].source}
+                id={imageList[(imageList.length-1)-index].id}/>
             </ItemWrapper>
           }
         />
