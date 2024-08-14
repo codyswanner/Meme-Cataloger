@@ -3,7 +3,7 @@ import { Box, createTheme, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
 import TopAppBar from './TopAppBar';
-import LeftDrawer from './TagDrawer/LeftDrawer';
+import TagDrawer from './TagDrawer/TagDrawer';
 import VirtuosoGridWrapper from './ImageList/VirtualizedImageList';
 import useFilterSocket from '../SupportingModules/useFilterSocket';
 import AppDataContext from '../SupportingModules/AppDataContext';
@@ -21,7 +21,7 @@ export function AppChildren() {
           <TopAppBar/>
 
           {/* Drawer on left side, holds tag filter options */}
-          <LeftDrawer/>
+          <TagDrawer/>
 
           {/* Main content area */}
           <Box component="main" sx={{ flexGrow: 1 }}>
