@@ -97,6 +97,17 @@ DATABASES = {
     }
 }
 
+# If testing, use an in-memory database,
+# as the default one will not be available.
+# Thanks StackOverflow user Sam Dolan for this suggestion!
+# https://stackoverflow.com/questions/4650509/different-db-for-testing-in-django
+import sys
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
