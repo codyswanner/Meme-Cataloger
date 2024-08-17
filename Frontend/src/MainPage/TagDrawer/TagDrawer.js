@@ -24,7 +24,7 @@ export default function TagDrawer() {
     const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     const drawerStyles = (style) => {
-        const widthChooser = style=='permanent' ? 240: "100%"
+        const widthChooser = style=='permanent' ? 240 : "100%"
         return {
             backgroundColor: '#666666',
             width: widthChooser,
@@ -33,15 +33,6 @@ export default function TagDrawer() {
                 { width: widthChooser, backgroundColor: '#aaaaaa' },
             marginRight: '0.5%',
         };
-    };
-
-    const handleDrawerClose = () => {
-        setIsClosingDrawer(true);
-        setDrawerOpen(false);
-    };
-
-    const handleDrawerTransitionEnd = () => {
-        appState.setIsClosingDrawer(false);
     };
 
     const handleArchive = () => {
@@ -62,16 +53,16 @@ export default function TagDrawer() {
 
     const permanentDrawerProps = {
         variant: 'permanent',
-        sx: [drawerStyles('permanent'), {display: { xs: 'none', md: 'block' }}]
+        sx: [drawerStyles('permanent'), {display: { xs: 'none', md: 'block' }}],
+        'data-testid': 'permanent-drawer'
     };
 
     const temporaryDrawerProps = {
         variant: 'temporary',
         open: appState.drawerOpen,
-        onTransitionEnd: handleDrawerTransitionEnd,
-        onClose: handleDrawerClose,
-        ModalProps: {keepMounted: true},
-        sx: [drawerStyles('temporary'), {display: { xs: 'block', md: 'none' }}]
+        ModalProps: {keepMounted: true}, // improves performance
+        sx: [drawerStyles('temporary'), {display: { xs: 'block', md: 'none' }}],
+        'data-testid': 'temporary-drawer'
     };
     
     return (

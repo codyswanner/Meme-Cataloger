@@ -17,7 +17,7 @@ describe('DrawerHeader', () => {
     });
 
     test('enables edit mode', () => {
-        const editButton = screen.getByRole('button');
+        const editButton = screen.getByRole('switch');
 
         fireEvent(
             editButton,
