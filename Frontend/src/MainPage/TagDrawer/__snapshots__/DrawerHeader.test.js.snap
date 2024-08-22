@@ -15,6 +15,7 @@ Object {
         </p>
         <button
           class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-yq5f9j-MuiButtonBase-root-MuiIconButton-root"
+          role="switch"
           tabindex="0"
           type="button"
         >
@@ -47,6 +48,7 @@ Object {
       </p>
       <button
         class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-yq5f9j-MuiButtonBase-root-MuiIconButton-root"
+        role="switch"
         tabindex="0"
         type="button"
       >

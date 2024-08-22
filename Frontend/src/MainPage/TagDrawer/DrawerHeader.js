@@ -13,6 +13,7 @@ export default function DrawerHeader(props) {
             </Typography>
             <IconButton
                 onClick={props.handleEdit}
+                role='switch'
                 sx={{
                     marginLeft: 'auto',
                     transform: {'xs': 'scale(1.7)', 'md': 'scale(1.15)'}
