@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 import AddTagButton from './AddTagButton';
@@ -7,12 +7,11 @@ import AddTagButton from './AddTagButton';
 describe('AddTagButton', () => {
     let handleClick;
     let buttonRef;
-    let component;
 
     beforeEach(() => {
         handleClick = jest.fn();
         buttonRef = {};
-        component = render(<AddTagButton handleClick={handleClick} buttonRef={buttonRef}/>)
+        render(<AddTagButton handleClick={handleClick} buttonRef={buttonRef}/>)
     });
 
     test('handles click', () => {

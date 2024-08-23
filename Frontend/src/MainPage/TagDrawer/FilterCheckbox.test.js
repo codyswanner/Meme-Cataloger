@@ -16,12 +16,11 @@ jest.mock('../../SupportingModules/FilterSocket', () => ({
 describe('FilterSocket', () => {
     let tagName;
     let tagId;
-    let component;
 
     beforeEach(() => {
         tagName = 'Test Tag';
         tagId = '1';
-        component = render(<FilterCheckbox text={tagName} tagId={tagId} key={tagId}/>);
+        render(<FilterCheckbox text={tagName} tagId={tagId} key={tagId}/>);
     });
 
     test('toggles checked and unchecked', () => {

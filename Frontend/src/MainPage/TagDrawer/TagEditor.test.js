@@ -17,12 +17,11 @@ describe('TagEditor', () => {
     let text;
     let tagId;
     let key = tagId;
-    let component;
 
     beforeEach(() => {
         text = 'Test Editor';
         tagId = '1';
-        component = render(<TagEditor text={text} tagId={tagId} key={key}/>);
+        render(<TagEditor text={text} tagId={tagId} key={key}/>);
     });
 
     test('edits tag name on input', () => {

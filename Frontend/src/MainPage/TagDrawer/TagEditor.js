@@ -15,7 +15,6 @@ export default function TagEditor(props) {
 
     const handleTagNameChange = (e, tagId) => {
         // Inform the backend of the change
-        const socket = filterSocket;
         filterSocket.sendMessage({
             'type': 'updateTagName',
             'tagId': tagId,

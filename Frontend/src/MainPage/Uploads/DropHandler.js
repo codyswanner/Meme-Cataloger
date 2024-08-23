@@ -35,7 +35,7 @@ function DropHandler(props) {
         setModalActive(true); // Activate dragOver modal
     };
 
-    const handleDragLeave = (e) => {
+    const handleDragLeave = () => {
         setModalActive(false); // Disappear dragOver modal
     };
 
@@ -63,7 +63,7 @@ function DropHandler(props) {
     return(
         <div
             onDragOver={(e) => handleDragOver(e)}
-            onDragLeave={(e) => handleDragLeave(e)}
+            onDragLeave={() => handleDragLeave()}
             onDrop={(e) => handleDrop(e)}>
             {/* conditional render dragOver modal */}
             {modalActive ? handleActiveModal() : <></>}

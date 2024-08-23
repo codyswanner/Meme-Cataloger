@@ -11,40 +11,6 @@ import DropHandler from './Uploads/DropHandler';
 import UploadFilesContextProvider from './Uploads/UploadFilesContext';
 
 
-export function AppChildren() {
-  return (
-      <Box sx={{ display: 'flex' }}>
-          {/* Provided by MUI Material for basic styling */}
-          <CssBaseline />
-
-          {/* Navigation banner/AppBar at top of the page */}
-          <TopAppBar/>
-
-          {/* Drawer on left side, holds tag filter options */}
-          <TagDrawer/>
-
-          {/* Main content area */}
-          <Box component="main" sx={{ flexGrow: 1 }}>
-              <Toolbar />{/* Hides under AppBar, push below to open space */}
-              <div className='flex-container'>
-                  <VirtuosoGridWrapper/>
-              </div>
-          </Box>
-      </Box>
-  );
-
-}
-
-export function AppContents() {
-  return(
-    <UploadFilesContextProvider>
-      <DropHandler>
-        <ContentFrame />
-      </DropHandler>
-    </UploadFilesContextProvider>
-  );
-};
-
 /**
  * Root component that renders all other components.
  * Activates useFilterSocket hook,
@@ -57,12 +23,12 @@ export function AppContents() {
  */
 export default function App(props) {
 
-  // useFilterSocket receives messages for updates to appData.
-  // appData contains Image, Tag and ImageTag data.
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isClosingDrawer, setIsClosingDrawer] = useState(false);
   const [editTags, setEditTags] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  // useFilterSocket receives messages for updates to appData.
+  // appData contains Image, Tag and ImageTag data.
   const appData = useFilterSocket(props.apiData);
   const appState = {
     drawerOpen: drawerOpen,
@@ -103,7 +69,25 @@ export default function App(props) {
       <AppDataContext.Provider value={{appData, appState}}>
       <UploadFilesContextProvider>
         <DropHandler>
-          {props.children}
+          <Box sx={{ display: 'flex' }}>
+              {/* Provided by MUI Material for basic styling */}
+              <CssBaseline />
+
+              {/* Navigation banner/AppBar at top of the page */}
+              <TopAppBar/>
+
+              {/* Drawer on left side, holds tag filter options */}
+              <TagDrawer/>
+
+              {/* Main content area */}
+              <Box component="main" sx={{ flexGrow: 1 }}>
+                  {/* Toolbar hides under AppBar, push below to open space */}
+                  <Toolbar />
+                  <div className='flex-container'>
+                      <VirtuosoGridWrapper/>
+                  </div>
+              </Box>
+          </Box>
         </DropHandler>
       </UploadFilesContextProvider>
       </AppDataContext.Provider>

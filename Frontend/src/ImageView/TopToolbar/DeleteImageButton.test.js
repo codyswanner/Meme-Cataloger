@@ -15,11 +15,10 @@ jest.mock('../../SupportingModules/FilterSocket', () => ({
 
 describe('DeleteImageButton', () => {
     let id;
-    let component;
 
     beforeEach(() => {
         id = 1;
-        component = render(<DeleteImageButton id={id}/>);
+        render(<DeleteImageButton id={id}/>);
     });
     test('sends websocket message on click', () => {
         fireEvent(
