@@ -10,9 +10,8 @@ update_database(file_data)
     Records path and owner of new file to the database.
 """
 
-from .models import *
+from .models import AppUser, Image
 from django.conf import settings
-from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 def handle_uploaded_file(file_data):
@@ -44,7 +43,7 @@ def update_database(file_data):
     """
 
     # Future: add user association for newly uploaded files
-    file_path: str = f"images/%s" % file_data.name
+    file_path: str = f"images/{file_data.name}"
     user: AppUser = AppUser.objects.get(id=1)
     new_file: Image = Image(source=file_path, owner=user)
     new_file.save()

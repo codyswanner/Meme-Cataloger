@@ -14,7 +14,7 @@ more information.
 """
 
 from django.urls import path
-from .views import *
+from .views import AppUserView, ImageView, TagView, ImageTagView, upload
 
 app_name = 'api'
 urlpatterns = [

@@ -16,7 +16,7 @@ from asgiref.sync import async_to_sync
 from django.db.models.query import QuerySet
 from channels.generic.websocket import WebsocketConsumer
 
-from api.models import *
+from api.models import AppUser, Image, Tag, ImageTag
 
 
 class FilterConsumer(WebsocketConsumer):
@@ -354,7 +354,7 @@ class FilterConsumer(WebsocketConsumer):
         image_object: Image = Image.objects.get(id=image_id)
         image_object.description = new_description
         image_object.save()
-        print(f"Description for image %s updated to %s" % (image_id, new_description))
+        print(f"Description for image {image_id} updated to {new_description}")
 
     @staticmethod
     def update_tag_name(text_data_json: dict) -> dict:
@@ -382,7 +382,7 @@ class FilterConsumer(WebsocketConsumer):
         tag_object: Tag = Tag.objects.get(id=tag_id)
         tag_object.name = new_name
         tag_object.save()
-        print(f"Name for tag %s updated to %s" % (tag_id, new_name))
+        print(f"Name for tag {tag_id} updated to {new_name}")
         response_message = {
             'type': 'tagUpdated',
             'id': tag_id,

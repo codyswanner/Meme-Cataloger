@@ -21,11 +21,11 @@ import filetype
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.renderers import JSONRenderer
-from .serializers import *
-from .uploads import *
+from .models import AppUser, Image, Tag, ImageTag
+from .serializers import \
+    AppUserSerializer, ImageSerializer, TagSerializer, ImageTagSerializer
+from .uploads import handle_uploaded_file, update_database
 # Imports below are for TypeHints
-# noinspection PyUnresolvedReferences
-from django.core.files.uploadedfile import InMemoryUploadedFile
 # noinspection PyUnresolvedReferences
 from django.core.handlers.asgi import ASGIRequest
 # noinspection PyUnresolvedReferences

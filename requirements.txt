@@ -22,6 +22,7 @@ pyasn1_modules==0.4.0
 pycparser==2.22
 pyOpenSSL==24.1.0
 redis==5.0.4
+ruff==0.6.2
 service-identity==24.1.0
 setuptools==70.0.0
 six==1.16.0
