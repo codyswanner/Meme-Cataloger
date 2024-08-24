@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "webpack --mode development --watch",
     "build": "webpack --mode production",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "lint": "eslint ./src/"
   },
   "keywords": [],
   "author": "",
