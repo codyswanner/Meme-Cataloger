@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { Toolbar } from "@mui/material";
+import { alpha, createTheme, Toolbar } from "@mui/material";
 
 import Tag from './Tag';
 import AddTagButton from './AddTagButton';
@@ -17,14 +17,26 @@ import ImageDataContext from '../ImageDataContext';
   */
 const formatTags = (imageTags, imageId) => {
 
+    // Custom coloring to improve tag readability on top of the images
+    const chipTheme = createTheme({
+      palette: {
+        primary: {
+          main: alpha('#333333', 0.6),
+        },
+      }
+    });
+
   if (imageTags.length == 0) {
-    return (<Tag imageTag={0} key={0} />); // display "add tag" placeholder
+    return (<Tag imageTag={0} key={0} theme={chipTheme} />); // display "add tag" placeholder
 
   } else if (imageTags.length < 3) {
     // display normally
     return (
       imageTags.map((imageTag) => (
-        <Tag imageTag={imageTag} imageId={imageId} key={imageTag} />
+        <Tag
+          imageTag={imageTag}
+          key={imageTag}
+          theme={chipTheme}/>
       ))
     );
 
@@ -33,9 +45,15 @@ const formatTags = (imageTags, imageId) => {
     return (
       <>
         {imageTags.map((imageTag) => (
-          <Tag imageTag={imageTag} imageId={imageId} key={imageTag} />
+          <Tag
+            imageTag={imageTag}
+            imageId={imageId}
+            key={imageTag}
+            theme={chipTheme}/>
         )).slice(0, 2) /* show only two tags */}
-        <ExcessTagsChip labelText={(imageTags.length - 2).toString()} />
+        <ExcessTagsChip
+          labelText={(imageTags.length - 2).toString()}
+          theme={chipTheme}/>
       </>
     );
   };
