@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 
 import { FileUploadForm, EmptyUploadForm } from './UploadForms';
-import { UploadFilesContext } from './UploadFilesContext';
+import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
 /**
@@ -12,9 +12,9 @@ import { UploadFilesContext } from './UploadFilesContext';
  * @returns The UploadBox component to be rendered in the app.
  */
 function UploadBox() {
-    const uploadFilesStates = useContext(UploadFilesContext);
-    const files = uploadFilesStates[0];
-    const setFiles = uploadFilesStates[1];
+    const {appState} = useContext(AppDataContext);
+    const files = appState.files;
+    const setFiles = appState.setFiles;
     const [uploadFailed, setUploadFailed] = useState(false);
 
     // this is triggered when user clicks "Upload" button

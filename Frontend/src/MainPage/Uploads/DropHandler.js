@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { Box, Modal, Typography } from '@mui/material';
 
-import { UploadFilesContext } from './UploadFilesContext';
+import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
 function DropHandler(props) {
-    const uploadFilesStates = useContext(UploadFilesContext);
-    const files = uploadFilesStates[0];
-    const setFiles = uploadFilesStates[1];
-    const setUploadDialogOpen = uploadFilesStates[3];
+    const {appState} = useContext(AppDataContext);
+    const files = appState.files;
+    const setFiles = appState.setFiles;
+    const setUploadDialogOpen = appState.setUploadDialogOpen;
     const [modalActive, setModalActive] = useState(false);
 
     const handleDrop = (e) => {

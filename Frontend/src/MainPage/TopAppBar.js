@@ -6,7 +6,6 @@ import UploadIcon from '@mui/icons-material/Upload'
 import MenuIcon from '@mui/icons-material/Menu'
 
 import UploadDialog from './Uploads/UploadDialog';
-import { UploadFilesContext } from './Uploads/UploadFilesContext';
 import AppDataContext from '../SupportingModules/AppDataContext';
 
 
@@ -18,9 +17,8 @@ import AppDataContext from '../SupportingModules/AppDataContext';
  */
 function TopAppBar() {
     const {appState} = useContext(AppDataContext);
-    const uploadFilesStates = useContext(UploadFilesContext);
-    const uploadDialogOpen = uploadFilesStates[2];
-    const setUploadDialogOpen = uploadFilesStates[3];
+    const uploadDialogOpen = appState.uploadDialogOpen
+    const setUploadDialogOpen = appState.setUploadDialogOpen
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [uploadButtonSize, setUploadButtonSize] = useState('100%');
