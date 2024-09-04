@@ -6,7 +6,6 @@ import UploadIcon from '@mui/icons-material/Upload'
 import MenuIcon from '@mui/icons-material/Menu'
 
 import UploadDialog from './Uploads/UploadDialog';
-import { UploadFilesContext } from './Uploads/UploadFilesContext';
 import AppDataContext from '../SupportingModules/AppDataContext';
 
 
@@ -18,9 +17,6 @@ import AppDataContext from '../SupportingModules/AppDataContext';
  */
 function TopAppBar() {
     const {appState} = useContext(AppDataContext);
-    const uploadFilesStates = useContext(UploadFilesContext);
-    const uploadDialogOpen = uploadFilesStates[2];
-    const setUploadDialogOpen = uploadFilesStates[3];
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [uploadButtonSize, setUploadButtonSize] = useState('100%');
@@ -40,11 +36,11 @@ function TopAppBar() {
     useEffect(() => {handleResize();}, [smallScreen])
     
     const handleOpenUpload = () => {
-        setUploadDialogOpen(true);
+        appState.setUploadDialogOpen(true);
     };
 
     const handleCloseUpload = () => {
-        setUploadDialogOpen(false);
+        appState.setUploadDialogOpen(false);
     };
 
     const handleDrawerToggle = () => {
@@ -76,7 +72,7 @@ function TopAppBar() {
                     onClick={handleOpenUpload}>
                     Upload
                 </Button>
-                <UploadDialog open={uploadDialogOpen} onClose={handleCloseUpload}/>
+                <UploadDialog open={appState.uploadDialogOpen} onClose={handleCloseUpload}/>
             </Toolbar>
         </AppBar>
     );

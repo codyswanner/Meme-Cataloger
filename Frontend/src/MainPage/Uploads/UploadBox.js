@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 
 import { FileUploadForm, EmptyUploadForm } from './UploadForms';
-import { UploadFilesContext } from './UploadFilesContext';
+import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
 /**
@@ -12,9 +12,7 @@ import { UploadFilesContext } from './UploadFilesContext';
  * @returns The UploadBox component to be rendered in the app.
  */
 function UploadBox() {
-    const uploadFilesStates = useContext(UploadFilesContext);
-    const files = uploadFilesStates[0];
-    const setFiles = uploadFilesStates[1];
+    const {appState} = useContext(AppDataContext);
     const [uploadFailed, setUploadFailed] = useState(false);
 
     // this is triggered when user clicks "Upload" button
@@ -26,23 +24,23 @@ function UploadBox() {
             for (const file of dt.files) {
                 data.push(file);
             }
-            setFiles([...files, ...data]);
+            appState.setFiles([...appState.files, ...data]);
         }
     };
     
-    if (files.length) {
+    if (appState.files.length) {
         return(
             <FileUploadForm
-                files={files}
-                setFiles={setFiles}
+                files={appState.files}
+                setFiles={appState.setFiles}
                 setUploadFailed={setUploadFailed}
             />
         );
     } else {
         return(
             <EmptyUploadForm
-                files={files}
-                setFiles={setFiles}
+                files={appState.files}
+                setFiles={appState.setFiles}
                 handleInput={handleInput}
                 uploadFailed={uploadFailed}
                 setUploadFailed={setUploadFailed}

@@ -1,12 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import ApiCall from '../SupportingModules/ApiCall';
 import App from './App';
 
-
-// initial data for page load, provided by Django API.
-let apiData = await ApiCall();
 
 // HTML root for the app, as required by React.
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,6 +11,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // StrictMode renders everything twice to help catch bugs.
   <React.StrictMode>
-    <App apiData={apiData}/>
+    <App/>
   </React.StrictMode>
 );

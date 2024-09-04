@@ -1,20 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { Box, Modal, Typography } from '@mui/material';
 
-import { UploadFilesContext } from './UploadFilesContext';
+import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
 function DropHandler(props) {
-    const uploadFilesStates = useContext(UploadFilesContext);
-    const files = uploadFilesStates[0];
-    const setFiles = uploadFilesStates[1];
-    const setUploadDialogOpen = uploadFilesStates[3];
+    const {appState} = useContext(AppDataContext);
     const [modalActive, setModalActive] = useState(false);
 
     const handleDrop = (e) => {
         e.preventDefault(); // Allow drop on page
         setModalActive(false);
-        setUploadDialogOpen(true);
+        appState.setUploadDialogOpen(true);
 
         const dt = e.dataTransfer;
         const isFile = dt.types.includes('application/x-moz-file')
@@ -25,7 +22,7 @@ function DropHandler(props) {
                 for (const file of dt.files) {
                     data.push(file);
                 };
-                setFiles([...files, ...data]);
+                appState.setFiles([...appState.files, ...data]);
             };
         };
     };

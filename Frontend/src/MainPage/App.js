@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { Box, createTheme, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
+import ApiCall from '../SupportingModules/ApiCall';
 import TopAppBar from './TopAppBar';
 import TagDrawer from './TagDrawer/TagDrawer';
 import VirtuosoGridWrapper from './ImageList/VirtualizedImageList';
 import useFilterSocket from '../SupportingModules/useFilterSocket';
 import AppDataContext from '../SupportingModules/AppDataContext';
 import DropHandler from './Uploads/DropHandler';
-import UploadFilesContextProvider from './Uploads/UploadFilesContext';
 
+
+
+// initial data for page load, provided by Django API.
+let apiData = await ApiCall();
 
 /**
  * Root component that renders all other components.
@@ -17,19 +21,19 @@ import UploadFilesContextProvider from './Uploads/UploadFilesContext';
  * which is the hub for WebSocket communications with backend.
  * 
  * @param {object} props Contains props passed into the component.
- * @param {Array} props.apiData Data for initial page load.
  * 
  * @returns The root App component to render all other components.
  */
 export default function App(props) {
 
+  // useFilterSocket receives messages for updates to appData.
+  // appData contains Image, Tag and ImageTag data.
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isClosingDrawer, setIsClosingDrawer] = useState(false);
   const [editTags, setEditTags] = useState(false);
+  const [files, setFiles] = useState([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
-  // useFilterSocket receives messages for updates to appData.
-  // appData contains Image, Tag and ImageTag data.
-  const appData = useFilterSocket(props.apiData);
+  const appData = useFilterSocket(apiData);
   const appState = {
     drawerOpen: drawerOpen,
     setDrawerOpen: setDrawerOpen,
@@ -37,6 +41,8 @@ export default function App(props) {
     setIsClosingDrawer: setIsClosingDrawer,
     editTags: editTags,
     setEditTags: setEditTags,
+    files: files,
+    setFiles: setFiles,
     uploadDialogOpen: uploadDialogOpen,
     setUploadDialogOpen: setUploadDialogOpen
   };
@@ -67,29 +73,26 @@ export default function App(props) {
     <ThemeProvider theme={theme}>
       {/* https://react.dev/reference/react/useContext */}
       <AppDataContext.Provider value={{appData, appState}}>
-      <UploadFilesContextProvider>
         <DropHandler>
           <Box sx={{ display: 'flex' }}>
-              {/* Provided by MUI Material for basic styling */}
-              <CssBaseline />
+            {/* Provided by MUI Material for basic styling */}
+            <CssBaseline />
 
-              {/* Navigation banner/AppBar at top of the page */}
-              <TopAppBar/>
+            {/* Navigation banner/AppBar at top of the page */}
+            <TopAppBar/>
 
-              {/* Drawer on left side, holds tag filter options */}
-              <TagDrawer/>
+            {/* Drawer on left side, holds tag filter options */}
+            <TagDrawer/>
 
-              {/* Main content area */}
-              <Box component="main" sx={{ flexGrow: 1 }}>
-                  {/* Toolbar hides under AppBar, push below to open space */}
-                  <Toolbar />
-                  <div className='flex-container'>
-                      <VirtuosoGridWrapper/>
-                  </div>
-              </Box>
+            {/* Main content area */}
+            <Box component="main" sx={{ flexGrow: 1 }}>
+                <Toolbar />{/* Hides under AppBar, push below to open space */}
+                <div className='flex-container'>
+                    <VirtuosoGridWrapper/>
+                </div>
+            </Box>
           </Box>
         </DropHandler>
-      </UploadFilesContextProvider>
       </AppDataContext.Provider>
     </ThemeProvider>
     </>
