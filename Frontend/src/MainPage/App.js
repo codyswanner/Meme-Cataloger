@@ -9,7 +9,6 @@ import VirtuosoGridWrapper from './ImageList/VirtualizedImageList';
 import useFilterSocket from '../SupportingModules/useFilterSocket';
 import AppDataContext from '../SupportingModules/AppDataContext';
 import DropHandler from './Uploads/DropHandler';
-import UploadFilesContextProvider from './Uploads/UploadFilesContext';
 
 
 // initial data for page load, provided by Django API.
@@ -30,6 +29,7 @@ export default function App(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isClosingDrawer, setIsClosingDrawer] = useState(false);
   const [editTags, setEditTags] = useState(false);
+  const [files, setFiles] = useState([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const appData = useFilterSocket(apiData);
   const appState = {
@@ -39,6 +39,8 @@ export default function App(props) {
     setIsClosingDrawer: setIsClosingDrawer,
     editTags: editTags,
     setEditTags: setEditTags,
+    files: files,
+    setFiles: setFiles,
     uploadDialogOpen: uploadDialogOpen,
     setUploadDialogOpen: setUploadDialogOpen
   };
@@ -69,7 +71,6 @@ export default function App(props) {
     <ThemeProvider theme={theme}>
       {/* https://react.dev/reference/react/useContext */}
       <AppDataContext.Provider value={{appData, appState}}>
-      <UploadFilesContextProvider>
         <DropHandler>
           <Box sx={{ display: 'flex' }}>
             {/* Provided by MUI Material for basic styling */}
@@ -90,7 +91,6 @@ export default function App(props) {
             </Box>
           </Box>
         </DropHandler>
-      </UploadFilesContextProvider>
       </AppDataContext.Provider>
     </ThemeProvider>
     </>
