@@ -7,7 +7,7 @@ from django.conf import settings
 from unittest.mock import Mock, patch
 
 from Sockets.consumers import FilterConsumer
-from api.models import *
+from api.models import AppUser, Image, Tag, ImageTag
 
 
 class TestSocketConsumer(TestCase):
@@ -446,7 +446,7 @@ class TestDeleteImage(TestSocketConsumer):
         result: dict = FilterConsumer.delete_image(input_message)
         expected_response: dict = {
             'type': 'message',
-            'message': f'File images/test_file.webp not found!'
+            'message': 'File images/test_file.webp not found!'
         }
         self.assertEqual(result, expected_response)
 

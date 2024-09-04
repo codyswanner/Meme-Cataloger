@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -96,6 +98,16 @@ DATABASES = {
         'PORT': '3306'
     }
 }
+
+# If testing, use an in-memory database,
+# as the default one will not be available.
+# Thanks StackOverflow user Sam Dolan for this suggestion!
+# https://stackoverflow.com/questions/4650509/different-db-for-testing-in-django
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
 
 
 # Password validation

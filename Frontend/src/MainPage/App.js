@@ -11,6 +11,7 @@ import AppDataContext from '../SupportingModules/AppDataContext';
 import DropHandler from './Uploads/DropHandler';
 
 
+
 // initial data for page load, provided by Django API.
 let apiData = await ApiCall();
 
@@ -24,6 +25,7 @@ let apiData = await ApiCall();
  * @returns The root App component to render all other components.
  */
 export default function App(props) {
+
   // useFilterSocket receives messages for updates to appData.
   // appData contains Image, Tag and ImageTag data.
   const [drawerOpen, setDrawerOpen] = useState(false);
