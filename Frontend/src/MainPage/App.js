@@ -11,7 +11,6 @@ import AppDataContext from '../SupportingModules/AppDataContext';
 import DropHandler from './Uploads/DropHandler';
 
 
-
 // initial data for page load, provided by Django API.
 let apiData = await ApiCall();
 
