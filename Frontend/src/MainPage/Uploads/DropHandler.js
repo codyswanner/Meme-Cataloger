@@ -8,13 +8,12 @@ function DropHandler(props) {
     const {appState} = useContext(AppDataContext);
     const files = appState.files;
     const setFiles = appState.setFiles;
-    const setUploadDialogOpen = appState.setUploadDialogOpen;
     const [modalActive, setModalActive] = useState(false);
 
     const handleDrop = (e) => {
         e.preventDefault(); // Allow drop on page
         setModalActive(false);
-        setUploadDialogOpen(true);
+        appState.setUploadDialogOpen(true);
 
         const dt = e.dataTransfer;
         const isFile = dt.types.includes('application/x-moz-file')

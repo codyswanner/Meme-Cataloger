@@ -17,8 +17,6 @@ import AppDataContext from '../SupportingModules/AppDataContext';
  */
 function TopAppBar() {
     const {appState} = useContext(AppDataContext);
-    const uploadDialogOpen = appState.uploadDialogOpen
-    const setUploadDialogOpen = appState.setUploadDialogOpen
     const theme = useTheme();
     const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [uploadButtonSize, setUploadButtonSize] = useState('100%');
@@ -38,11 +36,11 @@ function TopAppBar() {
     useEffect(() => {handleResize();}, [smallScreen])
     
     const handleOpenUpload = () => {
-        setUploadDialogOpen(true);
+        appState.setUploadDialogOpen(true);
     };
 
     const handleCloseUpload = () => {
-        setUploadDialogOpen(false);
+        appState.setUploadDialogOpen(false);
     };
 
     const handleDrawerToggle = () => {
@@ -74,7 +72,7 @@ function TopAppBar() {
                     onClick={handleOpenUpload}>
                     Upload
                 </Button>
-                <UploadDialog open={uploadDialogOpen} onClose={handleCloseUpload}/>
+                <UploadDialog open={appState.uploadDialogOpen} onClose={handleCloseUpload}/>
             </Toolbar>
         </AppBar>
     );
