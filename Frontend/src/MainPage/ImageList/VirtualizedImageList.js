@@ -2,6 +2,7 @@
 * This module adapted from react-virtuoso docs
 * https://virtuoso.dev/grid-responsive-columns/
 */
+/* eslint-disable react/display-name */
 
 import React, { forwardRef, useContext, useEffect, useState } from 'react';
 import { VirtuosoGrid } from 'react-virtuoso';

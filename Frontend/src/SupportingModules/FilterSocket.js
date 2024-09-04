@@ -19,7 +19,7 @@ filterSocket.onopen = () => {
     filterSocket.send(JSON.stringify({'type': 'message', 'message': 'FilterSocket Connected!'}));
 };
 
-filterSocket.onclose = function(e) {
+filterSocket.onclose = function() {
     console.log('Filter socket has closed unexpectedly');
 };
 

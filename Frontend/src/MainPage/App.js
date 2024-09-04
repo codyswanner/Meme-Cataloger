@@ -23,7 +23,8 @@ let apiData = await ApiCall();
  * 
  * @returns The root App component to render all other components.
  */
-export default function App(props) {
+export default function App() {
+
   // useFilterSocket receives messages for updates to appData.
   // appData contains Image, Tag and ImageTag data.
   const [drawerOpen, setDrawerOpen] = useState(false);

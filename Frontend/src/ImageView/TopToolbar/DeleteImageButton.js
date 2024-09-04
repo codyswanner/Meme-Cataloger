@@ -19,7 +19,6 @@ function DeleteImageButton (props) {
   const handleDeleteClick = (id) => {
     // Inform the backend of the deletion
     console.log("Delete button pressed, image " + id);
-    const socket = filterSocket;
     filterSocket.sendMessage({
       'type': 'deleteImage',
       'imageId': id

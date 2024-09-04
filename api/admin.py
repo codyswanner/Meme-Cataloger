@@ -2,6 +2,10 @@
 Not currently in use.
 """
 
-from django.contrib import admin
+"""
+Import below is unused, but may be required later on.
+Commenting out to avoid unused import flags from the linter.
+"""
+# from django.contrib import admin
 
 # Register your models here.
