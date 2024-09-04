@@ -6,8 +6,6 @@ import AppDataContext from '../../SupportingModules/AppDataContext';
 
 function DropHandler(props) {
     const {appState} = useContext(AppDataContext);
-    const files = appState.files;
-    const setFiles = appState.setFiles;
     const [modalActive, setModalActive] = useState(false);
 
     const handleDrop = (e) => {
@@ -24,7 +22,7 @@ function DropHandler(props) {
                 for (const file of dt.files) {
                     data.push(file);
                 };
-                setFiles([...files, ...data]);
+                appState.setFiles([...appState.files, ...data]);
             };
         };
     };
