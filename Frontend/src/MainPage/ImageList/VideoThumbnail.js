@@ -36,20 +36,9 @@ export default function ImageThumbnail(props){
 
     return(
       <a href={"http://" + window.location.host + "/image/" + props.id}>
-      <div style={containerStyles}>
-        {/* <video
-            src={props.src}
-            style={thumbnailStyles}
-            disablePictureInPicture
-            preload='metadata'
-        /> */}
-        { firstFrame &&
-            <img
-                style={thumbnailStyles}
-                src={firstFrame}
-            />
-        }
-      </div>
+        <div style={containerStyles}>
+            {firstFrame && <img style={thumbnailStyles} src={firstFrame}/>}
+        </div>
       </a>
     );
 };
