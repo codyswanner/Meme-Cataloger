@@ -4,7 +4,7 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
 import ApiCall from '../SupportingModules/ApiCall';
-import FullScreenPictureFrame from './FullScreenPictureFrame';
+import MediaFrame from './MediaFrame';
 import ImageDataContext from './ImageDataContext';
 
 const theme = createTheme({
@@ -28,7 +28,7 @@ root.render(
     <ThemeProvider theme={theme}>
       <ImageDataContext.Provider value={imageData}>
       <div style={{ backgroundColor: "#666666" }}>
-        <FullScreenPictureFrame apiData={apiData}/> 
+        <MediaFrame apiData={apiData}/>
       </div>
       </ImageDataContext.Provider>
     </ThemeProvider>
