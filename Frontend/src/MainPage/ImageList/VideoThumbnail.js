@@ -32,11 +32,11 @@ export default function ImageThumbnail(props){
         };
 
         generateFirstFrame();
-    }, [props.src])
+    }, [props.src]);
 
     return(
       <a href={"http://" + window.location.host + "/image/" + props.id}>
-        <div style={containerStyles}>
+        <div style={containerStyles} data-testid={'video-thumbnail'}>
             {firstFrame && <img style={thumbnailStyles} src={firstFrame}/>}
         </div>
       </a>
