@@ -79,7 +79,6 @@ export default function VirtuosoGridWrapper (props) {
         flex: 1,
         textAlign: "center",
         padding: "0.5rem 0.5rem",
-        border: "0px dashed red",
         whiteSpace: "nowrap",
       }}
     >

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 
 export default function ImageThumbnail(props){
-    const {containerStyles, thumbnailStyles} = props.styles;
     const [firstFrame, setFirstFrame] = useState();
 
     useEffect(() => {
@@ -36,8 +35,8 @@ export default function ImageThumbnail(props){
 
     return(
       <a href={"http://" + window.location.host + "/image/" + props.id}>
-        <div style={containerStyles} data-testid={'video-thumbnail'}>
-            {firstFrame && <img style={thumbnailStyles} src={firstFrame}/>}
+        <div style={props.containerStyles} data-testid={'video-thumbnail'}>
+            {firstFrame&&<img style={props.thumbnailStyles} src={firstFrame}/>}
         </div>
       </a>
     );
