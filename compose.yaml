@@ -47,7 +47,7 @@ services:
       - ./Frontend/:/home/django-server/Frontend/
       - ./api/:/home/django-server/api/
       - ./Sockets/:/home/django-server/Sockets/
-      - ./media/images/:/home/django-server/media/images
+      - ./media/:/home/django-server/media/
       
     ports:
       - 8000:8000
