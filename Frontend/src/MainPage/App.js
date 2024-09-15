@@ -32,6 +32,8 @@ export default function App() {
   const [editTags, setEditTags] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [selectionActive, setSelectionActive] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
   const appData = useFilterSocket(apiData);
   const appState = {
     drawerOpen: drawerOpen,
@@ -43,7 +45,11 @@ export default function App() {
     files: files,
     setFiles: setFiles,
     uploadDialogOpen: uploadDialogOpen,
-    setUploadDialogOpen: setUploadDialogOpen
+    setUploadDialogOpen: setUploadDialogOpen,
+    selectionActive: selectionActive,
+    setSelectionActive: setSelectionActive,
+    selectedItems: selectedItems,
+    setSelectedItems: setSelectedItems
   };
   // createTheme sets background color
   const theme = createTheme({
