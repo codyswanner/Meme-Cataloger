@@ -49,6 +49,10 @@ function TopAppBar() {
         };
     };
 
+    const handleStartSelect = () => {
+        appState.setSelectionActive(!appState.selectionActive);
+    };
+
     return(
         <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
@@ -65,13 +69,21 @@ function TopAppBar() {
                 <Typography variant='h5' noWrap component='div' sx={{ fontSize: titleSize }}>
                     Meme-opolis
                 </Typography>
-                <Button
-                    variant="contained"
-                    sx={{marginLeft: "auto", fontSize: uploadButtonSize}}
-                    startIcon={<UploadIcon fontSize="inherit"/>}
-                    onClick={handleOpenUpload}>
-                    Upload
-                </Button>
+                <Toolbar style={{marginLeft: 'auto'}}>
+                    <Button
+                        variant="contained"
+                        sx={{ fontSize: uploadButtonSize }}
+                        onClick={handleStartSelect}>
+                        Select
+                    </Button>
+                    <Button
+                        variant="contained"
+                        sx={{ marginLeft: '5%', fontSize: uploadButtonSize }}
+                        startIcon={<UploadIcon fontSize="inherit"/>}
+                        onClick={handleOpenUpload}>
+                        Upload
+                    </Button>
+                </Toolbar>
                 <UploadDialog open={appState.uploadDialogOpen} onClose={handleCloseUpload}/>
             </Toolbar>
         </AppBar>

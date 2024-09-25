@@ -34,19 +34,15 @@ export default function Thumbnail(props) {
   if (videoFileTypesRegex.test(props.src)) {
     const firstFrame = useFirstFrame(props.src);
     return(
-      <a href={"http://" + window.location.host + "/image/" + props.id}>
-        <ThumbnailContainer data-testid={'video-thumbnail'}>
-            {firstFrame&&<ThumbnailImg src={firstFrame}/>}
-        </ThumbnailContainer>
-      </a>
+      <ThumbnailContainer data-testid={'video-thumbnail'}>
+          {firstFrame&&<ThumbnailImg src={firstFrame}/>}
+      </ThumbnailContainer>
     );
   } else if (imageFileTypesRegex.test(props.src)) {
     return(
-      <a href={"http://" + window.location.host + "/image/" + props.id}>
-        <ThumbnailContainer data-testid={'img-thumbnail'}>
-          <ThumbnailImg src={props.src}/>
-        </ThumbnailContainer>
-      </a>
+      <ThumbnailContainer data-testid={'img-thumbnail'}>
+        <ThumbnailImg src={props.src}/>
+      </ThumbnailContainer>
     );
   } else {
     console.error(`Source ${props.src} does not match expected file types`);
