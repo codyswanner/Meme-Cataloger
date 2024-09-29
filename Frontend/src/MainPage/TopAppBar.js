@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 import UploadDialog from './Uploads/UploadDialog';
 import AppDataContext from '../SupportingModules/AppDataContext';
+import DeleteImagesButton from './DeleteImagesButton';
 
 
 /**
@@ -70,6 +71,7 @@ function TopAppBar() {
                     Meme-opolis
                 </Typography>
                 <Toolbar style={{marginLeft: 'auto'}}>
+                    {appState.selectionActive && <DeleteImagesButton/>}
                     <Button
                         variant="contained"
                         sx={{ fontSize: uploadButtonSize }}

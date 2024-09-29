@@ -27,7 +27,7 @@ function useFilterSocket(rawAppData) {
     const [appData, setAppData] = useState(rawAppData);
     // activeFilters refers to filters for image search
     const [activeFilters, setActiveFilters] = useState([]);
-    
+
     /**
      * Responds to a request to change a filter state.
      * 
@@ -171,6 +171,34 @@ function useFilterSocket(rawAppData) {
         setAppData(modifiedAppData);
     };
 
+    function handleImagesDeleted (response) {
+        const modifiedAppData = {...appData}; // Create a mutable copy
+        console.log(response.ids);
+
+        for (const id of response.ids) {
+            console.log(id);
+            // Delete image from the image array
+            var imageArray = modifiedAppData.imageData;
+            imageArray = imageArray.filter(function(item) {
+                return item.id !== id
+            });
+            modifiedAppData.imageData = imageArray;
+            console.log(`Removed ${id} from app data`);
+
+            // Delete any tag association records for image
+            // (Can this be changed to match the structure of handleTagRemoved?)
+            const imageTagData = modifiedAppData.imageTagData;
+            for (const [key, value] of Object.entries(imageTagData)) {
+                if (value.image_id === id) {
+                    delete imageTagData[key];
+                };
+            };
+            console.log(`Removed imagetags for ${id} from app data`);
+        };
+
+        setAppData(modifiedAppData);
+    }
+
     function handleTagUpdated (response) {
         const modifiedAppData = {...appData}; // Create a mutable copy
 
@@ -227,6 +255,8 @@ function useFilterSocket(rawAppData) {
                     break;
                 case "imageDeleted":
                     handleImageDeleted(response);
+                case "imagesDeleted":
+                    handleImagesDeleted(response);
                     break;
                 case "tagUpdated":
                     handleTagUpdated(response);
