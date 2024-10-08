@@ -50,8 +50,13 @@ function TopAppBar() {
         };
     };
 
-    const handleStartSelect = () => {
-        appState.setSelectionActive(!appState.selectionActive);
+    const handleToggleSelect = () => {
+        if (!appState.selectionActive) {
+            appState.setSelectionActive(true);
+        } else {
+            appState.setSelectionActive(false);
+            appState.setSelectedItems([]);
+        };
     };
 
     return(
@@ -75,7 +80,7 @@ function TopAppBar() {
                     <Button
                         variant="contained"
                         sx={{ fontSize: uploadButtonSize }}
-                        onClick={handleStartSelect}>
+                        onClick={handleToggleSelect}>
                         Select
                     </Button>
                     <Button
