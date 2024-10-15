@@ -8,14 +8,10 @@ import filterSocket from '../SupportingModules/FilterSocket';
 
 /**
  * Click to delete image from library.
- * Renders within the ImageTopToolbar component.
- * 
- * @param {object} props Contains props passed to the component.
- * @param {number} props.id Unique ID of the image to be deleted.
- * 
+ *
  * @returns The DeleteImageButton component to be rendered in the app.
  */
-export default function DeleteImagesButton (props) {
+export default function DeleteImagesButton () {
   const { appState } = useContext(AppDataContext);
 
   const handleClick = () => {

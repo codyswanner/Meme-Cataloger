@@ -255,6 +255,7 @@ function useFilterSocket(rawAppData) {
                     break;
                 case "imageDeleted":
                     handleImageDeleted(response);
+                    break;
                 case "imagesDeleted":
                     handleImagesDeleted(response);
                     break;
