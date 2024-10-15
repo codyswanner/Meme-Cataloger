@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 import UploadDialog from './Uploads/UploadDialog';
 import AppDataContext from '../SupportingModules/AppDataContext';
+import DeleteImagesButton from './DeleteImagesButton';
 
 
 /**
@@ -49,6 +50,15 @@ function TopAppBar() {
         };
     };
 
+    const handleToggleSelect = () => {
+        if (!appState.selectionActive) {
+            appState.setSelectionActive(true);
+        } else {
+            appState.setSelectionActive(false);
+            appState.setSelectedItems([]);
+        };
+    };
+
     return(
         <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
@@ -65,13 +75,22 @@ function TopAppBar() {
                 <Typography variant='h5' noWrap component='div' sx={{ fontSize: titleSize }}>
                     Meme-opolis
                 </Typography>
-                <Button
-                    variant="contained"
-                    sx={{marginLeft: "auto", fontSize: uploadButtonSize}}
-                    startIcon={<UploadIcon fontSize="inherit"/>}
-                    onClick={handleOpenUpload}>
-                    Upload
-                </Button>
+                <Toolbar style={{marginLeft: 'auto'}}>
+                    {appState.selectionActive && <DeleteImagesButton/>}
+                    <Button
+                        variant="contained"
+                        sx={{ fontSize: uploadButtonSize }}
+                        onClick={handleToggleSelect}>
+                        Select
+                    </Button>
+                    <Button
+                        variant="contained"
+                        sx={{ marginLeft: '5%', fontSize: uploadButtonSize }}
+                        startIcon={<UploadIcon fontSize="inherit"/>}
+                        onClick={handleOpenUpload}>
+                        Upload
+                    </Button>
+                </Toolbar>
                 <UploadDialog open={appState.uploadDialogOpen} onClose={handleCloseUpload}/>
             </Toolbar>
         </AppBar>

@@ -11,6 +11,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import Thumbnail from './Thumbnail';
 import AppDataContext from '../../SupportingModules/AppDataContext';
+import SelectionHandler from './SelectionHandler';
 
 
 export default function VirtuosoGridWrapper (props) {
@@ -79,7 +80,6 @@ export default function VirtuosoGridWrapper (props) {
         flex: 1,
         textAlign: "center",
         padding: "0.5rem 0.5rem",
-        border: "0px dashed red",
         whiteSpace: "nowrap",
       }}
     >
@@ -90,6 +90,7 @@ export default function VirtuosoGridWrapper (props) {
   function VirtualizedImageList() {
     const {appData} = useContext(AppDataContext);
     const imageList = appData.imageData;
+    const reverseList=(index)=>{return imageList[(imageList.length-1)-index]};
 
     return (
         <VirtuosoGrid
@@ -98,10 +99,12 @@ export default function VirtuosoGridWrapper (props) {
           components={gridComponents}
           itemContent={(index) => 
             <ItemWrapper>
+              <SelectionHandler id={reverseList(index).id}>
               <Thumbnail
                 // Provide images in reverse order -- (length - index)
-                src={imageList[(imageList.length-1)-index].source}
-                id={imageList[(imageList.length-1)-index].id}/>
+                src={reverseList(index).source}
+                id={reverseList(index).id}/>
+              </SelectionHandler>
             </ItemWrapper>
           }
         />

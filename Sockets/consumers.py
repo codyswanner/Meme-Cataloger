@@ -331,6 +331,46 @@ class FilterConsumer(WebsocketConsumer):
             return response_message
 
     @staticmethod
+    def delete_images(text_data_json: dict) -> dict:
+        
+        image_ids = text_data_json['imageIds']
+        deleted_ids: list = []
+        record_not_found_ids: list = []
+        source_not_found_ids: list = []
+
+        for image_id in image_ids:
+            try:
+                image_object: Image = Image.objects.get(id=image_id)
+
+                source_filename: str = image_object.source
+                app_media_root: str = settings.MEDIA_ROOT
+                full_file_path: str = \
+                    f'{app_media_root}/{source_filename}'
+                
+                os.remove(full_file_path)
+                image_object.delete()
+                # make a note of deletion for response message
+                deleted_ids.append(image_id)
+            except Image.DoesNotExist:
+                # make a note of this for the respone
+                record_not_found_ids.append(image_id)
+            except FileNotFoundError:
+                # make a note of this for logging and response
+                source_not_found_ids.append(image_id)
+
+        if record_not_found_ids or source_not_found_ids:
+            response_message: dict = {
+                'type': 'deletionErrors',
+                'successfulDeletions': deleted_ids,
+                'recordNotFound': record_not_found_ids,
+                'sourceNotFound': source_not_found_ids
+            }
+            return response_message
+        
+        response_message: dict = {'type': 'imagesDeleted', 'ids': deleted_ids}
+        return response_message
+
+    @staticmethod
     def update_description(text_data_json: dict) -> None:
         """Updates description on image (in database) as specified by client.
 
@@ -428,6 +468,9 @@ class FilterConsumer(WebsocketConsumer):
                     self.send_response(response_message)
             case 'deleteImage':
                 response_message = self.delete_image(text_data_json)
+                self.send_response(response_message)
+            case 'deleteImages':
+                response_message = self.delete_images(text_data_json)
                 self.send_response(response_message)
             case 'updateDescription':
                 self.update_description(text_data_json)  # no response needed

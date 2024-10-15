@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
-export default function ImageThumbnail(props){
-    const {containerStyles, thumbnailStyles} = props.styles;
+export default function useFirstFrame(source) {
     const [firstFrame, setFirstFrame] = useState();
 
     useEffect(() => {
@@ -11,7 +10,7 @@ export default function ImageThumbnail(props){
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
 
-            video.src = props.src;
+            video.src = source;
             video.preload = 'metadata';
 
             await new Promise(resolve => video.addEventListener(
@@ -32,14 +31,7 @@ export default function ImageThumbnail(props){
         };
 
         generateFirstFrame();
-    }, [props.src]);
+    }, []);
 
-    return(
-      <a href={"http://" + window.location.host + "/image/" + props.id}>
-        <div style={containerStyles} data-testid={'video-thumbnail'}>
-            {firstFrame && <img style={thumbnailStyles} src={firstFrame}/>}
-        </div>
-      </a>
-    );
+    return firstFrame;
 };
-
