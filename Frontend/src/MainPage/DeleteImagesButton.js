@@ -11,14 +11,15 @@ import filterSocket from '../SupportingModules/FilterSocket';
  *
  * @returns The DeleteImageButton component to be rendered in the app.
  */
-export default function DeleteImagesButton () {
+export default function DeleteImagesButton (props) {
   const { appState } = useContext(AppDataContext);
 
   const handleClick = () => {
     // Inform the backend of the deletion
+    console.log(props.imageIds);
     filterSocket.sendMessage({
       'type': 'deleteImages',
-      'imageIds': [ ...appState.selectedItems ]
+      'imageIds': props.imageIds
     });
     appState.setSelectedItems([]);
     appState.setSelectionActive(false);
