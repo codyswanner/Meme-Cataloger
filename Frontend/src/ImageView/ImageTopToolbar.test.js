@@ -2,11 +2,11 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import filterSocket from '../../SupportingModules/FilterSocket';
-import ImageDataContext from '../ImageDataContext';
+import filterSocket from '../SupportingModules/FilterSocket';
+import ImageDataContext from './ImageDataContext';
 import ImageTopToolbar from './ImageTopToolbar';
 
-jest.mock('../../SupportingModules/FilterSocket', () => ({
+jest.mock('../SupportingModules/FilterSocket', () => ({
     onOpen: jest.fn(),
     onClose: jest.fn(),
     send: jest.fn(),

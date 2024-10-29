@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { TextField, Toolbar } from "@mui/material";
 
-import ShareImageButton from './ShareImageButton';
-import ArchiveImageButton from './ArchiveImageButton';
-import DeleteImageButton from './DeleteImageButton';
-import filterSocket from '../../SupportingModules/FilterSocket';
-import ImageDataContext from '../ImageDataContext';
+import ShareImageButton from '../ImageFeatures/ShareImageButton';
+import ArchiveImageButton from '../ImageFeatures/ArchiveImageButton';
+import DeleteImagesButton from '../ImageFeatures/DeleteImagesButton';
+import filterSocket from '../SupportingModules/FilterSocket';
+import ImageDataContext from './ImageDataContext';
 
 
 /**
@@ -48,7 +48,7 @@ function ImageTopToolbar(props) {
         <Toolbar disableGutters> {/* MUI Gutters cause spacing issues */}
           <ShareImageButton id={imageData}/>
           <ArchiveImageButton id={imageData}/>
-          <DeleteImageButton id={imageId}/>
+          <DeleteImagesButton imageIds={imageId}/>
         </Toolbar>
       </div>
     </Toolbar>

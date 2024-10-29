@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import ImageTopToolbar from './TopToolbar/ImageTopToolbar';
+import ImageTopToolbar from './ImageTopToolbar';
 import ImageBottomToolbar from './BottomToolbar/ImageBottomToolbar';
 import useFilterSocket from '../SupportingModules/useFilterSocket';
 import ImageDataContext from './ImageDataContext';

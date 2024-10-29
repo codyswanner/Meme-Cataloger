@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 import UploadDialog from './Uploads/UploadDialog';
 import AppDataContext from '../SupportingModules/AppDataContext';
-import DeleteImagesButton from './DeleteImagesButton';
+import DeleteImagesButton from '../ImageFeatures/DeleteImagesButton';
 
 
 /**
@@ -59,6 +59,11 @@ function TopAppBar() {
     };
   };
 
+  const handleDeleteClick = () => {
+    appState.setSelectedItems([]);
+    appState.setSelectionActive(false);
+  };
+
   return (
     <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
@@ -78,7 +83,10 @@ function TopAppBar() {
         <Toolbar style={{ marginLeft: 'auto' }}>
           {
             appState.selectionActive &&
-            <DeleteImagesButton imageIds={appState.selectedItems}/>
+            <DeleteImagesButton
+              handleClickInContext={handleDeleteClick}
+              imageIds={appState.selectedItems}
+            />
           }
           <Button
             variant="contained"
