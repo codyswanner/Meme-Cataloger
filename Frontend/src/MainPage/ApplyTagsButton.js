@@ -29,7 +29,7 @@ export default function ApplyTagsButton(props) {
   return (
     <>
       <IconButton
-        style={{ color: "white", fontSize: "2em", maxHeight: "1px" }}
+        style={{ color: "white", fontSize: "2em", maxHeight: "30px" }}
         onClick={(e) => handleClick(e)}
         // ref={buttonRef}
       >
