@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from '@emotion/styled';
+import AppDataContext from '../SupportingModules/AppDataContext';
 
 
 export function TagCheckbox(props) {
@@ -7,7 +8,6 @@ export function TagCheckbox(props) {
   const inputRef = useRef(null);
 
   const handleLabelClick = () => {
-    console.log('The label was clicked!');
     if (inputRef.current.checked) {
       inputRef.current.checked = false;
     } else {
@@ -23,7 +23,7 @@ export function TagCheckbox(props) {
         value={props.tagName}
         ref={inputRef}
       />
-      <label for={props.tagId} onClick={handleLabelClick}>
+      <label htmlFor={props.tagId} onClick={handleLabelClick}>
         {props.tagName}
       </label>
 
@@ -33,7 +33,8 @@ export function TagCheckbox(props) {
 };
 
 export default function ApplyTagsPopper(props) {
-
+  
+  const { appData } = useContext(AppDataContext);
   const TagsDialog = styled.dialog`
     position: absolute;
     left: -250px;
@@ -44,9 +45,9 @@ export default function ApplyTagsPopper(props) {
   return(
     <TagsDialog open={props.open}>
       <form>
-        <TagCheckbox tagName={"This is a fake tag"} tagId={1}/>
-
-        <TagCheckbox tagName={"But will be real someday"} tagId={2}/>
+        {(appData.tagData.map((tag) => {
+          return <TagCheckbox tagName={tag.name} tagId={tag.id} key={tag.id}/>
+        }))}
       </form>
     </TagsDialog>
   );
