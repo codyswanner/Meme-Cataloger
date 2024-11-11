@@ -5,8 +5,29 @@ import AppDataContext from '../SupportingModules/AppDataContext';
 
 export function TagCheckbox(props) {
 
+  const { appData, appState } = props.appContext;
   const inputRef = useRef(null);
 
+  const handleSetup = (selection) => {
+    
+    const matchingTags = appData.imageTagData.filter(
+      (imageTag) => {
+        for (let i = 0; i < selection.length; i++){
+          if (imageTag.image_id == selection[i]){
+            return true
+          }
+        }
+      }
+    ).filter(
+      (imageTag) => {return imageTag.tag_id == props.tagId}
+    );
+    
+    if (matchingTags.length > 0) {return true} else {return false};
+
+    // Also need a partial match option?
+    // ^ This is a goal for another day
+  };
+  
   const handleLabelClick = () => {
     if (inputRef.current.checked) {
       inputRef.current.checked = false;
@@ -19,6 +40,7 @@ export function TagCheckbox(props) {
     <>
       <input
         type='checkbox'
+        defaultChecked={handleSetup(appState.selectedItems)}
         name={props.tagId}
         value={props.tagName}
         ref={inputRef}
@@ -34,7 +56,7 @@ export function TagCheckbox(props) {
 
 export default function ApplyTagsPopper(props) {
   
-  const { appData } = useContext(AppDataContext);
+  const { appData, appState } = useContext(AppDataContext);
   const TagsDialog = styled.dialog`
     position: absolute;
     left: -250px;
@@ -46,7 +68,14 @@ export default function ApplyTagsPopper(props) {
     <TagsDialog open={props.open}>
       <form>
         {(appData.tagData.map((tag) => {
-          return <TagCheckbox tagName={tag.name} tagId={tag.id} key={tag.id}/>
+          return(
+            <TagCheckbox
+              tagName={tag.name}
+              tagId={tag.id}
+              key={tag.id}
+              appContext={{ appData, appState }}
+            />
+          )
         }))}
       </form>
     </TagsDialog>
@@ -59,7 +88,7 @@ export default function ApplyTagsPopper(props) {
 Okay, what else does this need...
 
 1. Communications with backend (websocket)
-2. Way to determine applied tags on selected images (sounds complicated)
+\
 3. Controls that work in concert with #2
 4. Search functionality
 5. "Create new tag" functionality
