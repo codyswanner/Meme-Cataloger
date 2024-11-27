@@ -43,7 +43,6 @@ export default function TagCheckbox(props) {
     };
     
     setFieldChanged(false);
-    console.log("Fields reset!");
   
   }, [appState.selectedItems]);
   
@@ -59,9 +58,6 @@ export default function TagCheckbox(props) {
   const handleChange = () => {
     if (!fieldChanged) {
       setFieldChanged(true);
-      console.log("Field changed!");
-    } else {
-      console.log("Field already changed");
     };
   };
 
