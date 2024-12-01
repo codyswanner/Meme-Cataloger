@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import AppDataContext from '../SupportingModules/AppDataContext';
 
+import filterSocket from '../SupportingModules/FilterSocket';
 import TagCheckbox from './TagCheckbox';
 
 
@@ -25,7 +26,21 @@ export default function ApplyTagsPopper(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // more to come later
+
+    const formData = new FormData(e.currentTarget);
+
+    // Take the selected tagIds from the formData, and convert to int
+    const selectedTags = [...formData.keys()].map((key) => +key);
+
+    filterSocket.sendMessage({
+      'type': 'updateTagsFromGallery',
+      'selectedTags': selectedTags,
+      'selectedImages': appState.selectedItems
+    });
+
+    console.log("Socket message sent!");
+
+    setResetForm(true);
   };
 
   const handleReset = (e) => {
@@ -36,7 +51,7 @@ export default function ApplyTagsPopper(props) {
 
   return(
     <TagsDialog open={props.open}>
-      <form>
+      <form onSubmit={(e) => handleSubmit(e)}>
         {(appData.tagData.map((tag) => {
           return(
             <TagCheckbox
@@ -47,7 +62,7 @@ export default function ApplyTagsPopper(props) {
             />
           )
         }))}
-        <button onClick={(e) => handleSubmit(e)}>Submit</button>
+        <input type="submit" value="Submit"/>
         <button onClick={(e) => handleReset(e)}>Reset</button>
       </form>
     </TagsDialog>
@@ -57,35 +72,15 @@ export default function ApplyTagsPopper(props) {
 
 /*
 
-Okay, what else does this need...
+What else this needs...
 
-1. Communications with backend (websocket)
+\
 \
 \
 4. Search functionality
 5. "Create new tag" functionality
-6. Submit/Apply button? (would make sense with the form tag)
+\
 7. Better styling! (This looks like shit right now)
 8. Tests
-9. A way to temporarily store selections in this menu (until submitted)
-10. Undo/reset option overall
-11. Undo/reset option per tag? (kind of edge case but I can see it...)
-
-(Realized around point #4 that this is gonna need to be multiple components)
-
-Components (subject to change)
-1. outer dialog box
-2. individual tag checkboxes (w/ labels, etc)
-3. selection info storage + backend communication (together? yeah?)
-  Idk maybe only comms will get wrapped up and storage stays w/ #1
-  (Am I just describing FilterSocket?)
-4. Styling? (may also stay with #1)
-5. Search box
-6. tests
-
-That seems like enough for now, I'm sure there will be more to dig into,
-but at some point I have to stop thinking and start doing.
-Hey self, go make this an actual GitHub issue!
-(Issue #165 is already relevant for this, added it there!)
 
 */
