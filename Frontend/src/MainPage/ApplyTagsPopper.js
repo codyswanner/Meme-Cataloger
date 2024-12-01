@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import AppDataContext from '../SupportingModules/AppDataContext';
 
@@ -8,12 +8,31 @@ import TagCheckbox from './TagCheckbox';
 export default function ApplyTagsPopper(props) {
   
   const { appData, appState } = useContext(AppDataContext);
+  const [resetForm, setResetForm] = useState(false);
   const TagsDialog = styled.dialog`
     position: absolute;
     left: -250px;
     top: 52px;
     width: 300px;
   `;
+
+  useEffect(() => {
+    if (resetForm) {
+      // set resetForm back to false after a reset
+      setResetForm(false);
+    };
+  }, [resetForm]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // more to come later
+  };
+
+  const handleReset = (e) => {
+    e.preventDefault();
+    // changed state triggers fresh render, resetting all fields
+    setResetForm(true);
+  };
 
   return(
     <TagsDialog open={props.open}>
@@ -28,6 +47,8 @@ export default function ApplyTagsPopper(props) {
             />
           )
         }))}
+        <button onClick={(e) => handleSubmit(e)}>Submit</button>
+        <button onClick={(e) => handleReset(e)}>Reset</button>
       </form>
     </TagsDialog>
   );
@@ -40,7 +61,7 @@ Okay, what else does this need...
 
 1. Communications with backend (websocket)
 \
-3. Controls that work in concert with #2
+\
 4. Search functionality
 5. "Create new tag" functionality
 6. Submit/Apply button? (would make sense with the form tag)
