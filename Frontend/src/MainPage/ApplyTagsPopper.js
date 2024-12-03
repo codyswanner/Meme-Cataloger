@@ -24,17 +24,21 @@ export default function ApplyTagsPopper(props) {
     };
   }, [resetForm]);
 
+  const formActions = appData.tagData.map((tag) => {
+    return {'id': tag.id, 'action': 'none'}
+  });
+
+  const handleFormUpdate = (id, action) => {
+    const index = formActions.findIndex((tag) => {return tag.id == id});
+    formActions[index].action = action;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-
-    // Take the selected tagIds from the formData, and convert to int
-    const selectedTags = [...formData.keys()].map((key) => +key);
-
     filterSocket.sendMessage({
       'type': 'updateTagsFromGallery',
-      'selectedTags': selectedTags,
+      'actions': formActions,
       'selectedImages': appState.selectedItems
     });
 
@@ -59,6 +63,7 @@ export default function ApplyTagsPopper(props) {
               tagId={tag.id}
               key={tag.id}
               appContext={{ appData, appState }}
+              handleFormUpdate={handleFormUpdate}
             />
           )
         }))}

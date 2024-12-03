@@ -59,6 +59,13 @@ export default function TagCheckbox(props) {
     if (!fieldChanged) {
       setFieldChanged(true);
     };
+
+    const checkbox = document.querySelector(`#checkbox-${props.tagId}`);
+    if (checkbox.checked) {
+      props.handleFormUpdate(props.tagId, 'add');
+    } else {
+      props.handleFormUpdate(props.tagId, 'remove');
+    };
   };
 
   const handleResetClick = (e) => {
@@ -78,6 +85,7 @@ export default function TagCheckbox(props) {
       checkbox.indeterminate = true;
     };
 
+    props.handleFormUpdate(props.tagId, 'none');
   };
 
   const ResetButton = styled.button`
