@@ -39,7 +39,8 @@ export default function ApplyTagsPopper(props) {
     filterSocket.sendMessage({
       'type': 'updateTagsFromGallery',
       'actions': formActions,
-      'selectedImages': appState.selectedItems
+      'selectedImages': appState.selectedItems,
+      'user': 1 // Hardcoded for now
     });
 
     console.log("Socket message sent!");
