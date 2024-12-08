@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import UploadDialog from './Uploads/UploadDialog';
 import AppDataContext from '../SupportingModules/AppDataContext';
 import DeleteImagesButton from '../ImageFeatures/DeleteImagesButton';
-import ApplyTagsButton from './ApplyTagsButton';
+import ApplyTagsButton from './ApplyTagsButton/ApplyTagsButton';
 
 
 /**
