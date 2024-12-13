@@ -110,7 +110,10 @@ export default function TagCheckbox(props) {
         ref={inputRef}
         onChange={() => handleChange()}
       />
-      <label htmlFor={props.tagId} onClick={handleLabelClick}>
+      <label
+        htmlFor={props.tagId}
+        onClick={handleLabelClick}
+        data-testid={'checkbox-label'}>
         {props.tagName}
       </label>
 
