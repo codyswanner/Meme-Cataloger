@@ -10,7 +10,7 @@ import ApplyTagsPopper from './ApplyTagsPopper';
  * @param {ref} props.buttonRef helps with outside-click handling.
  * @returns The AddTagButton component to be rendered in the app.
  */
-export default function ApplyTagsButton(props) {
+export default function ApplyTagsButton() {
 
   // See https://mui.com/material-ui/react-popper/ for details on the purpose of anchorEl.
   const [anchorEl, setAnchorEl] = useState(null);
@@ -18,7 +18,7 @@ export default function ApplyTagsButton(props) {
   // Sets AddTagPopper open or closed.
   const [open, setOpen] = useState(false);
   
-  // Used by AddTagPopper for click-away handling.
+  // Used for click-away handling.
   const buttonRef = useRef(null);
 
   const handleClick = (e) => {
@@ -31,18 +31,16 @@ export default function ApplyTagsButton(props) {
       <IconButton
         style={{ color: "white", fontSize: "2em", maxHeight: "30px" }}
         onClick={(e) => handleClick(e)}
-        // ref={buttonRef}
+        ref={buttonRef}
       >
         <p>+</p>
       </IconButton>
-      <ApplyTagsPopper open={open}/>
-      {/* <TagPopper  // only shows when open==true
+      <ApplyTagsPopper
         open={open}
-        setOpen={setOpen}
-        anchorEl={anchorEl}
+        setOpen={setOpen} 
         setAnchorEl={setAnchorEl}
         buttonRef={buttonRef}
-      /> */}
+      />
     </>
   );
 };
