@@ -298,12 +298,14 @@ class FilterConsumer(WebsocketConsumer):
         responses_list: list = []  # Used to inform client of changes
         
         # Unpack text_data_json
-        user_id: int = text_data_json['user']
         image_ids: list = text_data_json['selectedImages']
         tag_actions: list = text_data_json['actions']
+        # user check to be implemented later
+        # user_id: int = text_data_json['user']
 
         try:
-            user: AppUser = AppUser.objects.get(id=user_id)
+            # user check to be implemented later
+            # user: AppUser = AppUser.objects.get(id=user_id)
             image_objects: QuerySet = Image.objects.filter(id__in=image_ids)
         except AppUser.DoesNotExist:
             response_message: dict = {
