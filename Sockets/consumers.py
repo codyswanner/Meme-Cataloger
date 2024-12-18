@@ -296,6 +296,94 @@ class FilterConsumer(WebsocketConsumer):
             tag_removed_details = self.remove_tag(image_object, tag_id)
             responses_list.append(tag_removed_details)
         return responses_list
+    
+    def update_tags_from_gallery(self, text_data_json: dict) -> dict:
+        """Updates ImageTag associations for Images as requested by user.
+
+        Parameters
+        ----------
+        text_data_json: dict
+            Websocket JSON message, translated to a Python dict by receive method.
+            For update_tags_from_gallery, expected structure is:
+                {'type': 'updateTagsFromGallery',
+                'actions': (list of tags to add/remove),
+                'selectedImages': (list of target images),
+                'user': (user_id as int)
+        
+        Returns
+        -------
+        responses_list: list
+            A list of WebSocket responses to inform the frontend of changes.
+            See self.add_tag and self.remove_tag for details on these messages.
+        """
+
+        responses_list: list = []  # Used to inform client of changes
+        
+        # Unpack text_data_json
+        image_ids: list = text_data_json['selectedImages']
+        tag_actions: list = text_data_json['actions']
+        # user check to be implemented later
+        # user_id: int = text_data_json['user']
+
+        try:
+            # user check to be implemented later
+            # user: AppUser = AppUser.objects.get(id=user_id)
+            image_objects: QuerySet = Image.objects.filter(id__in=image_ids)
+        except AppUser.DoesNotExist:
+            response_message: dict = {
+                'type': 'message',
+                'message': 'Specified user does not exist!'
+            }
+            responses_list.append(response_message)
+            return responses_list
+        except Image.DoesNotExist:
+            response_message: dict = {
+                'type': 'message',
+                'message': 'Specified image does not exist!'
+            }
+            responses_list.append(response_message)
+            return responses_list
+        
+        # Clean tag_actions to only relevant entries (not 'none')
+        for i in range(len(tag_actions)-1, -1, -1):  # reverse walk for safety
+            if tag_actions[i]['action'] == 'none':
+                tag_actions.pop(i)
+        
+        try:
+            for image in image_objects:
+                for entry in tag_actions:
+                    imagetag_query = ImageTag.objects.filter(
+                        image_id=image.id,
+                        tag_id=entry['id']
+                    )
+
+                    if entry['action'] == 'add':
+                        if imagetag_query.exists():
+                            # No need to create record, it already exists
+                            continue
+                        else:
+                            result = self.add_tag(image, entry['id'])
+
+                    elif entry['action'] == 'remove':
+                        if not imagetag_query.exists():
+                            # No need to delete, record does not exist
+                            continue
+                        else:
+                            result = self.remove_tag(image, entry['id'])
+                    else:
+                        # only two possible actions;
+                        # if we got to here, something went wrong
+                        unexpected_action: str = entry['action']
+                        raise ValueError
+                    responses_list.append(result)
+        except ValueError:
+            response_message: dict = {
+                'type': 'message',
+                'message': f'Action not supported: {unexpected_action}'
+            }
+            responses_list.append(response_message)
+        
+        return responses_list
 
     @staticmethod
     def delete_image(text_data_json: dict) -> dict:
@@ -486,6 +574,10 @@ class FilterConsumer(WebsocketConsumer):
                 self.send_response(response_message)
             case 'updateTags':
                 responses_list: list = self.update_tags(text_data_json)
+                for response_message in responses_list:
+                    self.send_response(response_message)
+            case 'updateTagsFromGallery':
+                responses_list = self.update_tags_from_gallery(text_data_json)
                 for response_message in responses_list:
                     self.send_response(response_message)
             case 'deleteImage':

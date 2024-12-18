@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import UploadDialog from './Uploads/UploadDialog';
 import AppDataContext from '../SupportingModules/AppDataContext';
 import DeleteImagesButton from '../ImageFeatures/DeleteImagesButton';
+import ApplyTagsButton from './ApplyTagsButton/ApplyTagsButton';
 
 
 /**
@@ -64,6 +65,7 @@ function TopAppBar() {
     appState.setSelectionActive(false);
   };
 
+  
   return (
     <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
@@ -81,6 +83,7 @@ function TopAppBar() {
           Meme-opolis
         </Typography>
         <Toolbar style={{ marginLeft: 'auto' }}>
+          {appState.selectionActive && <ApplyTagsButton/>}
           {
             appState.selectionActive &&
             <DeleteImagesButton
