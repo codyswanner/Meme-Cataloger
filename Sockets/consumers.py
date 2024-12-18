@@ -109,25 +109,47 @@ class FilterConsumer(WebsocketConsumer):
          text_data_json: dict
             Websocket JSON message, translated to a Python dict by receive method.
             For apply_filters, expected structure is:
-                {'type': 'activeFilters',
-                'activeFilters': (numerical filter ids represented as a list of strings)
-                }
+            {
+                'type': 'activeFilters',
+                'activeFilters': (numerical filter ids as a list of strings)
+            }
 
         Returns
         -------
         None; however, sends a WebSocket message to client with the following structure:
-            {'type': 'applyFilters', 'results': image_results}
+            {
+                'type': 'applyFilters',
+                'filters': (the filters that were passed in),
+                'imageResults': (list of matching images),
+                'associatedTags': {list of tags of matching images)
+            }
         """
 
         active_filters: list = text_data_json['activeFilters']
         image_queryset: QuerySet = Image.objects.all()
         image_results: list = []
+        associated_tags: list = []  # tags on images in image_results
         for f in active_filters:
             image_queryset = image_queryset.filter(imagetag__tag_id=f)
+        for image in image_queryset:
+            # collect tag IDs associated with image
+            imagetags_query: QuerySet = ImageTag.objects.filter(image_id=image.id)
+            tags_list: list = [image_tag.tag_id for image_tag in imagetags_query]
+            # if tag IDs are not in list, append them
+            for tag in tags_list:
+                if tag.id not in associated_tags:
+                    associated_tags.append(tag.id)
+                    print(f"Added {tag.id}!")
+
         for result in image_queryset:
             image_results.append(result.id)
 
-        response_message: dict = {'type': 'applyFilters', 'results': image_results}
+        response_message: dict = {
+            'type': 'applyFilters',
+            'filters': active_filters,
+            'imageResults': image_results,
+            'associatedTags': associated_tags
+        }
         return response_message
 
     @staticmethod
