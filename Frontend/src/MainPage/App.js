@@ -29,17 +29,19 @@ export default function App() {
   // appData contains Image, Tag and ImageTag data.
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isClosingDrawer, setIsClosingDrawer] = useState(false);
+  const [noMatchFilters, setNoMatchFilters] = useState([]);
   const [editTags, setEditTags] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [selectionActive, setSelectionActive] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-  const appData = useFilterSocket(apiData);
   const appState = {
     drawerOpen: drawerOpen,
     setDrawerOpen: setDrawerOpen,
     isClosingDrawer: isClosingDrawer,
     setIsClosingDrawer: setIsClosingDrawer,
+    noMatchFilters: noMatchFilters,
+    setNoMatchFilters: setNoMatchFilters,
     editTags: editTags,
     setEditTags: setEditTags,
     files: files,
@@ -51,6 +53,7 @@ export default function App() {
     selectedItems: selectedItems,
     setSelectedItems: setSelectedItems
   };
+  const appData = useFilterSocket(apiData, appState);
   // createTheme sets background color
   const theme = createTheme({
     palette: {

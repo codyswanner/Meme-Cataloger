@@ -22,7 +22,7 @@ import filterSocket from './FilterSocket';
  * 
  * @returns updated appData array according to messages from backend.
  */
-function useFilterSocket(rawAppData) {
+function useFilterSocket(rawAppData, appState) {
     // create appData object to be returned (after modifications)
     const [appData, setAppData] = useState(rawAppData);
     // activeFilters refers to filters for image search
@@ -62,25 +62,43 @@ function useFilterSocket(rawAppData) {
      * (as determined by a backend query; see consumers.py for details)
      * 
      * @param {object} response contains data about which images to render.
-     * @param {Array} response.results the list of IDs of images to render.
+     * @param {Array} response.imageResults list of IDs of images to render.
+     * @param {Array} response.associatedTags list of tags on matching images.
      * 
      */
     function handleApplyFilters (response) {
-        if (response.results.length == 0) {
+        
+        if (response.imageResults.length == 0) {
             console.log("No matching photos!");
             // empty array represents no images rendered.
-            setAppData({...rawAppData, imageData: []});
-        } else {
-            let imagesToRender = [];
-            // populate according to response data
-            rawAppData.imageData.forEach(image => {
-                if (response.results.includes(image.id)) {imagesToRender.push(image)};
+            const allTagIds = rawAppData.tagData.map((tag) => {
+                return tag.id;
             });
-            // const newData = [imagesToRender, apiData[1], apiData[2]];
-            const newData = {...rawAppData, imageData: imagesToRender};
-            setAppData(newData);
+            appState.setNoMatchFilters(allTagIds);
+            setAppData({...rawAppData, imageData: []});
+            return;
         };
-    }
+
+        if (response.filters.length == 0) {
+            console.log("Filters cleared");
+            appState.setNoMatchFilters([]);
+            setAppData({...rawAppData});
+            return;
+        };
+
+        const imagesToRender = rawAppData.imageData.filter((image) => {
+            return response.imageResults.includes(image.id);
+        });
+
+        const noMatchFilters = rawAppData.tagData.map((tag) => {
+            if (response.associatedTags.includes(tag.id)) {return null};
+            return tag.id;
+        });
+
+        appState.setNoMatchFilters(noMatchFilters);
+        const newData = {...rawAppData, imageData: imagesToRender};
+        setAppData(newData);
+    };
 
     /**
      * Updates appData when a new imageTag is created.
