@@ -139,7 +139,6 @@ class FilterConsumer(WebsocketConsumer):
             for tag in tags_list:
                 if tag.id not in associated_tags:
                     associated_tags.append(tag.id)
-                    print(f"Added {tag.id}!")
 
         for result in image_queryset:
             image_results.append(result.id)
