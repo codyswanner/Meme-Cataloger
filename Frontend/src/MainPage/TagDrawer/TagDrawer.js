@@ -85,7 +85,8 @@ export default function TagDrawer() {
                                 <FilterCheckbox
                                 text={tagName}
                                 key={tagId}
-                                tagId={tagId}/>
+                                tagId={tagId}
+                                noMatchFilters={appState.noMatchFilters}/>
                             )
                         }))}
                 </List>
