@@ -20,7 +20,14 @@ describe('FilterSocket', () => {
     beforeEach(() => {
         tagName = 'Test Tag';
         tagId = '1';
-        render(<FilterCheckbox text={tagName} tagId={tagId} key={tagId}/>);
+        render(
+            <FilterCheckbox
+                text={tagName}
+                tagId={tagId}
+                key={tagId}
+                noMatchFilters={[]}
+            />
+        );
     });
 
     test('toggles checked and unchecked', () => {
