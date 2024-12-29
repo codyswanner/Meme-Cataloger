@@ -10,8 +10,21 @@ update_database(file_data)
     Records path and owner of new file to the database.
 """
 
+import filetype
 from .models import AppUser, Image
 from django.conf import settings
+
+
+class FileTypeError(TypeError):
+    """This file type is not accepted for upload."""
+
+
+def validate_filetype(file):
+    image_match = filetype.image_match(file)
+    video_match = filetype.video_match(file)
+    if not image_match and not video_match:
+        raise FileTypeError
+    return True  # file is valid filetype for upload
 
 
 def handle_uploaded_file(file_data):
@@ -33,18 +46,19 @@ def handle_uploaded_file(file_data):
     print("Done writing file!")
 
 
-def update_database(file_data):
+def update_database(file_data, user):
     """Records path and owner of new file to the database.
 
     Parameters
     ----------
     file_data: InMemoryUploadedFile
         The file to be recorded to the database.
+
+    user: AppUser
+        The user to be assigned ownership of the file.
     """
 
-    # Future: add user association for newly uploaded files
     file_path: str = f"images/{file_data.name}"
-    user: AppUser = AppUser.objects.get(id=1)
     new_file: Image = Image(source=file_path, owner=user)
     new_file.save()
     print("Object created in database!")

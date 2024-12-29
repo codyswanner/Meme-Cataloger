@@ -12,14 +12,25 @@ export async function sendCSRFRequest(formData, targetURL) {
         const response = await fetch(targetURL, {
             method: "POST",
             body: formData,
-            headers: {'X-CSRFToken': getCookie('csrftoken')}
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'User-ID': '1'  // Will need to be passed in
+            }
         });
         if (response.ok) {
             console.log("Success!");
-        } else {
+        } else if (response.status == 400) {
+            throw new Error("User ID not provided!");
+        } else if (response.status == 401) {
+            throw new Error("User ID not recognized!");
+        } else if (response.status == 415) {
             throw new Error("Can't upload that!");
-        }
-}
+        } else if (response.status == 500) {
+            throw new Error("Server Error!");
+        } else {
+            throw new Error("Unforeseen error!");
+        };
+};
 
 /**
  * Used to get a value of a session cookie.
