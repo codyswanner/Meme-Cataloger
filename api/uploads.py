@@ -11,7 +11,7 @@ update_database(file_data)
 """
 
 import filetype
-from .models import AppUser, Image
+from .models import Image
 from django.conf import settings
 
 
