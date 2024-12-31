@@ -24,7 +24,7 @@ export async function sendCSRFRequest(formData, targetURL) {
         } else if (response.status == 401) {
             throw new Error("User ID not recognized!");
         } else if (response.status == 415) {
-            throw new Error("Can't upload that!");
+            throw new Error("Unsupported media type!");
         } else if (response.status == 500) {
             throw new Error("Server Error!");
         } else {
