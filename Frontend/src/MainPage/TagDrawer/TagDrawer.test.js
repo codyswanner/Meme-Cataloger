@@ -22,7 +22,10 @@ describe('TagDrawer', () => {
             ],
             imageTagData: [] // not used in this component
         };
-        appState = {drawerOpen: true}; // visible by default
+        appState = {
+            drawerOpen: true, // visible by default
+            noMatchFilters: []
+        }; 
 
         // jsdom does not have window.matchMedia;
         // it must be mocked for testing screen-responsive components.
@@ -85,7 +88,7 @@ describe('TagDrawer', () => {
         });
         window.dispatchEvent(new Event('resize'));
 
-        appState = {drawerOpen: false};
+        appState = {...appState, drawerOpen: false};
         const {rerender} = render(
             <AppDataContext.Provider value={{appData, appState}}>
                 <TagDrawer/>
@@ -94,7 +97,7 @@ describe('TagDrawer', () => {
         expect(screen.getByTestId('temporary-drawer'))
             .toHaveClass('MuiModal-hidden');
 
-        appState = {drawerOpen: true};
+        appState = {...appState, drawerOpen: true};
         rerender(
             <AppDataContext.Provider value={{appData, appState}}>
                 <TagDrawer/>

@@ -29,6 +29,7 @@ const handleChange = (props, event) => {
  * @param {object} props Contains props passed to the component.
  * @param {string} props.text String label of the checkbox; matches name of tag to filter.
  * @param {number} props.tagId The numerical tag ID to filter for when this box is checked.
+ * @param {Array} props.noMatchFilters greys out label on no results
  * @returns The FilterCheckbox component to be rendered in the app.
  */
 function FilterCheckbox(props) {
@@ -36,12 +37,17 @@ function FilterCheckbox(props) {
     const largeScreen = useMediaQuery(theme.breakpoints.up('md'));
     const largeScreenStyle = {transform: "scale(1.15)", margin: "0 0 0 3%"};
     const smallScreenStyle = {transform: "scale(1.75)", margin: "0 1% 0 2.5%"};
+    const greyedOut = props.noMatchFilters.includes(props.tagId);
+    const labelStyles = {
+        width: 0.98, // ensures that one item takes up one row
+        color: greyedOut ? 'rgba(20, 20, 20, 0.6)' : 'rgba(0, 0, 0, 0.87)'
+    };
 
     return(
         <FormControlLabel control={<Checkbox style={ largeScreen ? largeScreenStyle : smallScreenStyle }/>}
         label={props.text}
         componentsProps={{ typography: {fontSize: {'xs': 40, 'md': 25}}}}
-        sx = {{ width: 0.98 }} // ensures that one item takes up one row
+        sx = {labelStyles}
         onChange={(event) => handleChange(props, event)}/>
     );
 };
