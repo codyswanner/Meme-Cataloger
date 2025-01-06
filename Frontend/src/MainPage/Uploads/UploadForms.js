@@ -13,30 +13,29 @@ import { sendCSRFRequest } from '../../SupportingModules/CSRFToken';
  * @param {Event} e For preventing default browser behavior.
  * @param {Array} files The selected files to be uploaded.
  * @param {function} setFiles Resets state to empty after request is complete.
- * @param {function} setUploadFailed Says whether the upload failed or not.
+ * @param {function} setUploadResult sets error/success message.
  */
-async function handleUpload(e, files, setFiles, setUploadFailed) {
+async function handleUpload(e, files, setFiles, setUploadResult) {
     e.preventDefault()
     const formData = new FormData();
     files.forEach(file => {formData.append('file', file)});
     try {
         await sendCSRFRequest(formData, 'api/upload/');
-        setUploadFailed(false);
+        setUploadResult("Success");
     } catch (err) {
-        setUploadFailed(true);
-    }
+        setUploadResult(err.message);
+    };
     
     await setFiles([]);
 };
 
 /**
  * Shows an error to the user when the upload fails.
- * Currently, the only case handled by this function is "unsupported file type".
  * 
- * @param {boolean} uploadFailed When true, renders an error message for the user.
- * @returns The (conditionally rendered) error message to be displayed in the UploadBox.
+ * @param {string} uploadResult when not "Success," carries error message.
+ * @returns The error message to be displayed if there is one.
  */
-function handleUploadFailed(uploadFailed) {
+function handleUploadResult(uploadResult) {
     const uploadFailedStyles = {
         height: 30,
         margin: '5% auto 0 auto',
@@ -44,26 +43,27 @@ function handleUploadFailed(uploadFailed) {
         verticalAlign: 'center',
     }
 
-    if (uploadFailed) {
+    // on initial render, uploadResult is an empty string.
+    if (uploadResult != "Success" & uploadResult != '') {
         return(
             <Box sx={uploadFailedStyles}>
             <Alert severity='error'>
-                Unsupported File Type!
+                {uploadResult.toString()}
             </Alert>
             </Box>
         )
-    }
-}
+    };
+};
 
 /**
- * Displays a button for the file that will remove it from the form when clicked.
+ * Displays button that will remove the file from selection when clicked.
  * Fits inside the FileUploadForm.
  * 
  * @param {object} props Contains props passed to the component.
  * @param {file} props.file The specific file referenced by this button.
- * @param {Array} props.files The array of files currently in the form.
- * @param {function} props.setFiles Modifies the props.files array.
- * @returns The name of the file as a button that can be pressed to remove the file.
+ * @param {Array} props.files The array of files in the form (state).
+ * @param {function} props.setFiles Updates the props.files state.
+ * @returns The file name as a button that can be pressed to unselect file.
  */
 function FileButton(props) {
     const [isHovered, setIsHovered] = useState(false);
@@ -109,12 +109,12 @@ function FileButton(props) {
 }
 
 /**
- * Form displayed when files have been selected; allows submit, or further file selection.
+ * Displayed when files are selected; allows submit, or further file selection.
  * 
  * @param {object} props Contains props passed to the component.
- * @param {Array} props.files the files to be uploaded; state passed from parent.
- * @param {function} props.setFiles state updater for 'files' state.
- * @param {function} props.setUploadFailed allows for display of error on a failed upload.
+ * @param {Array} props.files files to be uploaded; state passed from parent.
+ * @param {function} props.setFiles updates 'props.files' state.
+ * @param {function} props.setUploadResult help display error on failed upload.
  * 
  * @returns The FileUploadForm component to the rendered in the app.
  */
@@ -153,7 +153,10 @@ function FileUploadForm(props) {
                             type='submit'
                             variant='contained'
                             onClick={(e) => handleUpload(
-                                e, props.files, props.setFiles, props.setUploadFailed
+                                e,
+                                props.files,
+                                props.setFiles,
+                                props.setUploadResult
                             )}
                             sx={{ width: '120px' }}
                         >
@@ -177,8 +180,8 @@ function FileUploadForm(props) {
 /**
  * 
  * @param {object} props Contains props passed to the component.
- * @param {function} props.handleInput passed from parent, for when "Upload" button is clicked.
- * @param {function} props.uploadFailed allows for display of error on a failed upload.
+ * @param {function} props.handleInput when "Upload" button is clicked.
+ * @param {function} props.uploadResult helps display error on failed upload.
  * 
  * @returns The EmptyUploadForm component to the rendered in the app.
  */
@@ -196,10 +199,14 @@ function EmptyUploadForm(props) {
         width: 1,
     });
 
-    const acceptedImageFiletypes = "image/jpg,image/jpeg,image/png,image/webp,image/gif,image/bmp,image/svg"
-    const acceptedVideoFiletypes = "video/mp4,video/mov,video/avi,video/mkv,video/wmv,video/flv,video/webm"
-    const acceptedFileTypes = (acceptedImageFiletypes + "," + acceptedVideoFiletypes)
-    
+    const acceptedImageTypes = 
+        "image/jpg,image/jpeg,image/png,\
+        image/webp,image/gif,image/bmp,image/svg"
+    const acceptedVideoTypes =
+        "video/mp4,video/mov,video/avi,\
+        video/mkv,video/wmv,video/flv,video/webm"
+    const acceptedFileTypes = `${acceptedImageTypes},${acceptedVideoTypes}`
+
     return(
         <Box 
         sx={{
@@ -213,11 +220,16 @@ function EmptyUploadForm(props) {
             verticalAlign: 'center',
             margin: '5% 0 5% 0'
             }}>
-            {handleUploadFailed(props.uploadFailed)}
+            {handleUploadResult(props.uploadResult)}
             <Button
             component="label"
             variant="contained"
-            sx={{ height: 50, verticalAlign: 'center', position: 'relative', margin: 'auto' }}
+            sx={{
+                height: 50,
+                verticalAlign: 'center',
+                position: 'relative',
+                margin: 'auto'
+            }}
             startIcon={<UploadIcon/>}>
                 Upload Here!
                 <VisuallyHiddenInput

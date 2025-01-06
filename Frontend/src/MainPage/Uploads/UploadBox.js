@@ -14,6 +14,7 @@ import AppDataContext from '../../SupportingModules/AppDataContext';
 function UploadBox() {
     const {appState} = useContext(AppDataContext);
     const [uploadFailed, setUploadFailed] = useState(false);
+    const [uploadResult, setUploadResult] = useState('');
 
     // this is triggered when user clicks "Upload" button
     const handleInput = () => {
@@ -34,6 +35,7 @@ function UploadBox() {
                 files={appState.files}
                 setFiles={appState.setFiles}
                 setUploadFailed={setUploadFailed}
+                setUploadResult={setUploadResult}
             />
         );
     } else {
@@ -44,6 +46,8 @@ function UploadBox() {
                 handleInput={handleInput}
                 uploadFailed={uploadFailed}
                 setUploadFailed={setUploadFailed}
+                uploadResult={uploadResult}
+                setUploadResult={setUploadResult}
             />
         );
     };
