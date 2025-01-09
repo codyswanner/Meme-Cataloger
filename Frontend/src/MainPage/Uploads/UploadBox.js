@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 
-import { FileUploadForm, EmptyUploadForm } from './UploadForms';
+import EmptyUploadForm from './EmptyUploadForm';
+import FileUploadForm from './FileUploadForm';
 import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
