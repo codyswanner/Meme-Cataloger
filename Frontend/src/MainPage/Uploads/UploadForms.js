@@ -25,7 +25,7 @@ async function handleUpload(e, files, setFiles, setUploadResult) {
     } catch (err) {
         setUploadResult(err.message);
     };
-    
+
     await setFiles([]);
 };
 
@@ -234,7 +234,7 @@ function EmptyUploadForm(props) {
                 Upload Here!
                 <VisuallyHiddenInput
                 type='file'
-                id='fileInput'
+                data-testid='fileInput'
                 multiple
                 onInput={props.handleInput}
                 accept={acceptedFileTypes}/>
