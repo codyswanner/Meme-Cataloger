@@ -26,10 +26,10 @@ describe('FileUploadForm', () => {
     'name': 'test-image-4',
     'type': 'image/png'
   };
-  const notAnImage = {
-    'name': 'txt-file',
-    'type': 'text/plain'
-  };
+  // const notAnImage = {
+  //   'name': 'txt-file',
+  //   'type': 'text/plain'
+  // };
 
   test('renders the form', () => {
     render(

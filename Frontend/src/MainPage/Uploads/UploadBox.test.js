@@ -6,36 +6,42 @@ import '@testing-library/jest-dom';
 import UploadBox from './UploadBox';
 import AppDataContext from '../../SupportingModules/AppDataContext';
 
-jest.mock('./FileUploadForm', () => ({files, setFiles}) => {
-  return(
-    <div data-testid='FileUploadForm'>
-      {files.map((file, index) => (
-        <button
-          key={index}
-          onClick={() => setFiles(files.splice(files.indexOf(file), 1))}>
-          {file.name}
-        </button>
-      ))}
-      <button>Upload</button>
-      <button onClick={setFiles([])}>Clear all</button>
-    </div>
-  );
-});
+jest.mock('./FileUploadForm', () => {
+  const MockFileForm = ({files, setFiles}) =>
+    (
+      <div data-testid='FileUploadForm'>
+        {files.map((file, index) => (
+          <button
+            key={index}
+            onClick={() => setFiles(files.splice(files.indexOf(file), 1))}>
+            {file.name}
+          </button>
+        ))}
+        <button>Upload</button>
+        <button onClick={setFiles([])}>Clear all</button>
+      </div>
+    );
+    return MockFileForm;
+  }
+);
 
-jest.mock('./EmptyUploadForm', () => ({handleInput}) => {
-  return(
-    <div data-testid='EmptyUploadForm'>
-      <button>
-        Upload Here!
-        <input
-          type='file'
-          data-testid='fileInput'
-          id='fileInput'
-          onInput={handleInput} />
-      </button>
-    </div>
-  );
-});
+jest.mock('./EmptyUploadForm', () => {
+  const MockEmtpyForm = ({handleInput}) => 
+    (
+      <div data-testid='EmptyUploadForm'>
+        <button>
+          Upload Here!
+          <input
+            type='file'
+            data-testid='fileInput'
+            id='fileInput'
+            onInput={handleInput} />
+        </button>
+      </div>
+    );
+    return MockEmtpyForm;
+  }
+);
 
 
 describe('UploadBox', () => {
