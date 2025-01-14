@@ -66,8 +66,10 @@ export default function App() {
         styleOverrides: {
           regular: {
             // Toolbar is used to push content out from under the AppBar.
-            // AppBar is larger than standard size, because of IconButton for the drawer.
-            // So, increase the max Toolbar size to allow tall enough Toolbars for this.
+            // AppBar is larger than standard size,
+            // because of IconButton for the drawer.
+            // So, increase the max Toolbar size
+            // to allow tall enough Toolbars for this.
             maxHeight: 1000
           }
         }

@@ -6,7 +6,7 @@ import React from 'react';
  * Currently only used by UploadForms for image upload requests.
  * 
  * @param {FormData} formData From the image upload request
- * @param {String} targetURL Usually 'upload/', see api.urls and api.views for details
+ * @param {String} targetURL see api.urls and api.views for details
  */
 export async function sendCSRFRequest(formData, targetURL) {
         const response = await fetch(targetURL, {
@@ -34,8 +34,9 @@ export async function sendCSRFRequest(formData, targetURL) {
 
 /**
  * Used to get a value of a session cookie.
- * Currntly only used to get the csrftoken for the session, for image upload requests.
- * CSRF cookie set in Frontend.views module; for more details see link to Django docs
+ * Currntly only used to get csrftoken, for image upload requests.
+ * CSRF cookie set in Frontend.views module;
+ * for more details see link to Django docs
  * https://docs.djangoproject.com/en/5.0/howto/csrf/
  * 
  * @param {String} name Name of the cookie to get; usually 'csrftoken'.
@@ -50,7 +51,9 @@ function getCookie(name) {
         for (var i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                cookieValue = decodeURIComponent(
+                    cookie.substring(name.length + 1)
+                );
                 break;
             };
         };
@@ -64,8 +67,12 @@ function getCookie(name) {
  * 
  * @returns Element with CSRF token for form submission.
  */
-const CSRFToken = () => {
-    return (<input type="hidden" name="csrfmiddlewaretoken" value={getCookie('csrftoken')} />);
+export default function CSRFToken () {
+    return (
+        <input
+            type="hidden"
+            name="csrfmiddlewaretoken"
+            value={getCookie('csrftoken')} 
+        />
+    );
 };
-
-export default CSRFToken;

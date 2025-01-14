@@ -17,7 +17,14 @@ describe('FeatureButton', () => {
         startIcon = <CatchingPokemonIcon/>;
         action = jest.fn();
         active = false;
-        component = render(<FeatureButton name={name} startIcon={startIcon} action={action} active={active}/>)
+        component = render(
+            <FeatureButton
+                name={name}
+                startIcon={startIcon}
+                action={action}
+                active={active}
+            />
+        );
     });
 
     test('activates feature when clicked', () => {

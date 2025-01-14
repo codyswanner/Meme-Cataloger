@@ -74,7 +74,8 @@ describe('FilterSocket', () => {
             })
         );
 
-        expect(filterSocket.sendMessage).toHaveBeenLastCalledWith(firstExpectedMessage);
+        expect(filterSocket.sendMessage)
+            .toHaveBeenLastCalledWith(firstExpectedMessage);
 
         const secondExpectedMessage = {
             'type':'filterChange',
@@ -91,7 +92,8 @@ describe('FilterSocket', () => {
             })
         );
 
-        expect(filterSocket.sendMessage).toHaveBeenLastCalledWith(secondExpectedMessage);
+        expect(filterSocket.sendMessage)
+            .toHaveBeenLastCalledWith(secondExpectedMessage);
 
     });
 });

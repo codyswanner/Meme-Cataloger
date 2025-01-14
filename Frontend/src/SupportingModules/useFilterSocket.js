@@ -22,7 +22,7 @@ import filterSocket from './FilterSocket';
  * 
  * @returns updated appData array according to messages from backend.
  */
-function useFilterSocket(rawAppData, appState) {
+export default function useFilterSocket(rawAppData, appState) {
     // create appData object to be returned (after modifications)
     const [appData, setAppData] = useState(rawAppData);
     // activeFilters refers to filters for image search
@@ -52,9 +52,12 @@ function useFilterSocket(rawAppData, appState) {
             });
         };
         
-        // Send filters to Django to make query and return picture ids to display
+        // Send filters to make query and return picture ids to display
         // Future: add user id to this
-        socket.send(JSON.stringify({'type': 'activeFilters', 'activeFilters': activeFilters}));
+        socket.send(JSON.stringify({
+            'type': 'activeFilters',
+            'activeFilters': activeFilters
+        }));
     };
 
     /**
@@ -115,13 +118,18 @@ function useFilterSocket(rawAppData, appState) {
         const modifiedAppData = {...appData}; // Create a mutable copy
 
         // Locate relevant object in imageData
-        const findInAppData = (id) => modifiedAppData.imageData.find(element => element.id == id); 
+        const findInAppData = (id) => modifiedAppData.imageData
+            .find(element => element.id == id); 
         const imageObject = findInAppData(response.imageId);
         // Modify image object to match updates
         imageObject.imageTags.push(response.id);
         
         // Add imageTag object to imageTagData to reflect updates
-        const newImageTag = {'id': response.id, 'image_id': response.imageId, 'tag_id': response.tagId};
+        const newImageTag = {
+            'id': response.id,
+            'image_id': response.imageId,
+            'tag_id': response.tagId
+        };
         modifiedAppData.imageTagData.push(newImageTag);
 
         setAppData(modifiedAppData); // push updates to state
@@ -132,18 +140,21 @@ function useFilterSocket(rawAppData, appState) {
      * 
      * @param {object} response contains data about the imageTag to be removed.
      * @param {number} response.id the id of the imageTag to be removed.
-     * @param {number} response.imageId the id of the image from which a tag is removed.
+     * @param {number} response.imageId id of image from which tag is removed.
      */
     function handleTagRemoved (response) {
         const modifiedAppData = {...appData}; // Create a mutable copy
 
         // remove imageTag from image data
-        const findImage = (id) => modifiedAppData.imageData.find(element => element.id == id);
+        const findImage = (id) => modifiedAppData.imageData
+            .find(element => element.id == id);
         const imageObject = findImage(response.imageId);
-        imageObject['imageTags'] = imageObject['imageTags'].filter(function(item) {return item !== response.id})
+        imageObject['imageTags'] = imageObject['imageTags']
+            .filter(function(item) {return item !== response.id})
         
         // remove imageTag from imageTagData
-        let index = modifiedAppData.imageTagData.findIndex(element => element.id === response.id);
+        let index = modifiedAppData.imageTagData
+            .findIndex(element => element.id === response.id);
         modifiedAppData.imageTagData.splice(index, 1);
 
         setAppData(modifiedAppData);
@@ -204,7 +215,7 @@ function useFilterSocket(rawAppData, appState) {
             console.log(`Removed ${id} from app data`);
 
             // Delete any tag association records for image
-            // (Can this be changed to match the structure of handleTagRemoved?)
+            // (Can this match the structure of handleTagRemoved?)
             const imageTagData = modifiedAppData.imageTagData;
             for (const [key, value] of Object.entries(imageTagData)) {
                 if (value.image_id === id) {
@@ -287,11 +298,9 @@ function useFilterSocket(rawAppData, appState) {
         };
 
         socket.addEventListener('message', receiveMessage);
-    
+
         return () => {socket.removeEventListener('message', receiveMessage);}
       }, []);
 
       return appData;
 };
-
-export default useFilterSocket;

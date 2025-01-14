@@ -25,7 +25,8 @@ export default function ApplyTagsPopper(props) {
     };
   }, [resetForm]);
 
-  // Thank you StackOverflow user Ben Bud! https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
+  // Thank you StackOverflow user Ben Bud!
+  // https://stackoverflow.com/questions/32553158
   function useOutsideAlerter(ref) {
     useEffect(() => {
       //Trigger if clicked outside both the popper and it's button

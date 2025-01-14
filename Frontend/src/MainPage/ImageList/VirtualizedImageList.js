@@ -36,11 +36,14 @@ export default function VirtuosoGridWrapper (props) {
     };
   };
 
-  useEffect(() => {handleResize();}, [smallScreen, mediumScreen, largeScreen, hugeScreen])
+  useEffect(() => {handleResize();},
+    [smallScreen, mediumScreen, largeScreen, hugeScreen]
+  );
 
 
   // Ensure that this stays out of the component, 
-  // Otherwise the grid will remount with each render due to new component instances.
+  // Otherwise the grid will remount with each render
+  // due to new component instances.
   const gridComponents = {
     List: forwardRef(({ style, children, ...props }, ref) => (
       <div

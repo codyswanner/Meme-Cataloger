@@ -27,7 +27,8 @@ const formatTags = (imageTags, imageId) => {
     });
 
   if (imageTags.length == 0) {
-    return (<Tag imageTag={0} key={0} theme={chipTheme} />); // display "add tag" placeholder
+    // display "add tag" placeholder
+    return (<Tag imageTag={0} key={0} theme={chipTheme} />);
 
   } else if (imageTags.length < 3) {
     // display normally
@@ -61,7 +62,7 @@ const formatTags = (imageTags, imageId) => {
 
 /**
  * Offers tag management options for an image.
- * This component renders at the bottom third of an image when the image is hovered.
+ * Renders at the bottom third of an image when the image is hovered.
  * 
  * @param {object} props Contains props passed to the component.
  * @param {number} props.toolbarStyles for visual consistency of the toolbar.
@@ -73,7 +74,7 @@ function ImageBottomToolbar(props) {
   const imageId = imageData['id'];
   const imageTags = imageData['imageTags'];
 
-  // See https://mui.com/material-ui/react-popper/ for details on the purpose of anchorEl.
+  // https://mui.com/material-ui/react-popper/
   const [anchorEl, setAnchorEl] = useState(null);
   
   // Sets AddTagPopper open or closed.

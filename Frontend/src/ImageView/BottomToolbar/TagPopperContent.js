@@ -28,7 +28,7 @@ function TagPopperContent() {
 
     /**
      * Determines details about the tag on the image.
-     * Uses the imageTagId (record of an image-to-tag pairing) as a starting point.
+     * Uses imageTagId (record of an image-to-tag pairing) as a starting point.
      * 
      * @param {array} imageTagArray Matches images with assigned tags.
      * @param {number} imageTagId unique ID of the image-to-tag association.
@@ -36,10 +36,12 @@ function TagPopperContent() {
      */
     function getTagInfo(imageTagArray, imageTagId) {
       // First, find the ID for this tag
-      const imageTag = imageTagArray.find(element => element.id === imageTagId);
+      const imageTag = imageTagArray
+        .find(element => element.id === imageTagId);
       const tagId = imageTag['tag_id'];
       // Now, find the name of the tag
-      const tagName = appData.tagData.find(tagData => tagData.id === tagId)['name'];
+      const tagName = appData.tagData
+        .find(tagData => tagData.id === tagId)['name'];
       // Package the info into an object and return
       const tagObject = {'id': tagId, 'label': tagName};
       return tagObject;
@@ -48,7 +50,7 @@ function TagPopperContent() {
     /**
      * Use the initial pageload data to set the initial tags.
      * 
-     * @param {array} imageTags The IDs of image-to-tag relationships on first pageload.
+     * @param {array} imageTags IDs of image-to-tag relationships.
      * @returns An array of objects describing tags on the image.
      */
     const createExistingTagsList = (imageTags) => {
@@ -60,11 +62,11 @@ function TagPopperContent() {
     };
 
     /**
-     * Injects an option to `Create ${new}` if typed value does not match existing options.
+     * Injects option to create new if value doesn't match existing options.
      * 
      * @param {array} options Options provided to the component; see tagOptions
      * @param {object} params Component-provided information about itself
-     * @returns Options to be displayed to the user, including `Create ${new}` if applicable.
+     * @returns Options to display to user, including create new if applicable.
      */
     const getFilterOptions = (options, params) => {
         // filtered returns results that match user input
@@ -78,9 +80,9 @@ function TagPopperContent() {
         // if it does not exist, suggest to create it with a new option
         if (inputValue !== "" && !isExisting) {
             filtered.push({
-              id: 0, // id of 0 signals to system that this tag doesn't exist yet
-              label: `Create "${inputValue}"`, // this is what is shown on the option
-              inputValue: inputValue, // this will be used to create the permanent label
+              id: 0, // id of 0 signals that this tag doesn't exist yet
+              label: `Create "${inputValue}"`, // what is shown on the option
+              inputValue: inputValue, // will be used to create permanent label
             });
           }
         // return options, including `Create "${inputValue}"` if applicable
@@ -112,8 +114,8 @@ function TagPopperContent() {
      * Updates the value passed to Autocomplete indicating selected options,
      * and informs the backend of newly added/removed/created tags.
      * 
-     * @param {array} tagArray The tags applied to this image (with any new changes).
-     * @param {number} imageId The id of the image to which these tags are applied.
+     * @param {array} tagArray Tags applied to image (and any new changes).
+     * @param {number} imageId id of image to which these tags are applied.
      */
     const handleChange = (tagArray, imageId) => {
         const newVal = []; // will populate with the new tag array
@@ -155,10 +157,10 @@ function TagPopperContent() {
             style={{ width: 300 }}
             openOnFocus
             value={val}
-            isOptionEqualToValue={(option, value) => checkOptions(option, value)}
+            isOptionEqualToValue={(option,value) => checkOptions(option,value)}
             // onChange returns an 'event' object that we don't need
             onChange={(event, value) => handleChange(value, imageId)}
-            filterOptions={(options, params) => getFilterOptions(options, params)}
+            filterOptions={(options,params)=>getFilterOptions(options,params)}
             disablePortal
             multiple
             renderInput={(params) => (
