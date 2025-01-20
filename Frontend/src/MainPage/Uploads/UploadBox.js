@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 
-import { FileUploadForm, EmptyUploadForm } from './UploadForms';
+import EmptyUploadForm from './EmptyUploadForm';
+import FileUploadForm from './FileUploadForm';
 import AppDataContext from '../../SupportingModules/AppDataContext';
 
 
 /**
- * Handles drag-and-drop for uploading new images to the app.
  * Contains either EmptyUploadForm or FileUploadForm,
  * depending on if an image has been selected by the user.
  * 
@@ -13,7 +13,6 @@ import AppDataContext from '../../SupportingModules/AppDataContext';
  */
 function UploadBox() {
     const {appState} = useContext(AppDataContext);
-    const [uploadFailed, setUploadFailed] = useState(false);
     const [uploadResult, setUploadResult] = useState('');
 
     // this is triggered when user clicks "Upload" button
@@ -24,17 +23,16 @@ function UploadBox() {
             const data = [];
             for (const file of dt.files) {
                 data.push(file);
-            }
+            };
             appState.setFiles([...appState.files, ...data]);
-        }
+        };
     };
-    
+
     if (appState.files.length) {
         return(
             <FileUploadForm
                 files={appState.files}
                 setFiles={appState.setFiles}
-                setUploadFailed={setUploadFailed}
                 setUploadResult={setUploadResult}
             />
         );
@@ -44,10 +42,7 @@ function UploadBox() {
                 files={appState.files}
                 setFiles={appState.setFiles}
                 handleInput={handleInput}
-                uploadFailed={uploadFailed}
-                setUploadFailed={setUploadFailed}
                 uploadResult={uploadResult}
-                setUploadResult={setUploadResult}
             />
         );
     };
