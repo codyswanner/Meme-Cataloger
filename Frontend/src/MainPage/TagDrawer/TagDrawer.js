@@ -10,6 +10,7 @@ import FilterCheckbox from './FilterCheckbox';
 import TagEditor from './TagEditor';
 import FeatureButton from './FeatureButton';
 import DrawerHeader from './DrawerHeader';
+import ExactMatchSwitch from './ExactMatchSwitch';
 
 
 /**
@@ -70,6 +71,7 @@ export default function TagDrawer() {
             <Toolbar/>
             <Box sx={{ overflow: 'auto' }}>
                 <DrawerHeader handleEdit={handleEdit}/>
+                <ExactMatchSwitch />
                 <List> {/* List tags available for filtering */}
                         {(appData.tagData.map((tag) => {
                             const tagId = tag.id;

@@ -25,8 +25,6 @@ import filterSocket from './FilterSocket';
 function useFilterSocket(rawAppData, appState) {
     // create appData object to be returned (after modifications)
     const [appData, setAppData] = useState(rawAppData);
-    // activeFilters refers to filters for image search
-    const [activeFilters, setActiveFilters] = useState([]);
 
     /**
      * Responds to a request to change a filter state.
@@ -38,13 +36,13 @@ function useFilterSocket(rawAppData, appState) {
      */
     function handleFilterChange (response, socket) {
         if (response.filterState == "on") {
-            setActiveFilters(
+            appState.setActiveFilters(
             filters => {
                 filters.push(response.filterId)
                 return filters;
             });
         } else if (response.filterState == "off") {
-            setActiveFilters(
+            appState.setActiveFilters(
             filters => {
                 const i = filters.indexOf(response.filterId);
                 filters.splice(i, 1);
@@ -54,7 +52,12 @@ function useFilterSocket(rawAppData, appState) {
         
         // Send filters to Django to make query and return picture ids to display
         // Future: add user id to this
-        socket.send(JSON.stringify({'type': 'activeFilters', 'activeFilters': activeFilters}));
+        socket.send(JSON.stringify({
+            'type': 'activeFilters',
+            'exactMatch': appState.exactMatchFilters.current,
+            'activeFilters': appState.activeFilters,
+            'origin': 'useFilterSocket.js'
+        }));
     };
 
     /**
@@ -68,31 +71,21 @@ function useFilterSocket(rawAppData, appState) {
      */
     function handleApplyFilters (response) {
         
+        const noMatchFilters = rawAppData.tagData.map((tag) => {
+            if (response.associatedTags.includes(tag.id)) {return null};
+            return tag.id;
+        });
+
         if (response.imageResults.length == 0) {
             console.log("No matching photos!");
             // empty array represents no images rendered.
-            const allTagIds = rawAppData.tagData.map((tag) => {
-                return tag.id;
-            });
-            appState.setNoMatchFilters(allTagIds);
+            appState.setNoMatchFilters(noMatchFilters);
             setAppData({...rawAppData, imageData: []});
-            return;
-        };
-
-        if (response.filters.length == 0) {
-            console.log("Filters cleared");
-            appState.setNoMatchFilters([]);
-            setAppData({...rawAppData});
             return;
         };
 
         const imagesToRender = rawAppData.imageData.filter((image) => {
             return response.imageResults.includes(image.id);
-        });
-
-        const noMatchFilters = rawAppData.tagData.map((tag) => {
-            if (response.associatedTags.includes(tag.id)) {return null};
-            return tag.id;
         });
 
         appState.setNoMatchFilters(noMatchFilters);
