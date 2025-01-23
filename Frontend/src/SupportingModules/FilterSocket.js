@@ -1,10 +1,10 @@
 /**
  * Used by the app to send and receive WebSocket messages.
- * All received WebSocket messages are processed through useFilterSocket module.
+ * All received WS messages are processed through useFilterSocket module.
  * WebSocket messages are sent with filterSocket in the following modules:
  * 
  * (Module, message type[, purpose])
- * AddTagPopper, addTag, create a new tag association on an image (ie, imageTag)
+ * AddTagPopper, addTag, create new tag association on an image (ie, imageTag)
  * DeleteImageButton, deleteImage
  * ImageTopToolbar, updateDescription, update an image description
  * Tag, removeTag, remove tag from image when tag is clicked
@@ -16,7 +16,10 @@ const filterSocket = new WebSocket(
 
 filterSocket.onopen = () => {
     console.log('FilterSocket connected!');
-    filterSocket.send(JSON.stringify({'type': 'message', 'message': 'FilterSocket Connected!'}));
+    filterSocket.send(JSON.stringify({
+        'type': 'message',
+        'message': 'FilterSocket Connected!'
+    }));
 };
 
 filterSocket.onclose = function() {

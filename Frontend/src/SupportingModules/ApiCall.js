@@ -50,7 +50,7 @@ export default async function ApiCall() {
    * 
    * @param {Array} imageDataList id, source(filepath) and desc for each image.
    * @param {Array} imageTagData List of associations between images and tags.
-   * @returns modified imageDataList; each Image now has tag association (imageTag) data attached.
+   * @returns imageDataList where each Image has tag association data attached.
    */
   const assignImageTags = async (imageDataList, imageTagData) => {
     // Assign each imageTag to it's image
@@ -58,8 +58,9 @@ export default async function ApiCall() {
       const imageId = imageTagData['image_id'];
       const imageTagId = imageTagData['id']; // Find unique imageTag ids
       // Append unique imageTag data to image
-      imageDataList.find(imageData => imageData.id === imageId).imageTags.push(imageTagId);
-      // imageDataList.find(imageData => imageData.id === imageId).tags.push(tagId);
+      imageDataList.find(
+        imageData => imageData.id === imageId
+      ).imageTags.push(imageTagId);
     });
 
     // Send back the modified imageDataList, now with imageTag data

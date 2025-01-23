@@ -94,7 +94,7 @@ describe('FileUploadForm', () => {
     );
 
     // expect(setFiles).toHaveBeenCalledTimes(1);
-    // https://stackoverflow.com/questions/79343519/jest-fn-doesnt-call-mock-implementation
+    // https://stackoverflow.com/questions/79343519
 
     expect(screen.getByText('test-image-1')).toBeInTheDocument();
     expect(screen.queryByText('test-image-2')).not.toBeInTheDocument();

@@ -47,7 +47,8 @@ describe('TagEditor', () => {
             target: { value: 'Changed input' }
         });
 
-        expect(filterSocket.sendMessage).toHaveBeenLastCalledWith(firstExpectedMessage);
+        expect(filterSocket.sendMessage)
+            .toHaveBeenLastCalledWith(firstExpectedMessage);
 
         const secondExpectedMessage = {
             'type': 'updateTagName',
@@ -59,7 +60,8 @@ describe('TagEditor', () => {
             target: { value: 'FRESHAVACODU' }
         });
 
-        expect(filterSocket.sendMessage).toHaveBeenLastCalledWith(secondExpectedMessage);
+        expect(filterSocket.sendMessage)
+            .toHaveBeenLastCalledWith(secondExpectedMessage);
 
     });
 });
