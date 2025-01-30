@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar,Button,IconButton,Toolbar,Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import UploadIcon from '@mui/icons-material/Upload'
@@ -67,7 +67,7 @@ function TopAppBar() {
 
   
   return (
-    <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer+1 }}>
       <Toolbar>
         <IconButton
           color="inherit"
@@ -79,7 +79,11 @@ function TopAppBar() {
         >
           <MenuIcon fontSize="inherit" />
         </IconButton>
-        <Typography variant='h5' noWrap component='div' sx={{ fontSize: titleSize }}>
+        <Typography
+          variant='h5'
+          noWrap
+          component='div'
+          sx={{ fontSize: titleSize }}>
           Meme-opolis
         </Typography>
         <Toolbar style={{ marginLeft: 'auto' }}>
@@ -105,7 +109,9 @@ function TopAppBar() {
             Upload
           </Button>
         </Toolbar>
-        <UploadDialog open={appState.uploadDialogOpen} onClose={handleCloseUpload} />
+        <UploadDialog
+          open={appState.uploadDialogOpen}
+          onClose={handleCloseUpload}/>
       </Toolbar>
     </AppBar>
   );

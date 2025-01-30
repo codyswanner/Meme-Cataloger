@@ -5,16 +5,16 @@ import TagPopperContent from './TagPopperContent';
 
 
 /**
- * Container for TagPopperContent component; determines visibility of child components.
+ * Container for TagPopperContent; determines visibility of child components.
  * Also handles open/close/click-away behavior of the popper.
  *
  * @param {object} props Contains props passed to the component.
- * @param {ref} props.buttonRef Refs the parent element for click-away handling.
- * @param {boolean} props.open Detemines if AddTagPopper is open/visible or not.
+ * @param {ref} props.buttonRef Refs parent element for click-away handling.
+ * @param {boolean} props.open Detemines if AddTagPopper open/visible or not.
  * @param {function} props.setOpen Takes a boolean; sets props.open.
  * @param {Element} props.anchorEl Anchor element of the popper.
  * @param {function} props.setAnchorEl Sets the anchor element for the Popper.
- *      See https://mui.com/material-ui/react-popper/ for details on the purpose of anchorEl.
+ * https://mui.com/material-ui/react-popper/ details on purpose of anchorEl.
  *
  * @returns The AddTagPopper component to be rendered in the app.
  */
@@ -22,7 +22,8 @@ function TagPopper(props) {
     const id = open ? 'simple-popper' : undefined;
     const popperRef = useRef(null); // For click-away detection
     
-    // Thank you StackOverflow user Ben Bud! https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
+    // Thank you StackOverflow user Ben Bud!
+    // https://stackoverflow.com/questions/32553158/
     function useOutsideAlerter(ref) {
         useEffect(() => {
            //Trigger if clicked outside both the popper and it's button
@@ -41,7 +42,7 @@ function TagPopper(props) {
                     props.setAnchorEl(null);
                     // "Why do we need to check the parent component?"
                     // Because AddTagButton has it's own close handler,
-                    // and if this event is triggered when AddTagButton is clicked,
+                    // and if event is triggered when AddTagButton is clicked,
                     // this component closes and immediately opens again.
             }
           }

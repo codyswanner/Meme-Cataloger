@@ -12,7 +12,7 @@ import ApplyTagsPopper from './ApplyTagsPopper';
  */
 export default function ApplyTagsButton() {
 
-  // See https://mui.com/material-ui/react-popper/ for details on the purpose of anchorEl.
+  // https://mui.com/material-ui/react-popper/
   const [anchorEl, setAnchorEl] = useState(null);
   
   // Sets AddTagPopper open or closed.

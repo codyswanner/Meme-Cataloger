@@ -58,7 +58,7 @@ export default function TagDrawer() {
         'data-testid': 'permanent-drawer'
     };
 
-    const temporaryDrawerProps = {
+    const tempDrawerProps = {
         variant: 'temporary',
         open: appState.drawerOpen,
         ModalProps: {keepMounted: true}, // improves performance
@@ -67,7 +67,7 @@ export default function TagDrawer() {
     };
     
     return (
-        <Drawer {...(smallScreen ? temporaryDrawerProps : permanentDrawerProps)}>
+        <Drawer {...(smallScreen ? tempDrawerProps : permanentDrawerProps)}>
             <Toolbar/>
             <Box sx={{ overflow: 'auto' }}>
                 <DrawerHeader handleEdit={handleEdit}/>
