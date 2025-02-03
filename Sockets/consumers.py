@@ -165,10 +165,8 @@ class FilterConsumer(WebsocketConsumer):
         for f in active_filters:
             image_query = image_query.filter(imagetag__tag_id__exact=f)
         associated_tags: list = self.grey_out_filters(image_query)
-        print(associated_tags)
         if exact_match:
             image_query = self.filter_exact(active_filters, image_query)
-        
 
         for result in image_query:
             image_results.append(result.id)
