@@ -114,8 +114,10 @@ describe('TagDrawer', () => {
             </AppDataContext.Provider>
         );
 
+        // This will include "exact match" checkbox
         const checkboxes = screen.getAllByRole('checkbox');
-        expect(checkboxes.length).toEqual(appData.tagData.length);
+        // Check for all test filters plus "exact match" checkbox
+        expect(checkboxes.length).toEqual(appData.tagData.length+1);
     });
 
     test('correctly renders TagEditor components on large screen', () => {
@@ -152,9 +154,11 @@ describe('TagDrawer', () => {
                 <TagDrawer/>
             </AppDataContext.Provider>
         );
-
+        
+        // This will include "exact match" checkbox
         const checkboxes = screen.getAllByRole('checkbox');
-        expect(checkboxes.length).toEqual(appData.tagData.length);
+        // Check for all test filters plus "exact match" checkbox
+        expect(checkboxes.length).toEqual(appData.tagData.length+1);
     });
 
     test('correctly renders TagEditor components on small screen', () => {

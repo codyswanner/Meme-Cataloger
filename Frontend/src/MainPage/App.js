@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, createTheme, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
@@ -29,7 +29,9 @@ export default function App() {
   // appData contains Image, Tag and ImageTag data.
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isClosingDrawer, setIsClosingDrawer] = useState(false);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [noMatchFilters, setNoMatchFilters] = useState([]);
+  const exactMatchFilters = useRef(false);
   const [editTags, setEditTags] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
@@ -40,8 +42,11 @@ export default function App() {
     setDrawerOpen: setDrawerOpen,
     isClosingDrawer: isClosingDrawer,
     setIsClosingDrawer: setIsClosingDrawer,
+    activeFilters: activeFilters,
+    setActiveFilters: setActiveFilters,
     noMatchFilters: noMatchFilters,
     setNoMatchFilters: setNoMatchFilters,
+    exactMatchFilters: exactMatchFilters,
     editTags: editTags,
     setEditTags: setEditTags,
     files: files,

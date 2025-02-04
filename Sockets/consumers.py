@@ -101,7 +101,40 @@ class FilterConsumer(WebsocketConsumer):
         pass
 
     @staticmethod
-    def apply_filters(text_data_json: dict) -> dict:
+    def filter_exact(active_filters, image_query) -> QuerySet:
+        if not active_filters:
+            imagetags = ImageTag.objects.all()
+            images_with_tags = [
+                i.image_id for i in imagetags
+            ]
+            image_query = Image.objects.all()
+            for image in images_with_tags:
+                image_query = image_query.exclude(id=image.id)
+            return(image_query)
+    
+        for image in image_query:
+            tags = set(
+                i.tag_id.id for i in ImageTag.objects.filter(image_id=image)
+            )
+            if tags != set(active_filters):
+                image_query = image_query.exclude(id=image.id)
+        return(image_query)
+
+    @staticmethod
+    def grey_out_filters(image_query) -> list:
+        associated_tags: list = []
+
+        for image in image_query:
+            # collect tag IDs associated with image
+            imagetags_query:QuerySet=ImageTag.objects.filter(image_id=image.id)
+            tags_list: list=[image_tag.tag_id for image_tag in imagetags_query]
+            # if tag IDs are not in list, append them
+            for tag in tags_list:
+                if tag.id not in associated_tags:
+                    associated_tags.append(tag.id)
+        return associated_tags
+    
+    def apply_filters(self, text_data_json: dict) -> dict:
         """Queries DB for objects matching filter array, and passes this list back to the client.
 
         Parameters
@@ -126,21 +159,16 @@ class FilterConsumer(WebsocketConsumer):
         """
 
         active_filters: list = text_data_json['activeFilters']
-        image_queryset: QuerySet = Image.objects.all()
+        exact_match: bool = text_data_json['exactMatch']
+        image_query: QuerySet = Image.objects.all()
         image_results: list = []
-        associated_tags: list = []  # tags on images in image_results
         for f in active_filters:
-            image_queryset = image_queryset.filter(imagetag__tag_id=f)
-        for image in image_queryset:
-            # collect tag IDs associated with image
-            imagetags_query: QuerySet = ImageTag.objects.filter(image_id=image.id)
-            tags_list: list = [image_tag.tag_id for image_tag in imagetags_query]
-            # if tag IDs are not in list, append them
-            for tag in tags_list:
-                if tag.id not in associated_tags:
-                    associated_tags.append(tag.id)
+            image_query = image_query.filter(imagetag__tag_id__exact=f)
+        associated_tags: list = self.grey_out_filters(image_query)
+        if exact_match:
+            image_query = self.filter_exact(active_filters, image_query)
 
-        for result in image_queryset:
+        for result in image_query:
             image_results.append(result.id)
 
         response_message: dict = {

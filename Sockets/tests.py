@@ -65,63 +65,103 @@ class TestApplyFilters(TestSocketConsumer):
 
     def test_typical_case_1(self):
         # Should return 1
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [1]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [1])
+        text_data_1: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [1],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_1)
+        self.assertEqual(result['imageResults'], [1])
 
     def test_typical_case_2(self):
         # Should return 1 and 2
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [2]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [1, 2])
+        text_data_2: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [2],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_2)
+        self.assertEqual(result['imageResults'], [1, 2])
 
     def test_typical_case_3(self):
         # Should return 1 and 3
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [3]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [1, 3])
+        text_data_3: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [3],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_3)
+        self.assertEqual(result['imageResults'], [1, 3])
 
     def test_typical_case_4(self):
         # Should return 2
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [4]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [2])
+        text_data_4: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [4],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_4)
+        self.assertEqual(result['imageResults'], [2])
 
     def test_typical_case_5(self):
         # Should return 1
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [5]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [1])
+        text_data_5: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [5],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_5)
+        self.assertEqual(result['imageResults'], [1])
 
     def test_typical_case_6(self):
         # Should return 2 and 3
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [6]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [2, 3])
+        text_data_6: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [6],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_6)
+        self.assertEqual(result['imageResults'], [2, 3])
 
     def test_typical_case_7(self):
         # Should return 1
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [7]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [1])
+        text_data_7: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [7],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_7)
+        self.assertEqual(result['imageResults'], [1])
 
     def test_typical_case_8(self):
         # Should return 2
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [8]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [2])
+        text_data_8: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [8],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_8)
+        self.assertEqual(result['imageResults'], [2])
 
     def test_typical_case_9(self):
         # Should return 3
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [9]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [3])
+        text_data_9: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [9],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_9)
+        self.assertEqual(result['imageResults'], [3])
 
     def test_typical_case_10(self):
         # Should return none
-        text_data_1: dict = {'type': 'activeFilters', 'activeFilters': [10]}
-        image_result_data: dict = FilterConsumer.apply_filters(text_data_1)
-        self.assertEqual(image_result_data['imageResults'], [])
+        text_data_10: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [10],
+            'exactMatch': False
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_10)
+        self.assertEqual(result['imageResults'], [])
 
 
 class TestAddTag(TestSocketConsumer):
