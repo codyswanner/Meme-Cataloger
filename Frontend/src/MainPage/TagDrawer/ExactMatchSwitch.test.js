@@ -32,7 +32,6 @@ describe('ExactMatchSwitch', () => {
     );
 
     const checkbox = screen.getByRole('checkbox');
-    console.log(checkbox.value);
     expect(checkbox).toBeInTheDocument();
 
     fireEvent(
