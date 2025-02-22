@@ -10,12 +10,12 @@ export default function ExactMatchSwitch() {
 
   const handleChange = () => {
     appState.exactMatchFilters.current = !appState.exactMatchFilters.current
-    filterSocket.send(JSON.stringify({
+    filterSocket.sendMessage({
       'type': 'activeFilters',
       'exactMatch': appState.exactMatchFilters.current,
       'activeFilters': appState.activeFilters,
       'origin': 'ExactMatchSwitch.js'
-    }));
+    });
   };
 
   const handleLabelClick = () => {
