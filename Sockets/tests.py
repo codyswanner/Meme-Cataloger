@@ -60,6 +60,71 @@ class TestConnectDisconnect(TestSocketConsumer):
     #     ...
 
 
+class TestFilterExact(TestSocketConsumer):
+    """Test that filter_exact returns the correct images."""
+
+    def test_typical_case_1(self):
+        # Should return 1
+        text_data_1: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [1, 2, 3, 5, 7],
+            'exactMatch': True
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_1)
+        self.assertEqual(result['imageResults'], [1])
+    
+    def test_typical_case_2(self):
+        # Should return 2
+        text_data_2: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [2, 4, 6, 8],
+            'exactMatch': True
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_2)
+        self.assertEqual(result['imageResults'], [2])
+    
+    def test_typical_case_3(self):
+        # Should return 3
+        text_data_3: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [3, 6, 9],
+            'exactMatch': True
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_3)
+        self.assertEqual(result['imageResults'], [3])
+
+    
+    def test_typical_case_4(self):
+        # Should return none
+        text_data_4: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [1],
+            'exactMatch': True
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_4)
+        self.assertEqual(result['imageResults'], [])
+    
+    def test_typical_case_5(self):
+        # Should return none
+        text_data_5: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [2],
+            'exactMatch': True
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_5)
+        self.assertEqual(result['imageResults'], [])
+    
+    def test_typical_case_6(self):
+        # Should return none
+        text_data_6: dict = {
+            'type': 'activeFilters',
+            'activeFilters': [3],
+            'exactMatch': True
+        }
+        result: dict = FilterConsumer().apply_filters(text_data_6)
+        self.assertEqual(result['imageResults'], [])
+
+
 class TestApplyFilters(TestSocketConsumer):
     """Test that apply_filters returns the correct images."""
 
