@@ -1,10 +1,15 @@
 ## Meme Cataloger
 
-This is a project I am working on by myself with the goals of (1) creating something I want to use and (2) challening myself/learning more about programming.  I am using [ReactJS](https://react.dev/) as the frontend and Python [Django](docs.djangoproject.com) as the backend.
+**Deprecated: see [MemeCataloger-NextJS](github.com/codyswanner/MemeCataloger-NextJs) for current version of this project**
+This project was built at the beginning of my journey with learning React, and I chose an outdated, deprecated platform to build on ([Create React App](https://create-react-app.dev/)). Over the course of development the tech debt of this outdated platform (along with some early architectural choices of mine) became a growing problem for continuing to build sustainably, so I created the [MemeCataloger-NextJS](github.com/codyswanner/MemeCataloger-NextJs) repository to rebuild the existing features of this iteration with better planning and on a more modern platform. I've kept this repo available as an archive for my own reference and for anyone curious on my process of getting this far with this project! Below is the original README with some typo corrections. I'll add that while it was fun to work with Websockets on this version of the project, I've found that this isn't really the proper use-case for them, and standard HTTP is a little easier to work with in most scenarios.
+
+---
+
+This is a project I am working on by myself with the goals of (1) creating something I want to use and (2) challenging myself/learning more about programming.  I am using [ReactJS](https://react.dev/) as the frontend and Python [Django](docs.djangoproject.com) as the backend.
 
 In terms of usability, the eventual goal of this project is for it to replace Google Photos as my place to store silly/funny internet media that I've saved, and for this project to have a better system for organizing and quickly finding my saved media.
 
-In terms of programming experience, I would love for this project to be a showcase of what I can do in React and Python for potential employment opportunities, but the more realistic goal for me right now is simply to encounter real-world problems to spark reserach and learning.
+In terms of programming experience, I would love for this project to be a showcase of what I can do in React and Python for potential employment opportunities, but the more realistic goal for me right now is simply to encounter real-world problems to spark research and learning.
 
 ### Tools, Packages, and Frameworks I am using
  1. [ReactJS](https://react.dev/) which has been the best intro to JavaScript that I could ask for, in that it's JavaScript that makes sense to a Python native.  (Currently the roots of this project are in Create React App, but I'm leaning CRA is not maintained any longer and looking at alternatives.  Perhaps Vite?  Suggestions welcome!)
