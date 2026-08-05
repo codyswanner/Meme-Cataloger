@@ -1,6 +1,7 @@
 ## Meme Cataloger
 
 **Deprecated: see [MemeCataloger-NextJS](github.com/codyswanner/MemeCataloger-NextJs) for current version of this project**
+
 This project was built at the beginning of my journey with learning React, and I chose an outdated, deprecated platform to build on ([Create React App](https://create-react-app.dev/)). Over the course of development the tech debt of this outdated platform (along with some early architectural choices of mine) became a growing problem for continuing to build sustainably, so I created the [MemeCataloger-NextJS](github.com/codyswanner/MemeCataloger-NextJs) repository to rebuild the existing features of this iteration with better planning and on a more modern platform. I've kept this repo available as an archive for my own reference and for anyone curious on my process of getting this far with this project! Below is the original README with some typo corrections. I'll add that while it was fun to work with Websockets on this version of the project, I've found that this isn't really the proper use-case for them, and standard HTTP is a little easier to work with in most scenarios.
 
 ---
